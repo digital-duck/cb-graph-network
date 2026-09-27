@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Walk Trail Path Cycle | Graph Intro Ch01</title>
+<script>
+MathJax = {
+  loader: { load: ['[tex]/mathtools'] },
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']],
+         packages: { '[+]': ['mathtools'] } },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="walk-trail-path-cycle">Walk Trail Path Cycle</h2>
+<p><strong>定义</strong></p>
+<p>在图论中，"游走"（walk）是顶点与边交替出现的序列 $v_0, e_1, v_1, e_2, v_2, \ldots, e_k, v_k$，其中每条边 $e_i$ 连接 $v_{i-1}$ 与 $v_i$；顶点和边都允许重复出现。游走的长度即所含边数 $k$。</p>
+<p>在此基础上，三个概念依次施加更强的约束：</p>
+<li><strong>迹</strong>（trail）：要求所有边互不相同（顶点可以重复）。</li>
+<li><strong>路径</strong>（path）：要求所有顶点互不相同（因此边自然也互不相同，是比迹更强的约束）。</li>
+<li><strong>圈</strong>（cycle）：一条闭合的迹（起点等于终点，$v_0 = v_k$），且除首尾顶点外，其余内部顶点互不相同，长度至少为 3（简单无向图中）。</li>
+<p>这四个概念构成一个包含关系：路径 $\subset$ 迹 $\subset$ 游走，而圈则是"闭合且内部无重复顶点"的特殊迹。</p>
+<p><strong>实例演算</strong></p>
+<p>考虑一个顶点集为 $\{A, B, C, D\}$ 的图，边集为 $\{AB, BC, CD, DA, AC\}$。</p>
+<li>序列 $A \to B \to C \to A \to D$ 是一条游走，但因为边 $AC$ 与 $CA$……实际上这里只用了一次 $AC$，顶点 $A$ 却重复出现，所以它是迹（若边未重复）但不是路径。</li>
+<li>序列 $A \to B \to C \to D$ 顶点全不相同，是一条路径。</li>
+<li>序列 $A \to B \to C \to D \to A$ 首尾顶点相同（$A$），内部顶点 $B, C, D$ 互不相同，边 $AB, BC, CD, DA$ 也互不相同，因此这是一个长度为 4 的圈。</li>
+<p><strong>问题求解应用</strong></p>
+<p>判别一个给定序列属于哪一类，本质上是一道约束检验题：先检查边是否重复（判定是否为迹），再检查顶点是否重复（判定是否为路径），最后检查首尾顶点是否相等且内部无重复（判定是否为圈）。这种分层检验方法在算法实现中非常直接——用一个集合记录已访问的边（或顶点），一旦发现序列中出现重复元素，就立刻可以排除更严格的分类。</p>
+<p>这一分类体系是许多经典图论算法的基础。例如，欧拉迹（Euler trail）要求恰好使用图中每条边一次，其存在性由"度为奇数的顶点数为 0 或 2"这一判据决定；哈密顿路径（Hamiltonian path）则要求经过每个顶点恰好一次，但目前没有已知的高效判定算法，是计算机科学中 NP 完全问题的经典例子。理解游走、迹、路径、圈之间的严格层级关系，是分析网络可达性、电路设计与最短路径算法（如 Dijkstra 算法要求所求为路径而非任意游走）的必要前提。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Graph Theory Ch1: Foundations (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

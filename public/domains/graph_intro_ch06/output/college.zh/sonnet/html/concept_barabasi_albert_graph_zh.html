@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Barabasi Albert Graph | Graph Intro Ch06</title>
+<script>
+MathJax = {
+  loader: { load: ['[tex]/mathtools'] },
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']],
+         packages: { '[+]': ['mathtools'] } },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="barabasi-albert-graph">Barabasi Albert Graph</h2>
+<p><strong>定义</strong></p>
+<p>巴拉巴西－阿尔伯特图（记作 $BA(n, n_0, m)$）是一种通过"优先连接"机制动态生长而成的无标度网络模型。构造过程如下：从一个含有 $n_0$ 个顶点的初始连通图出发，每次引入一个新顶点，并为其分配 $m$ 条边（要求 $m \le n_0$），这些边连接到已存在的顶点上；重复这一过程直至网络达到 $n$ 个顶点。关键在于连接概率不是均匀随机的，而是与目标顶点当前的度数成正比——顶点 $i$ 被新顶点选中连接的概率为</p>
+$$
+\Pi(k_i) = \frac{k_i}{\sum_j k_j}
+$$
+<p>其中 $k_i$ 是顶点 $i$ 的度数，分母是网络中所有顶点度数之和。这一"富者愈富"的机制正是"优先连接"（preferential attachment）名称的由来。</p>
+<p><strong>渐近度分布定理</strong></p>
+<p>巴拉巴西与阿尔伯特证明，当 $n \to \infty$ 时，该网络的度分布 $P(k)$（即随机选取一个顶点，其度数恰为 $k$ 的概率）渐近服从幂律：</p>
+$$
+P(k) \sim k^{-3}
+$$
+<p>这一指数 $-3$ 与初始参数 $n_0$、$m$ 均无关，是模型的普适性质。证明思路采用"连续场近似"：将顶点的度数 $k_i(t)$ 视为随时间 $t$ 连续演化的量，其增长率满足</p>
+$$
+\frac{\partial k_i}{\partial t} = m \cdot \frac{k_i}{\sum_j k_j} = \frac{m \, k_i}{2mt} = \frac{k_i}{2t}
+$$
+<p>（分母利用了每一步新增 $m$ 条边、总度数增加 $2m$ 的事实）。解此微分方程得 $k_i(t) \propto t^{1/2}$，即早期加入网络的顶点度数增长更快。结合顶点加入时间的分布，可推出 $P(k) \propto k^{-3}$，这与随机图（Erdős–Rényi 模型）中度分布呈指数衰减的钟形曲线形成鲜明对比。</p>
+<p><strong>问题求解应用</strong></p>
+<p>判断一个真实网络（如互联网自治系统图、引文网络、蛋白质相互作用网络）是否具备无标度特性，标准做法是：统计经验度分布，在双对数坐标下绘图，若数据点近似落在一条直线上，则斜率的绝对值即为幂律指数的估计值，可与理论值 $3$ 比较。这类分析常用于识别网络中的"枢纽节点"（高度数顶点），并评估网络对随机故障的鲁棒性与对定向攻击的脆弱性——无标度网络的显著特点正是二者并存。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Graph Theory Ch6: Random networks (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

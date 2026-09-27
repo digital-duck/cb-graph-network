@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shortest Path | Graph Intro Ch05</title>
+<script>
+MathJax = {
+  loader: { load: ['[tex]/mathtools'] },
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']],
+         packages: { '[+]': ['mathtools'] } },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="shortest-path">Shortest Path</h2>
+<p><strong>定义</strong></p>
+<p>给定一个带权图 $G = (V, E)$，其中每条边 $(u, v)$ 关联一个权重 $w(u, v)$（通常表示距离、时间或成本），两个顶点 $s$ 和 $t$ 之间的最短路径，是指从 $s$ 到 $t$ 的所有可能路径中，边权之和最小的那一条。若路径 $P = (v_0, v_1, \dots, v_k)$，则其总权重为</p>
+$$
+w(P) = \sum_{i=1}^{k} w(v_{i-1}, v_i)
+$$
+<p>最短路径问题就是求使 $w(P)$ 最小的路径 $P$。当所有边权均为 $1$ 时，最短路径退化为边数最少的路径，可用广度优先搜索求解；但当权重不均等（例如道路里程、网络延迟）时，就需要更精细的算法。</p>
+<p><strong>Dijkstra 算法（单源最短路径）</strong></p>
+<p>Dijkstra 算法适用于所有边权非负的图。其核心思想是贪心地扩展当前已知距离最小的顶点：维护一个距离数组 $d[v]$，初始时 $d[s] = 0$，其余为 $\infty$；每次从未确定最终距离的顶点集合中选出 $d$ 值最小的顶点 $u$，将其标记为已确定，并对其所有邻居 $v$ 执行松弛操作：</p>
+$$
+d[v] = \min\big(d[v],\ d[u] + w(u, v)\big)
+$$
+<p>重复此过程直到所有顶点都被处理。该算法的正确性依赖于边权非负这一前提——一旦某顶点被选出，其距离值就不会再被更小的路径超越，因为任何经过尚未处理顶点的路径长度只会更长。使用二叉堆实现优先队列时，时间复杂度为 $O((|V| + |E|) \log |V|)$。</p>
+<p><strong>问题求解应用</strong></p>
+<p>考虑一个城市间的公路网络：顶点是城市，边权是里程。若要规划一条从城市 A 到城市 F 的最省油路线，可将该网络建模为带权图，运行 Dijkstra 算法从 A 出发，逐步松弛所有可达城市的距离，最终读出到 F 的最短距离及其对应路径（通过记录每个顶点的前驱节点回溯得到）。类似地，在计算机网络中，路由协议（如 OSPF）也使用最短路径算法来决定数据包的转发路径，权重可以是延迟或带宽成本。若图中存在负权边，则需改用 Bellman-Ford 算法；若需要计算所有顶点对之间的最短路径，则应使用 Floyd-Warshall 算法，其时间复杂度为 $O(|V|^3)$。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Graph Theory Ch5: Network analysis (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

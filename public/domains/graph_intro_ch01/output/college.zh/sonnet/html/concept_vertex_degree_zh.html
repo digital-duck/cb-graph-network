@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vertex Degree | Graph Intro Ch01</title>
+<script>
+MathJax = {
+  loader: { load: ['[tex]/mathtools'] },
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']],
+         packages: { '[+]': ['mathtools'] } },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="顶点度">顶点度</h2>
+<p>在图论中，顶点 $v$ 的<strong>度</strong>（记作 $\delta(v)$）定义为与该顶点相关联的边的数目。特别需要注意的是，若存在自环（即一条边的两个端点都是同一个顶点），该自环对该顶点的度贡献为 $2$，而不是 $1$。这一约定并非随意规定，而是为了保持一个更基本的关系——所有顶点度之和必须等于图中边数的两倍，因为每条边恰好连接两个"端点位置"。用公式表示：</p>
+$$\sum_{v \in V} \delta(v) = 2|E|$$
+<p>这个等式被称为<strong>握手定理</strong>（Handshaking Lemma），它是图论中最早也最基础的定理之一。证明思路很简单：每条边贡献两个端点，无论这两个端点是否相同，都在求和中被计入两次——因此边数乘以 $2$ 恰好等于所有顶点度的总和。</p>
+<p><strong>握手定理的一个直接推论</strong>是：任意图中，度为奇数的顶点个数必为偶数。这是因为若把所有顶点度求和，结果必须是偶数（等于 $2|E|$）；而奇数度顶点的个数如果是奇数，其贡献之和的奇偶性会破坏总和为偶数的结论，产生矛盾。</p>
+<p><strong>举例说明</strong>：考虑一个有 $4$ 个顶点 $\{A, B, C, D\}$ 的图，边集为 $\{AB, AC, AD, BC\}$。逐个统计：$\delta(A) = 3$（与 $B$、$C$、$D$ 相连），$\delta(B) = 2$，$\delta(C) = 2$，$\delta(D) = 1$。求和得 $3+2+2+1=8$，而边数 $|E|=4$，验证 $2|E|=8$，与握手定理一致。</p>
+<p><strong>问题求解应用</strong>：握手定理常用于快速判断一个"度序列"是否可能对应某个真实图。例如，若题目给出五个顶点的度分别为 $1, 1, 1, 1, 1$，求和为 $5$（奇数），根据推论，这样的图不可能存在，无需再尝试构造即可排除。这种"先算总和、再判断可行性"的思路，是分析网络结构（如社交网络中每人的好友数分布）时的第一步筛查工具。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Graph Theory Ch1: Foundations (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

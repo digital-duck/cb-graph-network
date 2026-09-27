@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kruskals Algorithm | Graph Intro Ch04</title>
+<script>
+MathJax = {
+  loader: { load: ['[tex]/mathtools'] },
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']],
+         packages: { '[+]': ['mathtools'] } },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="kruskals-algorithm">Kruskals Algorithm</h2>
+<p><strong>定义</strong></p>
+<p>克鲁斯卡尔算法是一种贪心算法，用于在带权无向连通图中构造最小生成树（MST）。设图 $G = (V, E)$，其中 $|V| = n$。算法先将所有边按权重从小到大排序，然后依次考察每条边：若加入该边不会与已选边集合形成环，则将其加入生成树；否则跳过。算法在选出 $n-1$ 条边后终止。判断"是否形成环"通常借助并查集（union-find）数据结构高效实现——两个顶点若已在同一集合中，则连接它们的边必然成环。</p>
+<p>该算法的正确性依赖于最小生成树的<strong>割性质</strong>：对图的顶点集任意一种二分（一个"割"），横跨该割的所有边中权重最小的一条，必然存在于某棵最小生成树中。克鲁斯卡尔算法每一步选择当前未成环的最小边，本质上就是在利用某个割的最小边，因此贪心选择不会破坏最优性，这是贪心算法罕见地能保证全局最优的情形之一。</p>
+<p><strong>复杂度分析</strong></p>
+<p>排序所有边需要 $O(E \log E)$ 时间；并查集在路径压缩与按秩合并优化下，$E$ 次操作的均摊代价接近 $O(E \, \alpha(V))$，其中 $\alpha$ 是增长极其缓慢的反阿克曼函数，可视为常数。因此总体时间复杂度为：</p>
+$$
+O(E \log E)
+$$
+<p><strong>应用示例</strong></p>
+<p>设某图有边（权重）：$(A,B,1)$、$(B,C,3)$、$(A,C,4)$、$(C,D,2)$、$(B,D,5)$。按权重排序后依次考察：先选 $(A,B,1)$；再选 $(C,D,2)$；再选 $(B,C,3)$（此时 $A,B,C,D$ 尚未全部连通，不成环，加入）；接着 $(A,C,4)$ 会使 $A$ 与 $C$ 已连通的分量再次相连，形成环，跳过；最后 $(B,D,5)$ 同理成环，跳过。此时已选 3 条边，恰好连接 4 个顶点，算法终止，总权重为 $1+2+3=6$。</p>
+<p><strong>解题应用</strong></p>
+<p>在实际问题中（如设计连接多个城市的最低成本电缆网络、电路布线、聚类分析中的层次聚类），可将节点抽象为图的顶点、连接成本抽象为边权，直接套用该算法求解最小总成本的连通方案。解题关键在于正确建模边权含义，并留意图不连通时算法只能得到最小生成森林而非单棵生成树。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Graph Theory Ch4: Trees (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

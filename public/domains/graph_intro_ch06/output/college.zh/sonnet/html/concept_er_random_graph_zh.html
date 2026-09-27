@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Er Random Graph | Graph Intro Ch06</title>
+<script>
+MathJax = {
+  loader: { load: ['[tex]/mathtools'] },
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']],
+         packages: { '[+]': ['mathtools'] } },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="er-random-graph">Er Random Graph</h2>
+<p><strong>定义</strong></p>
+<p>Erdős–Rényi 随机图模型，记作 $G(n, p)$，是概率图论中最基础的随机图构造方式：给定 $n$ 个顶点，对每一对不同的顶点独立地以概率 $p$ 连边，互不影响。这意味着最终生成的图不是唯一确定的，而是一个随机变量——图的边集本身服从一个概率分布。当 $p$ 接近 $0$ 时，图趋于稀疏，边很少；当 $p$ 接近 $1$ 时，图趋于稠密，几乎所有顶点对都相连。这个模型的关键之处在于"独立性"：每条边是否存在，完全不依赖于其他任何一条边是否存在。</p>
+<p>由于总共有 $\binom{n}{2}$ 对可能的顶点，图中边的数目 $M$ 服从二项分布：</p>
+$$
+P(M = m) = \binom{\binom{n}{2}}{m} p^{m} (1-p)^{\binom{n}{2} - m}
+$$
+<p>由此可得边数的期望值为：</p>
+$$
+E[M] = \binom{n}{2} p
+$$
+<p><strong>应用举例</strong></p>
+<p>设 $n = 10$，$p = 0.3$。顶点对总数为 $\binom{10}{2} = 45$，因此期望边数为 $45 \times 0.3 = 13.5$。也就是说，若反复生成许多个这样的随机图，平均每张图会有约 13.5 条边——但任意一次具体生成的结果可能是 10 条、15 条甚至 20 条边，这正是"随机"二字的含义所在。</p>
+<p>单个顶点的度数（与它相连的边数）也服从二项分布 $\text{Binomial}(n-1, p)$，因为该顶点与其余 $n-1$ 个顶点中的每一个都独立地以概率 $p$ 连边。当 $n$ 很大而 $p$ 很小、且 $np$ 保持一个适中的常数时，这个二项分布可以用泊松分布很好地近似，这也是随机图理论与稀疏网络建模之间的重要桥梁。</p>
+<p><strong>解题应用</strong></p>
+<p>Erdős–Rényi 模型最有力的地方在于回答"某种图结构何时几乎必然出现"这类问题，这类结果称为图性质的相变现象。例如可以证明：当 $p$ 超过某个与 $\ln n / n$ 成正比的阈值时，图几乎必然是连通的；低于这个阈值时，图几乎必然是不连通的。求解这类问题的基本方法是：先固定目标结构（如三角形、连通分支或孤立点），计算该结构出现的期望数目，再结合一阶矩方法（期望趋于 $0$ 则该结构几乎必然不出现）或二阶矩方法（方差远小于期望的平方则该结构几乎必然出现），从而确定精确的概率阈值。这套分析框架是理解随机网络、渗流现象以及随机算法平均复杂度的基本工具。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Graph Theory Ch6: Random networks (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

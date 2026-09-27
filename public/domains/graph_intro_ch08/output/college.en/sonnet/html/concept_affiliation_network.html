@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Affiliation Network | Graph Intro Ch08</title>
+<script>
+MathJax = {
+  loader: { load: ['[tex]/mathtools'] },
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']],
+         packages: { '[+]': ['mathtools'] } },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="affiliation-network">Affiliation Network</h2>
+<p>An affiliation network is a two-mode (bipartite) graph containing two distinct sets of nodes — actors and events — where edges connect only across the sets, never within one. An actor is linked to an event if that actor participated in it: an employee to the committees they sit on, a scientist to the papers they co-author, a shareholder to the boards they join. No actor-to-actor or event-to-event edges exist directly; any relationship between two actors is inferred through the events they share.</p>
+<p>Formally, an affiliation network is represented by a biadjacency matrix $A$ of size $n \times m$, where $n$ is the number of actors and $m$ is the number of events, and $A_{ij} = 1$ if actor $i$ participated in event $j$ (0 otherwise). This matrix is the key computational object: from it, we derive one-mode "projections" that reveal indirect ties. The actor-actor projection is given by</p>
+$$
+P_{\text{actor}} = A A^{T}
+$$
+<p>where entry $(P_{\text{actor}})_{ik}$ counts the number of events actors $i$ and $k$ both attended — a measure of how strongly they are indirectly connected. Symmetrically, the event-event projection $P_{\text{event}} = A^{T} A$ counts shared actors between pairs of events.</p>
+<p><strong>Worked example.</strong> Suppose three researchers — Ana, Ben, and Cara — worked on four papers as follows: Ana on papers 1 and 2, Ben on papers 2 and 3, Cara on papers 3 and 4. The biadjacency matrix is 3×4. Computing $A A^{T}$ shows Ana and Ben share one paper (paper 2), Ben and Cara share one paper (paper 3), and Ana and Cara share zero papers. This immediately reconstructs a co-authorship network — a one-mode graph — purely from bipartite participation data, without ever recording a direct Ana-Cara relationship.</p>
+<p><strong>Problem-solving application.</strong> Given raw affiliation data (e.g., a spreadsheet of students and the clubs they belong to), the standard workflow is: (1) encode the data as a biadjacency matrix, (2) compute the desired projection via matrix multiplication, (3) threshold or weight the resulting matrix (since raw shared-event counts can overstate weak ties, e.g., large events inflate co-membership counts artificially), and (4) analyze the projected one-mode network using standard techniques such as centrality or clustering. This projection-then-analyze pattern underlies applications from board-interlock studies in corporate governance to detecting hidden communities in co-authorship and voting-bloc data.</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Graph Theory Ch8: Social networks (Level: College &middot; Language: EN &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

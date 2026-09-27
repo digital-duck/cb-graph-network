@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Expected Vertex Degree | Graph Intro Ch06</title>
+<script>
+MathJax = {
+  loader: { load: ['[tex]/mathtools'] },
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']],
+         packages: { '[+]': ['mathtools'] } },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="顶点度数的期望值">顶点度数的期望值</h2>
+<p><strong>定义与背景</strong></p>
+<p>在随机图模型 $ER(n,p)$ 中，图有 $n$ 个顶点，每一对顶点之间以独立概率 $p$ 连边。对图中任意一个顶点 $v$，它的度数（degree）$\deg(v)$ 是与它相连的边的数目，这是一个随机变量,因为每条边是否存在都是随机的。我们关心的问题是:平均而言,一个顶点会有多少条边?</p>
+<p><strong>推导:期望的线性性</strong></p>
+<p>顶点 $v$ 可能与其余 $n-1$ 个顶点中的任意一个相连。对第 $i$ 个其他顶点,定义指示变量:</p>
+$$
+X_i = \begin{cases} 1, & \text{若 } v \text{ 与该顶点之间存在边} \\ 0, & \text{否则} \end{cases}
+$$
+<p>由于每条边独立地以概率 $p$ 出现,所以 $X_i$ 是一个伯努利随机变量,其期望为 $E[X_i] = p$。顶点 $v$ 的度数就是这 $n-1$ 个指示变量之和:</p>
+$$
+\deg(v) = \sum_{i=1}^{n-1} X_i
+$$
+<p>利用期望的线性性(无论各随机变量是否独立,期望的线性性都成立),我们得到:</p>
+$$
+E[\deg(v)] = \sum_{i=1}^{n-1} E[X_i] = \sum_{i=1}^{n-1} p = p(n-1)
+$$
+<p>这就证明了 $ER(n,p)$ 图中任意顶点度数的期望值恰好等于 $p(n-1)$。</p>
+<p><strong>例题</strong></p>
+<p>设 $n = 1000$,$p = 0.01$。那么每个顶点期望的度数为:</p>
+$$
+E[\deg(v)] = 0.01 \times (1000-1) = 9.99
+$$
+<p>也就是说,尽管每条边出现的概率很小,但由于潜在的邻居数量多达 999 个,平均每个顶点仍然会有约 10 条边。</p>
+<p><strong>问题求解应用</strong></p>
+<p>这个结果的实际价值在于反向设计:如果你想构造一个平均度数为 $\bar{d}$ 的随机图,只需令</p>
+$$
+p = \frac{\bar{d}}{n-1}
+$$
+<p>例如,要模拟一个含 $10^6$ 个节点、平均度数约为 $6$ 的社交网络,可取 $p \approx \dfrac{6}{10^6-1} \approx 6\times 10^{-6}$。这一关系也是后续研究图的连通性阈值、巨大连通分支出现临界点等性质的出发点——它们都以 $p(n-1)$ 这一期望度数作为核心参数。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Graph Theory Ch6: Random networks (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

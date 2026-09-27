@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Triangle | Graph Intro Ch05</title>
+<script>
+MathJax = {
+  loader: { load: ['[tex]/mathtools'] },
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']],
+         packages: { '[+]': ['mathtools'] } },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="triangle">Triangle</h2>
+<p><strong>定义</strong>：在一个图 $G = (V, E)$ 中，三角形是由三个顶点构成的完全子图——即存在顶点 $u, v, w \in V$，使得这三个顶点两两之间都有边相连：$(u,v), (v,w), (u,w) \in E$。当我们说"包含给定顶点 $v$ 的三角形"时，指的是存在另外两个顶点 $u, w$，它们既与 $v$ 相邻，又彼此相邻。三角形是图中最小的"稠密"结构，也是刻画局部聚集程度的基本单元：如果一个顶点的邻居之间也互相连接，就会形成三角形。</p>
+<p><strong>计数公式</strong>：设顶点 $v$ 的邻居集合为 $N(v)$，度数为 $\deg(v) = |N(v)|$。通过 $v$ 的三角形数量，等价于在 $N(v)$ 这个邻居集合内部存在的边数。也就是说，只需检查 $N(v)$ 中任意两个顶点是否相邻即可。若邻居集合内部共有 $m$ 条边，则经过 $v$ 的三角形数量恰为 $m$。</p>
+<p><strong>求解示例</strong>：设图中顶点 $v$ 的邻居为 $\{a, b, c\}$，即 $\deg(v) = 3$。已知边集中包含 $(a,b)$ 和 $(b,c)$，但不包含 $(a,c)$。要判断经过 $v$ 的三角形，只需检验 $N(v) = \{a,b,c\}$ 内部的边：$(a,b)$ 存在 $\Rightarrow$ $\{v,a,b\}$ 构成一个三角形；$(b,c)$ 存在 $\Rightarrow$ $\{v,b,c\}$ 构成另一个三角形；$(a,c)$ 不存在，因此 $\{v,a,c\}$ 不是三角形。结论：经过 $v$ 的三角形共有 2 个。</p>
+<p><strong>问题求解应用</strong>：三角形计数是社交网络分析中"聚类系数"的核心步骤。顶点 $v$ 的局部聚类系数定义为</p>
+$$
+C(v) = \frac{2 \cdot t(v)}{\deg(v)\,(\deg(v)-1)}
+$$
+<p>其中 $t(v)$ 是经过 $v$ 的三角形数量，分母 $\deg(v)(\deg(v)-1)$ 是邻居对的总数的两倍（即从 $\deg(v)$ 个邻居中任选两个的组合数乘以 2）。$C(v)$ 越接近 1，说明 $v$ 的朋友们彼此也是朋友，社交圈越紧密；越接近 0，说明 $v$ 更像是连接不同群体的"桥梁"。在实际问题中，若要计算某社交网络中每个用户的聚类系数，算法流程是：对每个顶点 $v$，先取出其邻居集合 $N(v)$，再统计 $N(v)$ 内部实际存在的边数 $m$，令 $t(v) = m$，代入上式即可求出 $C(v)$。这种基于三角形计数的方法，是识别网络中紧密社群与关键连接点的基础工具。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Graph Theory Ch5: Network analysis (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Walk | Graph Intro Ch03</title>
+<script>
+MathJax = {
+  loader: { load: ['[tex]/mathtools'] },
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']],
+         packages: { '[+]': ['mathtools'] } },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="walk">Walk</h2>
+<p><strong>定义</strong></p>
+<p>在图论中，<strong>walk（途径）</strong>是一个顶点与边交替出现的有限序列</p>
+$$
+v_0, e_1, v_1, e_2, v_2, \ldots, e_k, v_k
+$$
+<p>其中每条边 $e_i$ 连接顶点 $v_{i-1}$ 与 $v_i$。途径的<strong>长度</strong>定义为其中边的数目 $k$。途径是图论中最宽松的"连通路径"概念：它允许重复经过同一个顶点，也允许重复使用同一条边。若途径的起点 $v_0$ 与终点 $v_k$ 相同，则称为<strong>闭途径（closed walk）</strong>；否则称为<strong>开途径（open walk）</strong>。途径比后续章节将学到的迹（trail，边不重复）和路径（path，顶点不重复）更基本，因为它不施加任何"不重复"的限制，因而是最容易验证、也是计算上最基础的对象。</p>
+<p><strong>举例说明</strong></p>
+<p>考虑一个社交网络图：顶点表示用户 A、B、C、D，边表示他们互相关注。假设边集为 $\{AB, BC, CD, DA, AC\}$。序列</p>
+$$
+A \to B \to C \to A \to C \to D
+$$
+<p>就是一条途径：顶点 $A, B, C, A, C, D$ 交替与相应边出现，长度为 5。注意顶点 $A$ 和 $C$ 都被重复访问了，边 $AC$ 也没有被排除重复使用的可能——这正体现了途径的宽松性，它只要求"相邻两点之间确实有边相连"这一条件。</p>
+<p><strong>问题求解应用</strong></p>
+<p>判断一条给定序列是否为合法途径，是许多图算法的基础校验步骤：只需依次检查序列中每一对相邻顶点 $(v_{i-1}, v_i)$ 是否在边集中出现。这一操作的时间复杂度为 $O(k)$，其中 $k$ 为途径长度，因为每一步只需一次边存在性查询（若图以邻接表或邻接矩阵存储，单次查询为 $O(1)$ 或 $O(\deg(v))$）。</p>
+<p>途径概念在实际问题中尤为重要的原因在于：它是判断"两个顶点是否连通"的最弱条件——只要存在任意一条途径连接两点，就说明它们在同一连通分量中，而不必关心是否存在不重复顶点的路径。因此，在设计如深度优先搜索（DFS）或广度优先搜索（BFS）等连通性算法时，算法在探索过程中生成的正是途径，之后再通过记录已访问顶点，从途径中提炼出路径。理解途径与路径的区别，是正确分析这些算法正确性与复杂度的前提。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Graph Theory Ch3: Network traversal (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

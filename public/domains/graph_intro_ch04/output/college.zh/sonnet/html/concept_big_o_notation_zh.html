@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Big O Notation | Graph Intro Ch04</title>
+<script>
+MathJax = {
+  loader: { load: ['[tex]/mathtools'] },
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']],
+         packages: { '[+]': ['mathtools'] } },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="大o记号">大O记号</h2>
+<p><strong>定义</strong></p>
+<p>大O记号（Big O Notation）是一种数学工具，用来描述当输入规模趋于无穷大时，函数的渐近增长速率，常用于比较算法在最坏情况下的时间或空间效率。设 $f(n)$ 和 $g(n)$ 是定义在正整数上的函数，我们称 $f(n) = O(g(n))$，当且仅当存在正常数 $c$ 和 $n_0$，使得对所有 $n \geq n_0$，都有：</p>
+$$
+0 \leq f(n) \leq c \cdot g(n)
+$$
+<p>直观地说，$O(g(n))$ 给出了 $f(n)$ 增长速度的一个上界：当 $n$ 足够大时，$f(n)$ 不会比 $g(n)$ 增长得更快（相差最多一个常数倍）。大O记号刻意忽略常数系数和低阶项，因为当规模足够大时，这些因素对增长趋势的影响可以忽略不计。</p>
+<p><strong>实例演算</strong></p>
+<p>考虑函数 $f(n) = 3n^2 + 5n + 2$。我们断言 $f(n) = O(n^2)$。取 $c = 10$，$n_0 = 1$，则当 $n \geq 1$ 时：</p>
+$$
+3n^2 + 5n + 2 \leq 3n^2 + 5n^2 + 2n^2 = 10n^2
+$$
+<p>不等式成立，因此按照定义，$f(n) = O(n^2)$ 得证。这说明尽管 $f(n)$ 中含有低阶项 $5n$ 和常数项 $2$，其主导增长行为仍由最高次项 $n^2$ 决定。</p>
+<p><strong>问题求解应用</strong></p>
+<p>大O记号的真正价值在于比较算法效率，从而在设计阶段就能预判程序在大规模输入下的表现。例如，在一个包含 $n$ 个元素的数组中查找某个元素：</p>
+<li>线性查找（逐个比较）的时间复杂度为 $O(n)$；</li>
+<li>若数组已排序，二分查找的时间复杂度为 $O(\log n)$。</li>
+<p>当 $n$ 从一千增长到一百万时，$O(n)$ 算法的运行时间大约增长一千倍，而 $O(\log n)$ 算法的运行时间几乎不变（$\log_2 10^6 \approx 20$）。因此，面对海量数据处理任务，工程师会优先选择渐近增长更慢的算法，即使它在小规模输入下未必是最快的。</p>
+<p>掌握大O记号的关键练习是：给定一段代码（尤其是嵌套循环、递归调用），能够推导出其时间复杂度表达式，并化简为标准的大O形式，如 $O(1)$、$O(\log n)$、$O(n)$、$O(n \log n)$、$O(n^2)$ 或 $O(2^n)$，从而判断该算法是否适用于给定的问题规模。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Graph Theory Ch4: Trees (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

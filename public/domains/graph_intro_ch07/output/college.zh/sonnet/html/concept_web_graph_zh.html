@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Web Graph | Graph Intro Ch07</title>
+<script>
+MathJax = {
+  loader: { load: ['[tex]/mathtools'] },
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']],
+         packages: { '[+]': ['mathtools'] } },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="web-graph">Web Graph</h2>
+<p><strong>定义</strong></p>
+<p>网页图（Web Graph）是对万维网结构的一种有向图表示：每个顶点代表一个网页，每条有向弧 $(u, v)$ 代表页面 $u$ 中存在一个指向页面 $v$ 的超链接。设 $G = (V, E)$，其中 $V$ 是网页集合，$E \subseteq V \times V$ 是超链接的集合。由于超链接是单向的——$u$ 指向 $v$ 并不意味着 $v$ 也指向 $u$——网页图必须是有向图，而不能用无向图建模。这一结构是搜索引擎排名算法（如网页排名算法）的基础：一个页面的重要性不仅取决于有多少页面链接到它（入度），还取决于链接来源页面本身的重要性。</p>
+<p><strong>实例分析</strong></p>
+<p>考虑一个只有四个页面的小型网络：A、B、C、D。假设链接关系为：A→B，A→C，B→C，C→A，D→C。用图表示，顶点集为 $V = \{A, B, C, D\}$，弧集为 $E = \{(A,B), (A,C), (B,C), (C,A), (D,C)\}$。若要用矩阵刻画这个结构，可以构造邻接矩阵 $M$，其中 $M_{ij} = 1$ 表示第 $i$ 个页面指向第 $j$ 个页面，否则为 $0$：</p>
+$$
+M = \begin{pmatrix}
+0 & 1 & 1 & 0 \\
+0 & 0 & 1 & 0 \\
+1 & 0 & 0 & 0 \\
+0 & 0 & 1 & 0
+\end{pmatrix}
+$$
+<p>观察这个矩阵可以发现：页面 C 的入度最高（被 A、B、D 三个页面指向），直觉上应比 D 更重要，因为 D 只被零个页面链接。而这正是入度中心性（in-degree centrality）这一简单排名思路的直观体现——但它忽略了链接来源本身的权威性，这也是后续更精细算法（如网页排名算法）要解决的问题。</p>
+<p><strong>解题应用</strong></p>
+<p>利用网页图分析网络结构时，一类常见的问题是判断信息或影响力能否从一个页面传播到另一个页面，这本质上是有向图中的可达性问题：从顶点 $u$ 沿有向弧序列能否到达顶点 $v$。在上例中，从 D 出发只能到达 C，再从 C 到达 A，再到 B——因此 D 可以到达网络中所有其他页面，但没有任何页面能到达 D（D 的入度为零，是一个"孤岛"入口）。这类可达性分析可以用深度优先搜索或广度优先搜索在 $O(|V| + |E|)$ 时间内完成，是判断网络连通性、寻找孤立页面或检测链接闭环（如 A→C→A）的标准手段。识别这类结构对于优化网站内部链接策略、避免死链陷阱, 都具有实际意义。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Graph Theory Ch7: Modern computer networks (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

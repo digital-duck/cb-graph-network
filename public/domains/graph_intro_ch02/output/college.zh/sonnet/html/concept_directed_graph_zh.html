@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Directed Graph | Graph Intro Ch02</title>
+<script>
+MathJax = {
+  loader: { load: ['[tex]/mathtools'] },
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']],
+         packages: { '[+]': ['mathtools'] } },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="directed-graph">Directed Graph</h2>
+<p><strong>定义</strong></p>
+<p>有向图（记作 $D = (V, A)$）由一个顶点集合 $V$ 和一个弧集合 $A$ 组成，其中每条弧是一个有序对 $\langle u, v \rangle$，表示从尾顶点 $u$ 指向头顶点 $v$。与无向图不同，弧 $\langle u, v \rangle$ 和 $\langle v, u \rangle$ 是两条不同的弧，方向具有实际意义——它可以表示单向道路、任务的先后依赖、网页之间的超链接，或者电路中电流的流向。一个顶点的<strong>出度</strong>是以它为尾的弧的数目，<strong>入度</strong>是以它为头的弧的数目。整个图的弧总数满足以下关系：</p>
+$$
+\sum_{v \in V} \text{outdeg}(v) = \sum_{v \in V} \text{indeg}(v) = |A|
+$$
+<p>这是因为每条弧恰好贡献一次出度和一次入度，与弧的方向无关。</p>
+<p><strong>实例讲解</strong></p>
+<p>考虑一个课程先修关系图：顶点集合 $V = \{\text{微积分}, \text{线性代数}, \text{机器学习}\}$，弧集合 $A = \{\langle \text{微积分}, \text{机器学习} \rangle, \langle \text{线性代数}, \text{机器学习} \rangle\}$。这里"机器学习"的入度为 2（两门课都是它的先修条件），出度为 0；而"微积分"和"线性代数"的出度都是 1，入度都是 0。这个方向信息至关重要：它告诉我们不能反过来先学机器学习再学微积分。</p>
+<p><strong>问题求解应用</strong></p>
+<p>在实际问题中，有向图常用来判断"是否存在合法的执行顺序"。例如，若一个课程安排系统需要检测先修关系中是否存在矛盾（比如课程 A 需要 B，B 又需要 A），就等价于检测有向图中是否存在<strong>有向环</strong>。若图中不存在有向环（称为<strong>有向无环图</strong>，DAG），则可以通过拓扑排序算法，把所有顶点排成一个线性序列，使得每条弧都从序列中靠前的顶点指向靠后的顶点。这正是操作系统任务调度、编译器中变量依赖分析、以及项目管理中甘特图排期的数学基础。反之，若检测到环，则说明当前的依赖设计存在逻辑矛盾，必须重新设计。因此，理解有向图的方向语义，是解决一整类"顺序依赖"问题的第一步。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Graph Theory Ch2: Extensions (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

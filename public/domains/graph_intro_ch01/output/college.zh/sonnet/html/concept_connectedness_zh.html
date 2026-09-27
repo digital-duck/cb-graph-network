@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Connectedness | Graph Intro Ch01</title>
+<script>
+MathJax = {
+  loader: { load: ['[tex]/mathtools'] },
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']],
+         packages: { '[+]': ['mathtools'] } },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="连通性">连通性</h2>
+<p>若图 $G=(V,E)$ 中任意两个不同的顶点 $u,v$ 之间都存在一条路径相连，则称 $G$ 是连通的；否则，$V$ 会被划分为若干个极大的连通子集，每个子集连同其内部的边构成一个连通分量。</p>
+<p>顶点之间的"可达性"实际上是一个等价关系：记 $u \sim v$ 表示存在一条从 $u$ 到 $v$ 的路径。自反性显然（长度为零的路径）；对称性成立是因为无向图中一条路径反过来走仍是路径；传递性则由路径的拼接保证——若 $u$ 到 $v$ 有路径、$v$ 到 $w$ 有路径，把两条路径首尾相接（并去掉重复顶点）即可得到 $u$ 到 $w$ 的路径。正因为 $\sim$ 是等价关系，它把顶点集 $V$ 划分成互不相交的等价类，这些等价类正是图的连通分量。图连通当且仅当只有一个等价类。</p>
+<p><strong>举例</strong>：设 $V=\{1,2,3,4,5\}$，边集为 $\{(1,2),(2,3),(4,5)\}$。从顶点 $1$ 出发做深度优先搜索（DFS），能访问到 $1,2,3$，说明它们属于同一分量；顶点 $4,5$ 互相可达但与前三者之间没有任何路径，构成第二个分量。于是该图共有两个连通分量：$\{1,2,3\}$ 与 $\{4,5\}$。</p>
+<p><strong>算法应用</strong>：判断连通性、划分连通分量的标准方法是对每个尚未访问的顶点执行一次 DFS 或广度优先搜索（BFS），每次搜索能覆盖的顶点集合就是一个分量。由于每条边、每个顶点在搜索过程中只被处理常数次，整个算法的时间复杂度为</p>
+$$
+O(|V| + |E|)
+$$
+<p>这一效率使得连通性检测可以直接应用到大规模网络中，例如判断通信网络在若干条链路失效后是否仍能保持整体互联、或在图像处理中通过像素邻接关系做连通区域标记（connected-component labeling）。此外，还有一个基于矩阵的等价判据：设 $A$ 为图的邻接矩阵，$n=|V|$，则图连通当且仅当矩阵 $(A+I)^{n-1}$ 不含零元素——因为该矩阵的 $(i,j)$ 元素统计的正是长度不超过 $n-1$ 的从 $i$ 到 $j$ 的途径数，而任意两点间若存在路径，其长度必不超过 $n-1$。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Graph Theory Ch1: Foundations (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

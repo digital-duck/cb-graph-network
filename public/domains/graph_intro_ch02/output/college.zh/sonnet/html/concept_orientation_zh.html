@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Orientation | Graph Intro Ch02</title>
+<script>
+MathJax = {
+  loader: { load: ['[tex]/mathtools'] },
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']],
+         packages: { '[+]': ['mathtools'] } },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="定向">定向</h2>
+<p><strong>定义</strong></p>
+<p>设 $G = (V, E)$ 为一个无向图。对 $G$ 的一个<strong>定向</strong>，是指为每条边 $\{u, v\} \in E$ 选定一个方向，将其替换为有向边 $(u, v)$ 或 $(v, u)$ 中的一个，从而得到一个有向图 $D(G)$。定向不改变顶点集合和边的总数，只改变每条边的"通行方向"。同一个无向图通常有多种不同的定向方式：若图有 $m$ 条边，理论上共有 $2^m$ 种定向（尽管其中很多在结构上是同构的）。定向是图论中连接"无向结构"与"有向结构"的一座桥梁，在建模单行道路网络、任务优先级、比赛胜负关系等场景中十分自然。</p>
+<p><strong>举例说明</strong></p>
+<p>考虑一个三角形图 $G$，顶点为 $\{A, B, C\}$，边为 $\{A,B\}, \{B,C\}, \{A,C\}$。给出一种定向：$A \to B$，$B \to C$，$A \to C$。得到的有向图 $D(G)$ 中，从 $A$ 出发可以沿两条路径到达 $C$（直接 $A \to C$，或经过 $A \to B \to C$），但没有任何一条边指回 $A$。这样的定向被称为<strong>无环定向</strong>（acyclic orientation），因为 $D(G)$ 中不存在有向环。另一种定向 $A \to B \to C \to A$ 则会形成一个有向环，两种定向体现了同一无向图截然不同的结构性质。</p>
+<p><strong>解决问题的应用</strong></p>
+<p>无环定向的存在性与图的顶点着色数密切相关。一个经典结果是：无向图 $G$ 的色数 $\chi(G)$ 等于其无环定向中最长有向路径上顶点数的最小值加一，即</p>
+$$
+\chi(G) = 1 + \min_{D} \left( \text{最长有向路径的边数} \right)
+$$
+<p>其中最小值取遍 $G$ 的所有无环定向 $D$。这个结果（Gallai–Roy 定理）把"图染色"这一组合优化问题，转化为"寻找一个最长路径最短的无环定向"的问题。在实际应用中，例如任务调度：若边表示任务之间的依赖关系，无环定向对应一种合法的执行顺序，而最长路径的长度则对应完成所有任务所需的最少阶段数——这正是关键路径法（critical path method）背后的图论原理。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Graph Theory Ch2: Extensions (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

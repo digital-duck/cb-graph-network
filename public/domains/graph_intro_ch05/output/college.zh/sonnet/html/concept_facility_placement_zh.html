@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Facility Placement | Graph Intro Ch05</title>
+<script>
+MathJax = {
+  loader: { load: ['[tex]/mathtools'] },
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']],
+         packages: { '[+]': ['mathtools'] } },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="facility-placement">Facility Placement</h2>
+<p><strong>定义</strong></p>
+<p>在一个用图 $G=(V,E)$ 表示的网络（道路网、供水网、通信网等）中，顶点 $v$ 的<strong>偏心率</strong>（eccentricity）定义为它到图中所有其他顶点的最短路径距离的最大值：</p>
+$$e(v) = \max_{u \in V} d(v, u)$$
+<p>其中 $d(v,u)$ 是 $v$ 到 $u$ 的最短路径长度。图的<strong>半径</strong>（radius）是所有顶点偏心率中的最小值：</p>
+$$r(G) = \min_{v \in V} e(v)$$
+<p>使偏心率等于半径的顶点集合称为图的<strong>中心</strong>（center）。与偏心率关注"最坏情况"不同，<strong>接近中心性</strong>（closeness centrality）衡量一个顶点到所有其他顶点的<strong>总</strong>距离：</p>
+$$C(v) = \frac{1}{\displaystyle\sum_{u \in V} d(v, u)}$$
+<p>$C(v)$ 越大，说明 $v$ 到全网的平均距离越短。</p>
+<p><strong>工作实例</strong></p>
+<p>设一个由五个社区节点 $A,B,C,D,E$ 组成的道路网络，边表示可通行道路。计算最短路径后得到距离矩阵，假设结果显示：$e(A)=4,\ e(B)=2,\ e(C)=3,\ e(D)=3,\ e(E)=4$。于是半径 $r(G)=2$，中心为 $\{B\}$——因为 $B$ 到最远节点的距离仅为 2，是全网"最坏响应时间"最短的位置。再计算总距离：若 $B$ 到各节点距离之和为 6，而 $C$ 的总距离和为 5，则 $C(C) > C(B)$，说明 $C$ 虽然偏心率略大，但到所有节点的<strong>平均</strong>距离更短。</p>
+<p><strong>问题求解应用</strong></p>
+<p>这一区别正对应两类现实设施选址问题。消防站需要保证<strong>最坏情况下</strong>的响应时间足够短——一旦发生火灾，不能因为某个偏远节点距离过远而延误，因此应选在<strong>中心</strong>（偏心率最小、即半径达到的顶点），这是典型的"极小化最大距离"（minimax）选址问题。而医院或配送中心更关心<strong>平均</strong>服务效率与总运输成本，因此应选在<strong>接近中心性最高</strong>的顶点，这是"极小化总距离"（minisum）选址问题。两者可能给出不同的最优节点：在上例中，消防站应设在 $B$，而配送中心更适合设在 $C$。工程实践中常同时计算两个指标，再结合人口密度、道路容量等约束综合决策。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Graph Theory Ch5: Network analysis (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

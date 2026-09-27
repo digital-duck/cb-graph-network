@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Strongly Connected Orientation | Graph Intro Ch02</title>
+<script>
+MathJax = {
+  loader: { load: ['[tex]/mathtools'] },
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']],
+         packages: { '[+]': ['mathtools'] } },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="strongly-connected-orientation">Strongly Connected Orientation</h2>
+<p><strong>定义</strong>：给定一个连通无向图 $G=(V,E)$，为每条边指定一个方向，得到一个有向图。如果所得的有向图是强连通的——即任意两个顶点之间都存在有向路径可以互相到达——就称这种定向为 $G$ 的一个<strong>强连通定向</strong>（strongly connected orientation）。</p>
+<p>并非所有连通图都存在强连通定向。判定条件由 Robbins 定理给出：连通图 $G$ 存在强连通定向，当且仅当 $G$ 是 2-边连通的，记作 $\lambda(G) \geq 2$，即删去任意一条边后图仍保持连通（不存在桥）。</p>
+<p><strong>为什么桥是关键障碍</strong>：如果边 $e=(u,v)$ 是桥，删去它会把图分成两个分支。无论把 $e$ 定向为 $u \to v$ 还是 $v \to u$，两个分支之间只有单向连接，导致某一侧无法到达另一侧，强连通性必然被破坏。因此桥的存在是强连通定向不可能实现的充分理由；Robbins 定理的价值在于证明了这也是<strong>充分</strong>条件——只要没有桥，就一定能构造出强连通定向。</p>
+<p><strong>构造性证明思路</strong>：对 2-边连通图 $G$ 做一次深度优先搜索（DFS），得到一棵 DFS 生成树。把所有树边定向为从父节点指向子节点（前向），把所有非树边（回边）定向为从后代指向祖先（反向）。由于 $G$ 没有桥，每一条非树边都能把某个子树"拉回"到更早访问的祖先，从而保证每个顶点都能沿树边向下、再借助回边向上返回根节点，因此整个有向图强连通。</p>
+<p><strong>问题求解应用</strong>：给定一个连通图，先用 Tarjan 桥查找算法（基于 DFS 时间戳 low-link 值）判断是否存在桥，时间复杂度为 $O(|V|+|E|)$。若不存在桥，则按照上述 DFS 定向规则直接输出一个强连通定向；若存在桥，则可以断言该图不存在强连通定向，桥本身必须保持"双向可达"的语义（在需要双向通行的场景中，如道路网络设计，桥两端的道路必须允许双向通行）。这一判定与构造过程常被用于电网、通信网络单向线路规划等实际问题中，用来验证网络在单向流量约束下是否仍能维持全局连通性。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Graph Theory Ch2: Extensions (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

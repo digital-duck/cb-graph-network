@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Food Web Modeling | Graph Intro Ch06</title>
+<script>
+MathJax = {
+  loader: { load: ['[tex]/mathtools'] },
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']],
+         packages: { '[+]': ['mathtools'] } },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="food-web-modeling">Food Web Modeling</h2>
+<p><strong>定义</strong></p>
+<p>食物网可以形式化为一个有向图 $G=(V,E)$：顶点集合 $V$ 中的每个节点代表一个物种（或营养类群），有向边 $(i,j)\in E$ 表示物种 $i$ 捕食物种 $j$。这样一来，生态学中"谁吃谁"的关系网络就转化为图论对象，可以借助随机图理论中的标准指标来刻画其结构。最常用的整体密度指标是连接度（connectance），定义为</p>
+$$
+C = \frac{L}{S(S-1)}
+$$
+<p>其中 $L$ 是网络中有向边的总数，$S$ 是物种数（分母中的 $S(S-1)$ 是排除自身捕食后可能存在的最大边数）。另一个关键概念是节点的入度与出度：入度表示某物种的猎物数目，出度表示捕食它的天敌数目。经验食物网的度分布往往更接近 Erdős–Rényi 随机图，而非严格的无标度分布，这一点在生态网络研究中仍存在争议。</p>
+<p><strong>示例</strong></p>
+<p>考虑一个简化的池塘食物网，物种集合为 $S=6$：浮游植物、浮游动物、水生昆虫幼虫、小鱼、青蛙、苍鹭。假设有向边为：浮游动物→浮游植物、水生昆虫幼虫→浮游植物、小鱼→浮游动物、小鱼→水生昆虫幼虫、青蛙→水生昆虫幼虫、苍鹭→小鱼、苍鹭→青蛙，共 $L=7$ 条边。代入公式得 $C = 7/(6\times5) \approx 0.233$，说明该网络中约 23% 的潜在捕食关系被实际实现，属于中等密度的食物网。</p>
+<p><strong>问题解决应用</strong></p>
+<p>网络的真正价值在于评估生态系统的稳健性：当某个物种因环境扰动而消失时,与其相连的边被删除,若某个物种因此失去全部猎物来源,则触发二次灭绝,这一过程与随机图中的渗流（percolation）现象类似——在 Erdős–Rényi 图 $G(n,p)$ 中,当平均度 $\langle k\rangle=(n-1)p$ 超过临界值 1 时,才会出现覆盖大部分节点的巨连通分量;反之网络迅速碎片化。据此可以设计一个模拟实验：分别按"随机移除物种"和"优先移除高连接度物种（如苍鹭这类顶级捕食者）"两种策略,逐步删除节点并统计每一步引发的二次灭绝数量,绘制"剩余物种比例 vs. 已移除物种比例"的稳健性曲线。多数经验食物网表现出与无标度网络类似的特征:对随机扰动较为稳健,但对关键物种的定向移除高度脆弱——这正是保护生物学中确定"关键种"优先保护顺序的定量依据。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Graph Theory Ch6: Random networks (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

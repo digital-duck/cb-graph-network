@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Eccentricity | Graph Intro Ch05</title>
+<script>
+MathJax = {
+  loader: { load: ['[tex]/mathtools'] },
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']],
+         packages: { '[+]': ['mathtools'] } },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="离心率">离心率</h2>
+<p><strong>定义</strong></p>
+<p>在一个连通图 $G$ 中，顶点 $u$ 的离心率（eccentricity）定义为 $u$ 到图中所有其他顶点的最短路径距离的最大值：</p>
+$$
+\epsilon(u) = \max_{v \in V(G)} d(u, v)
+$$
+<p>其中 $d(u,v)$ 表示顶点 $u$ 与 $v$ 之间的最短路径长度（边数）。直观地说，$\epsilon(u)$ 回答的问题是："从 $u$ 出发，最坏情况下需要走多远才能到达图中最远的顶点？"离心率是一个顶点级别的量，每个顶点都有自己的离心率值；把所有顶点的离心率放在一起考察，就引出了图的直径（$\max_u \epsilon(u)$）和半径（$\min_u \epsilon(u)$）这两个整体性指标。</p>
+<p><strong>求解示例</strong></p>
+<p>考虑一条长度为 4 的路径图，顶点依次为 $v_1 - v_2 - v_3 - v_4 - v_5$。计算 $\epsilon(v_1)$：$v_1$ 到 $v_2, v_3, v_4, v_5$ 的距离分别为 $1, 2, 3, 4$，取最大值得 $\epsilon(v_1) = 4$。再计算 $\epsilon(v_3)$（中间顶点）：到其余四个顶点的距离分别为 $2, 1, 1, 2$，最大值为 $2$，所以 $\epsilon(v_3) = 2$。可以看到，越靠近图的"中心"，离心率越小；越靠近边缘，离心率越大。</p>
+<p><strong>应用：如何系统地求解</strong></p>
+<p>在实践中，计算单个顶点 $u$ 的离心率，只需以 $u$ 为起点做一次广度优先搜索（BFS），记录到达每个顶点所需的层数，取其中的最大值即可，时间复杂度为 $O(|V| + |E|)$。若要求出整个图所有顶点的离心率（从而确定直径与半径），最直接的方法是对每个顶点各做一次 BFS，总复杂度为 $O(|V| \cdot (|V| + |E|))$。</p>
+<p>离心率在实际问题中常用于选址类决策：例如在设计消防站、应急中心或网络中的服务器节点位置时，希望该节点到网络中任意其他节点的最大响应距离尽可能小——这正是寻找离心率最小的顶点（即图的中心点）的问题。理解离心率，是进一步学习图的半径、直径和中心性等概念的基础。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Graph Theory Ch5: Network analysis (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

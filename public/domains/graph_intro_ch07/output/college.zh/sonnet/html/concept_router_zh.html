@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Router | Graph Intro Ch07</title>
+<script>
+MathJax = {
+  loader: { load: ['[tex]/mathtools'] },
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']],
+         packages: { '[+]': ['mathtools'] } },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="router">Router</h2>
+<p>定义:路由器是网络中的一个节点设备,它根据IP地址中的网络标识部分,将数据包转发至目的地址所在的网络,而不需要知道主机在该网络内部的具体位置。一个IP地址由网络部分和主机部部分组成,分界点由子网掩码或CIDR前缀长度决定。CIDR记法写作 $IP/n$,表示地址的前 $n$ 位属于网络部分,其余位标识网络内的主机。</p>
+<p>举例:假设路由器收到目的地址为 $192.168.1.130$ 的数据包,其路由表中有两条都可能匹配的表项:$192.168.1.0/24$ 和 $192.168.1.128/25$。判断是否匹配的方法是将目的地址与掩码做按位与运算 (bitwise AND),得到网络地址后与表项比较:</p>
+$$192.168.1.130 \text{ AND } 255.255.255.128 = 192.168.1.128$$
+<p>由于该地址同时落在这两个网络范围内,路由器依据最长前缀匹配 (longest prefix match) 原则,选择前缀长度更长、掩码更精确的表项 $192.168.1.128/25$,将数据包转发到对应的下一跳接口,而不是转发到范围更宽泛的 $192.168.1.0/24$。</p>
+<p>问题解决应用:最长前缀匹配不仅是一条转发规则,更是一个可以形式化分析的查找问题。可以把路由表中的每条前缀想象成地址空间中的一段区间,查找目的地址所属的最具体区间,等价于在一棵按比特位逐层展开的前缀树 (trie) 中向下匹配:每一位取值0或1决定走哪个分支,走到最深处对应的表项即为最长匹配。这种基于trie的查找,时间复杂度为 $O(W)$,其中 $W$ 是地址的位数(IPv4中 $W = 32$),与路由表中表项的数量无关——这正是路由器能够在毫秒级完成对数百万条表项的查找的关键。掌握这一机制后,便能解决实际问题:给定一组CIDR前缀和某个目的地址,判断数据包会被转发到哪一个下一跳,以及为何一条更"精确"(前缀更长)的路由会覆盖一条更"宽泛"的路由。这也是无类别域间路由 (CIDR) 取代传统按类划分的网络设计后,现代互联网路由表得以高效聚合、缩减规模并快速查找的基础。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Graph Theory Ch7: Modern computer networks (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

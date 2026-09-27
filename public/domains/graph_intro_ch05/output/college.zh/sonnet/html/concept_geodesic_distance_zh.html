@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Geodesic Distance | Graph Intro Ch05</title>
+<script>
+MathJax = {
+  loader: { load: ['[tex]/mathtools'] },
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']],
+         packages: { '[+]': ['mathtools'] } },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="geodesic-distance">Geodesic Distance</h2>
+<p><strong>定义</strong></p>
+<p>在一个图 $G = (V, E)$ 中，两个顶点 $u$ 和 $v$ 之间的测地距离，记作 $d(u, v)$，是连接 $u$ 与 $v$ 的所有路径中长度最短的那条路径的长度。这里的"长度"指路径所经过的边数（在无权图中），或者路径上各边权重之和（在带权图中，权重通常表示距离、时间或成本）。若图中不存在从 $u$ 到 $v$ 的路径，则约定 $d(u, v) = \infty$，表示两点不可达。</p>
+<p>测地距离满足度量的三条基本性质：非负性（$d(u, v) \geq 0$，且当且仅当 $u = v$ 时取零）、对称性（在无向图中 $d(u, v) = d(v, u)$）、以及三角不等式：</p>
+$$
+d(u, w) \leq d(u, v) + d(v, w)
+$$
+<p>这条不等式的直观含义是：绕道经过 $v$ 再到 $w$ 不会比直接走最短路径更近——这正是"最短"二字的数学保证。</p>
+<p><strong>worked example</strong></p>
+<p>考虑一个社交网络图，其中顶点代表人，边代表"互相认识"关系。假设从甲到乙需要经过丙作为中间人（甲—丙—乙），而甲和乙之间没有直接的边。那么 $d(\text{甲}, \text{丙}) = 1$，$d(\text{丙}, \text{乙}) = 1$，于是 $d(\text{甲}, \text{乙}) \leq 1 + 1 = 2$。若确实找不到更短的路径，则 $d(\text{甲}, \text{乙}) = 2$，这也就是这两人之间的"社交距离"，即常说的"六度分隔"概念中所度量的量。</p>
+<p><strong>解决问题的应用</strong></p>
+<p>计算测地距离的标准算法是广度优先搜索（BFS）：从起点 $u$ 出发，逐层向外扩展，第一次到达 $v$ 时所经过的层数即为 $d(u, v)$，时间复杂度为 $O(|V| + |E|)$。对于带权图，则需使用 Dijkstra 算法（要求权重非负）来求解最短路径长度。</p>
+<p>测地距离是许多图论指标的基石：图的<strong>直径</strong>定义为图中所有顶点对测地距离的最大值，<strong>平均路径长度</strong>是所有顶点对测地距离的平均值，而<strong>接近中心性</strong>则用一个顶点到其他所有顶点测地距离之和的倒数来衡量其在网络中的"中心程度"。在实际问题中，无论是计算路由网络中数据包的最优传输路径，还是分析蛋白质相互作用网络中信号传递的效率，测地距离都是量化"网络紧密程度"的核心工具。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Graph Theory Ch5: Network analysis (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

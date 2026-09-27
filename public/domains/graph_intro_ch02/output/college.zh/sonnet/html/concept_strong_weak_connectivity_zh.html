@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Strong Weak Connectivity | Graph Intro Ch02</title>
+<script>
+MathJax = {
+  loader: { load: ['[tex]/mathtools'] },
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']],
+         packages: { '[+]': ['mathtools'] } },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="strong-weak-connectivity">Strong Weak Connectivity</h2>
+<p><strong>定义</strong>　设 $G = (V, E)$ 为一个有向图（digraph）。若对任意一对顶点 $u, v \in V$，都同时存在从 $u$ 到 $v$ 以及从 $v$ 到 $u$ 的有向路径，则称 $G$ 是<strong>强连通</strong>的（strongly connected）。若将 $G$ 中每条有向边 $(u,v)$ 替换为无向边 $\{u,v\}$ 后得到的<strong>基础图</strong>（underlying graph）是连通的，则称 $G$ 是<strong>弱连通</strong>的（weakly connected）。由定义可知，强连通必然弱连通，但反之不成立——方向信息的丢失会让原本不可达的顶点对在基础图中"看起来"连通。</p>
+<p><strong>实例分析</strong>　考虑顶点集 $V=\{1,2,3,4\}$，边集为 $1\to2,\ 2\to3,\ 3\to1,\ 3\to4$。顶点 $1,2,3$ 构成一个有向环，彼此互相可达，但顶点 $4$ 只能被 $3$ 到达，无法反向到达 $1,2,3$ 中任何一个。因此该图<strong>不是强连通</strong>的；但去掉方向后，$1\text{--}2\text{--}3\text{--}4$ 形成一条连通链，所以该图<strong>是弱连通</strong>的。这个例子说明：弱连通只保证"信息可以在忽略方向的意义上互通"，而强连通保证"沿着实际允许的方向，任意两点都能双向往返"。</p>
+<p><strong>判定算法</strong>　直接对每一对顶点做可达性检验的代价是 $O(|V|^2(|V|+|E|))$，效率过低。更实用的做法是：任取一个顶点 $v$，先在 $G$ 上做一次广度优先搜索（BFS），检验能否从 $v$ 到达所有顶点；再在反向图 $G^{T}$（把每条边方向取反）上从 $v$ 做一次 BFS，检验是否所有顶点都能到达 $v$。若两次搜索都能覆盖全部顶点，则 $G$ 强连通，否则不是。两次 BFS 的总时间复杂度为 $O(|V|+|E|)$。判定弱连通则更简单：直接在基础无向图上做一次 BFS 或并查集（union-find），检验连通分量数是否为 $1$。</p>
+<p>在实际应用中，若一个有向图不是强连通的，工程上常关心它能被划分成多少个"内部强连通、彼此单向可达"的子块——这正是<strong>强连通分量</strong>（strongly connected components）问题，可用 Kosaraju 或 Tarjan 算法在 $O(|V|+|E|)$ 时间内求解，是分析网页链接结构、依赖关系图、编译器控制流图等问题的核心工具。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Graph Theory Ch2: Extensions (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

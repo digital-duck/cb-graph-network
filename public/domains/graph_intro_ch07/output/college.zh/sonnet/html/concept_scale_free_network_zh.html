@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Scale Free Network | Graph Intro Ch07</title>
+<script>
+MathJax = {
+  loader: { load: ['[tex]/mathtools'] },
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']],
+         packages: { '[+]': ['mathtools'] } },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="scale-free-network">Scale Free Network</h2>
+<p><strong>定义</strong></p>
+<p>无标度网络（scale-free network）是一类节点度数分布服从幂律（power law）的网络结构。设 $k$ 为节点的度数（即与该节点相连的边数），$P(k)$ 为随机选取一个节点其度数恰为 $k$ 的概率，则无标度网络满足：</p>
+$$
+P(k) \sim k^{-\gamma}
+$$
+<p>其中 $\gamma$ 通常介于 2 和 3 之间，是描述网络异质性的关键参数。这一分布意味着绝大多数节点只有很少的连接，而极少数节点（称为“枢纽节点”，hub）拥有异常多的连接。与随机网络（度数分布近似正态分布、节点连接数相对均匀）不同，无标度网络的度数分布在双对数坐标下呈现出一条近似直线，这是幂律的典型特征，也是判断一个网络是否为无标度网络的常用经验方法。</p>
+<p><strong>范例解析</strong></p>
+<p>以互联网自治系统（AS）之间的连接为例：绝大多数小型网络运营商只与两三家其他网络互联，但少数骨干运营商（如大型电信骨干网）可能与数千个其他网络相连。这种结构并非人为设计，而是通过“优先连接”（preferential attachment）机制自然涌现——新加入网络的节点更倾向于连接已经拥有大量连接的节点，从而使强者愈强，形成幂律分布下的枢纽结构。这一机制由 Barabási 与 Albert 于 1999 年提出的 BA 模型给出了简洁的数学刻画。</p>
+<p><strong>问题解决应用</strong></p>
+<p>识别无标度结构对实际系统的设计与防御至关重要。例如，在评估网络的鲁棒性时，无标度网络对随机节点失效表现出较强的容错能力——因为大多数被随机移除的节点都是度数很低的边缘节点，整体连通性几乎不受影响。但若攻击者刻意针对度数最高的少数枢纽节点进行定向打击，网络会迅速分裂为多个孤立子图，连通性急剧下降。因此，工程师在设计通信网络、电力网或识别生物网络（如蛋白质交互网络）的关键节点时，应首先通过对数—对数坐标下的度数分布拟合来判断网络是否具有无标度特征，进而将有限的防护资源优先分配给少数高连接度的枢纽节点，而非平均分配到所有节点上。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Graph Theory Ch7: Modern computer networks (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

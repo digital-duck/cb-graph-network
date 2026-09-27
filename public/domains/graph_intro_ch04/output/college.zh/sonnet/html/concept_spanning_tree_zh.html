@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Spanning Tree | Graph Intro Ch04</title>
+<script>
+MathJax = {
+  loader: { load: ['[tex]/mathtools'] },
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']],
+         packages: { '[+]': ['mathtools'] } },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="生成树">生成树</h2>
+<p><strong>定义</strong></p>
+<p>给定一个连通图 $G = (V, E)$，其中 $V$ 是顶点集、$E$ 是边集，$G$ 的<strong>生成树</strong>是一个子图 $T$，满足三个条件：（1）$T$ 包含 $G$ 的全部顶点；（2）$T$ 是连通的；（3）$T$ 不含环。由这三条性质可以推出一个重要事实：若 $G$ 有 $n$ 个顶点，则任意一棵生成树恰好有 $n-1$ 条边——多一条边就会形成环，少一条边就无法保持连通。一个图可能存在多棵不同的生成树，它们都覆盖相同的顶点集合，但选取的边不同。</p>
+<p><strong>举例说明</strong></p>
+<p>设想一家连锁企业要在五个城市 $A, B, C, D, E$ 之间铺设通信光缆，使任意两个城市都能通过光缆网络互通消息。城市之间可铺设光缆的路径构成一个图 $G$，共有若干条可选边，每条边都有对应的铺设成本。如果直接把所有可选边都铺上，虽然连通性没有问题，但存在冗余：某些边所连接的两点已经可以通过其他路径互通，这些边构成了环路，白白浪费了预算。生成树的作用正是从原图中挑出恰好 $4$ 条边（因为 $n=5$），使五个城市仍然全部连通，且不存在任何冗余路径。这样的选取方式不止一种：可以先连 $A$–$B$、$B$–$C$、$C$–$D$、$D$–$E$，形成一条链;也可以选择以 $C$ 为中心，连出四条辐射状的边。两种方案都是合法的生成树，但边的总成本可能不同。</p>
+<p><strong>问题求解应用</strong></p>
+<p>生成树概念本身是纯粹的组合结构性质，真正的问题求解价值体现在“最小生成树”这一延伸问题上：在带权图中，从所有可能的生成树里找出边权之和最小的那一棵。经典算法有 Kruskal 算法（按边权从小到大排序，依次加入不会形成环的边，用并查集判环）和 Prim 算法（从一个顶点出发，每次贪心地扩展当前树到最近的未连接顶点）。两者都利用了图论中的一个关键性质：生成树问题具有“贪心选择性”——局部最优的边选择能够导出全局最优的树,这一性质可以用反证法结合“环交换”论证严格证明。掌握生成树，是理解网络设计、电路布线成本最小化以及聚类算法（如层次聚类中利用最小生成树切割最长边）等实际问题的基础。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Graph Theory Ch4: Trees (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

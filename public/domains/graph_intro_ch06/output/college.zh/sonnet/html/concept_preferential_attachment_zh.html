@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Preferential Attachment | Graph Intro Ch06</title>
+<script>
+MathJax = {
+  loader: { load: ['[tex]/mathtools'] },
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']],
+         packages: { '[+]': ['mathtools'] } },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="preferential-attachment-优先连接机制">Preferential Attachment（优先连接机制）</h2>
+<p><strong>定义</strong></p>
+<p>优先连接是一种网络增长机制：网络中不断有新节点加入，而每个新节点选择与谁建立连接时，倾向于连接那些"已经拥有较多连接"的节点。具体来说，一个已有节点被新节点选中的概率与它当前的度（degree，即它已有的连接数）成正比。这个规则常被概括为一句俗语——"富者愈富"（rich get richer）。</p>
+<p>这一机制由巴拉巴西（Barabási）和阿尔伯特（Albert）在研究万维网结构时提出，用来解释真实世界网络（互联网、引文网络、社交网络）为何呈现出"无标度"（scale-free）结构：少数节点拥有极高的连接数（称为枢纽节点，hub），而绝大多数节点连接数很少。这与随机网络中节点度数集中在某个平均值附近的情形截然不同。</p>
+<p>节点 $i$ 在下一个新节点加入时被连接的概率可以写成：</p>
+$$
+P(i) = \frac{k_i}{\sum_j k_j}
+$$
+<p>其中 $k_i$ 是节点 $i$ 当前的度，分母是网络中所有节点度数之和。这个公式的直观含义是：一个节点的连接数越多，它在"争夺"下一条新连接时的相对优势就越大。</p>
+<p><strong>理论结果：幂律度分布</strong></p>
+<p>如果网络从少量节点开始，每次新增一个节点并按照上述概率连接到 $m$ 个已有节点，经过长期增长后，网络的度分布会收敛到幂律形式：</p>
+$$
+P(k) \sim k^{-3}
+$$
+<p>也就是说，度数为 $k$ 的节点出现的概率随 $k$ 增大而以幂函数速度衰减，而不是像随机网络那样呈指数衰减。指数为 $3$ 是巴拉巴西－阿尔伯特模型的一个经典理论结果，可以通过一个称为"主方程"（master equation）的连续时间近似推导得到——具体做法是假设节点度数随时间连续增长，写出度数增长速率与时间的关系式并求解。</p>
+<p><strong>问题求解应用</strong></p>
+<p>判断一个真实网络是否具有优先连接特征的常见做法是：绘制度分布的对数—对数（log-log）图，观察数据点是否近似落在一条直线上——直线的斜率即对应幂律指数。这一分析方法被广泛用于检验社交网络中"大V"账号的形成、学术论文引用网络中"经典论文"的涌现，以及互联网路由结构中少数骨干节点的支配地位，帮助判断这些系统的鲁棒性与脆弱性（枢纽节点被移除时网络更容易瘫痪）。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Graph Theory Ch6: Random networks (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

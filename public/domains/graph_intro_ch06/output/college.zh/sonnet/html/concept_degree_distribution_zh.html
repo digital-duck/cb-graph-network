@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Degree Distribution | Graph Intro Ch06</title>
+<script>
+MathJax = {
+  loader: { load: ['[tex]/mathtools'] },
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']],
+         packages: { '[+]': ['mathtools'] } },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="degree-distribution-度分布">Degree Distribution（度分布）</h2>
+<p><strong>定义</strong></p>
+<p>度分布是描述图中顶点度数的概率分布,记为 $P[\delta = k]$,表示图中随机选取一个顶点其度数恰好为 $k$ 的概率。在 Erdős–Rényi 随机图模型 $G(n,p)$ 中(顶点数为 $n$,任意两点之间独立地以概率 $p$ 连边),某个固定顶点 $v$ 的度数 $\delta(v)$ 等于它与其余 $n-1$ 个顶点之间独立伯努利试验中"成功"(即连边)的次数。因此度分布服从二项分布:</p>
+$$
+P[\delta = k] = \binom{n-1}{k} p^k (1-p)^{n-1-k}, \quad k = 0, 1, \dots, n-1
+$$
+<p>其中 $\binom{n-1}{k}$ 表示从 $n-1$ 个候选邻居中选出恰好 $k$ 个与 $v$ 相连的组合数,$p^k$ 是这 $k$ 条边都存在的概率,$(1-p)^{n-1-k}$ 是其余边都不存在的概率。这一结果直接来自二项分布的定义,因为每条候选边的存在与否是独立同分布的伯努利变量。</p>
+<p><strong>推导要点</strong></p>
+<p>设 $X_i$ 为示性变量,当顶点 $v$ 与第 $i$ 个其他顶点相连时取 1,否则取 0,则 $\delta(v) = \sum_{i=1}^{n-1} X_i$,且各 $X_i$ 相互独立、同分布为 $\text{Bernoulli}(p)$。由独立伯努利变量之和服从二项分布这一标准结论,即得上式。由此还可直接得到期望度和方差:</p>
+$$
+\mathbb{E}[\delta] = (n-1)p, \qquad \text{Var}(\delta) = (n-1)p(1-p)
+$$
+<p><strong>求解应用</strong></p>
+<p>考虑 $n = 1000$、$p = 0.01$ 的随机图,求某顶点度数恰为 10 的概率。代入公式:</p>
+$$
+P[\delta = 10] = \binom{999}{10}(0.01)^{10}(0.99)^{989}
+$$
+<p>数值计算约为 0.125。当 $n$ 很大、$p$ 很小且乘积 $np$ 保持有限时,二项分布可用泊松分布 $\text{Poisson}(\lambda = np)$ 很好地近似,这正是稀疏随机图(如互联网拓扑早期模型)中常用的简化手段,便于快速估算孤立点比例、连通性阈值等结构性质。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Graph Theory Ch6: Random networks (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

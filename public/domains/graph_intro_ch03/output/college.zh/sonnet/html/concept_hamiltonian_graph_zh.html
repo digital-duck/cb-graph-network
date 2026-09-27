@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hamiltonian Graph | Graph Intro Ch03</title>
+<script>
+MathJax = {
+  loader: { load: ['[tex]/mathtools'] },
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']],
+         packages: { '[+]': ['mathtools'] } },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="哈密顿图">哈密顿图</h2>
+<p><strong>定义</strong>：如果一个图 $G$ 中存在至少一条哈密顿回路——也就是一条经过图中每一个顶点恰好一次，并最终回到起点的闭合路径——那么称 $G$ 为哈密顿图。需要注意它与欧拉图的区别：欧拉回路要求遍历每一条<strong>边</strong>恰好一次，而哈密顿回路要求遍历每一个<strong>顶点</strong>恰好一次；两者虽然形式相似，但判定难度截然不同——欧拉图的判定可以在多项式时间内通过简单的度数奇偶性完成，而判断一般图是否为哈密顿图属于 NP 完全问题，目前没有已知的高效通用算法。</p>
+<p><strong>判定的困难与一个有用的充分条件</strong>：正因为不存在简洁的必要充分条件，图论学者转而寻找<strong>充分条件</strong>——满足条件即可保证哈密顿回路存在，但不满足也不能说明它一定不存在。其中最经典的是 Dirac 定理：设 $G$ 是一个有 $n \geq 3$ 个顶点的简单图，若 $G$ 中每个顶点的度数都满足</p>
+$$
+\deg(v) \geq \frac{n}{2}, \quad \forall v \in V(G)
+$$
+<p>则 $G$ 必为哈密顿图。这一结果的直觉是：当每个顶点都与足够多的其他顶点相连时，图会变得"稠密"到无法避免形成一条贯穿所有顶点的闭合链条。更宽松一些的 Ore 定理则指出：只要每一对不相邻顶点 $u, v$ 满足 $\deg(u) + \deg(v) \geq n$，结论同样成立。</p>
+<p><strong>应用举例</strong>：考虑一个有 6 个顶点的图,若每个顶点的度数都至少为 3（即 $n/2 = 3$），根据 Dirac 定理可以立即断定该图存在哈密顿回路,而无需逐一枚举可能的顶点排列——对于 6 个顶点，暴力枚举需要检验多达 $5!/2 = 60$ 条不同的候选路径,复杂度随顶点数呈阶乘增长。这正体现了充分条件的实用价值:在满足条件的场景下,我们跳过了指数级的搜索。</p>
+<p>在实际问题中,哈密顿图的思想常用于旅行商问题的建模——找出一条访问所有城市恰好一次并返回起点的最短路径,本质上就是在带权图中寻找最优的哈密顿回路,这也是它成为组合优化与运筹学核心研究对象的原因。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Graph Theory Ch3: Network traversal (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

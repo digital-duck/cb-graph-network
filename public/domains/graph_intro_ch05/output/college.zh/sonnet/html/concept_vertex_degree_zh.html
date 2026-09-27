@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vertex Degree | Graph Intro Ch05</title>
+<script>
+MathJax = {
+  loader: { load: ['[tex]/mathtools'] },
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']],
+         packages: { '[+]': ['mathtools'] } },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="vertex-degree">Vertex Degree</h2>
+<p><strong>定义</strong></p>
+<p>在一个图中，顶点的度是指与该顶点相连的边的数目。对于图 $G=(V,E)$ 中的顶点 $v$，其度记作 $\deg(v)$。如果一条边的两个端点都是 $v$（自环），通常按惯例计入两次。度是分析网络结构的最基本量：它衡量一个节点与其他节点的直接连接强度，是后续研究中心性、连通性、社群结构等更复杂概念的出发点。</p>
+<p>对于有向图，度需要区分方向：从 $v$ 指出的边数称为出度，记作 $\deg^{+}(v)$；指向 $v$ 的边数称为入度，记作 $\deg^{-}(v)$，二者之和才是该顶点的总度。</p>
+<p>一个基本而重要的结果是握手定理：对无向图，所有顶点的度之和恰好等于边数的两倍，因为每条边同时为它的两个端点各贡献一次度：</p>
+$$
+\sum_{v \in V} \deg(v) = 2|E|
+$$
+<p>这个等式的直接推论是：任意图中度为奇数的顶点个数必为偶数——这是图论中最早、也是最常用的校验工具之一。</p>
+<p><strong>实例分析</strong></p>
+<p>设想一个由五名学生组成的合作小组，若两人合作过一次项目就在他们之间连一条边。若学生 A 与 B、C、D 三人合作过，则 $\deg(A)=3$。若整个小组共发生了 6 次合作关系（6 条边），根据握手定理，五人的度之和必为 12。若已知其中四人的度分别是 3、2、2、3，那么第五人的度必然是 $12-(3+2+2+3)=2$，无需重新统计原始数据即可求出。</p>
+<p><strong>问题求解应用</strong></p>
+<p>握手定理常被用作快速排错手段：若统计出的度序列之和是奇数，说明数据必有误，因为任何真实图的度和都必须是偶数。在实际网络分析中（如社交网络、通信网络），先计算每个节点的度，可以迅速定位度极高的“枢纽”节点或度为零的孤立节点，为后续判断网络是否连通、是否存在瓶颈，提供第一手线索。度分布的整体形态（是否集中、是否有少数节点占据绝大多数连接）也是区分随机网络与真实社会网络结构差异的关键起点。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Graph Theory Ch5: Network analysis (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

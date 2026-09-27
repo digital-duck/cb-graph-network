@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Newscast | Graph Intro Ch07</title>
+<script>
+MathJax = {
+  loader: { load: ['[tex]/mathtools'] },
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']],
+         packages: { '[+]': ['mathtools'] } },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="newscast">Newscast</h2>
+<p><strong>定义</strong>：Newscast 是一种基于流行病式（epidemic-style）传播的无结构对等网络协议，用于维护每个节点的"部分视图"（partial view）——即节点已知的少量邻居及其时间戳。协议不依赖任何全局拓扑设计，而是周期性地让每个节点随机挑选视图中的一个邻居，交换各自的完整视图，合并后按"新鲜度"（时间戳）截断回固定大小。由于每一轮交换都随机引入新的邻居信息，经过若干轮之后，整个网络的连接结构趋近于埃尔德什-任意（Erdős–Rényi）随机图 $G(n,p)$。</p>
+<p><strong>运行示例</strong>：设节点 $A$ 的视图大小上限为 3,当前持有 $\{(B,5),(C,2),(D,8)\}$(数字为"年龄",越小越新)。$A$ 随机选中 $B$ 交换视图,$B$ 返回其视图 $\{(E,1),(F,3),(A,0)\}$。双方各自把两个视图合并、去重、把自身条目年龄归零,再按年龄升序截断回大小 3。结果 $A$ 的新视图可能是 $\{(A,0),(E,1),(B,5)\}$——它已经"认识"了此前完全陌生的 $E$。经过多轮之后,任意两个节点之间存在"认识路径"的概率趋于均匀,拓扑因此呈现随机图特征。</p>
+<p><strong>问题求解应用</strong>:随机图理论给出了这种拓扑鲁棒性的定量判据。若节点数为 $n$,平均视图大小(即平均度)为 $c$,则连通概率有一个尖锐阈值:</p>
+$$
+p_c = \frac{\ln n}{n}
+$$
+<p>对应的平均度阈值为 $c = (n-1)p_c \approx \ln n$。这意味着,只要 Newscast 的视图大小 $c$ 随节点规模按 $O(\ln n)$ 增长,网络几乎必然(概率趋于 1)保持连通,即使不断有节点随机加入或离线。这一结果直接指导工程决策:设计者不需要精心规划拓扑,只需把每个节点的视图大小设为对数量级(例如 20—30 个节点在 $n=10^5$ 时已足够),协议自身的随机交换过程就会以极大概率维持全局连通性,同时具备对节点失效的天然容错能力——这正是 Newscast 被广泛用于大规模分布式系统成员管理的原因。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Graph Theory Ch7: Modern computer networks (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

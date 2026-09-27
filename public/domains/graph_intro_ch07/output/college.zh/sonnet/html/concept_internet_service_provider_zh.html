@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Internet Service Provider | Graph Intro Ch07</title>
+<script>
+MathJax = {
+  loader: { load: ['[tex]/mathtools'] },
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']],
+         packages: { '[+]': ['mathtools'] } },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="internet-service-provider">Internet Service Provider</h2>
+<p><strong>定义</strong></p>
+<p>互联网服务提供商（Internet Service Provider,简称ISP）是拥有大范围网络基础设施、并对外提供互联网接入与流量转接（transit）服务的组织。业界按照网络覆盖范围与商业关系将ISP分为三层：一级（Tier-1）运营商拥有覆盖全球的骨干网络，彼此之间通过对等互联（peering）协议免费交换流量，不向任何其他网络购买转接服务；二级（Tier-2）运营商既与部分网络对等互联,也需要向一级运营商购买转接,才能到达其网络之外的所有地址；三级（Tier-3）运营商通常只服务本地或区域用户,几乎完全依赖向上层购买转接。这种分层结构本质上是一张由自治系统（Autonomous System,简称AS）构成的图,节点是各家ISP,边是对等或转接关系,而数据包在这张图上的转发路径由边界网关协议（BGP）动态决定。</p>
+<p><strong>实例分析</strong></p>
+<p>假设你所在城市的小型宽带公司(三级ISP)要把用户的请求发送到大洋对岸的一台服务器。该请求先经过本地ISP的路由器,由于三级ISP没有到达对岸网络的直接连接,它必须把流量转交给已付费购买转接服务的二级ISP;二级ISP同样没有覆盖全球的骨干线路,于是再把流量转交给与自己签有转接协议的一级ISP;这条流量最终穿越一级ISP之间的对等互联骨干网络,到达对方所在区域的一级ISP,再逐级下放到二级、三级网络,最后送达目标服务器。整个过程展示了转接费用如何随层级向上传递,也说明了为什么终端用户的网络体验依赖于多家独立公司协作。</p>
+<p><strong>问题解决应用</strong></p>
+<p>网络工程师在为企业设计出口线路时,常需要在成本与可靠性之间权衡:只连接一家三级ISP成本低,但一旦该ISP的上联链路故障,企业网络就会完全断网;若同时连接两家不同的二级或一级ISP(称为多线路接入,multihoming),即使一条路径失效,BGP也能自动将流量切换到另一条路径,从而提高可用性。评估这类方案时,需要考察每家候选ISP在AS拓扑图中的连接度(与多少家其他网络对等互联)、其上联路径的跳数,以及是否为一级运营商——连接度越高、上联路径越短,通常意味着延迟更低、单点故障风险更小。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Graph Theory Ch7: Modern computer networks (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

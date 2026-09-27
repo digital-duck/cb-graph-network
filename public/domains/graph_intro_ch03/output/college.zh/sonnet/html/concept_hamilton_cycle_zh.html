@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hamilton Cycle | Graph Intro Ch03</title>
+<script>
+MathJax = {
+  loader: { load: ['[tex]/mathtools'] },
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']],
+         packages: { '[+]': ['mathtools'] } },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="哈密顿环">哈密顿环</h2>
+<p>在一个连通图 $G$ 中，如果存在一个环，能够恰好经过图中每一个顶点一次（不重复、不遗漏），并最终回到起点，这样的环就称为<strong>哈密顿环</strong>。含有哈密顿环的图称为哈密顿图。需要与之区分的是<strong>哈密顿路径</strong>：路径同样要求经过每个顶点恰好一次，但起点与终点不必相同，因此不构成闭合的环。</p>
+<p><strong>举例说明</strong>。设图 $G$ 有顶点集 $\{1,2,3,4,5\}$，边集为 $\{12, 23, 34, 45, 51, 13, 24\}$（即一个五边形加两条对角线）。观察外围的五条边 $12, 23, 34, 45, 51$，恰好依次经过全部五个顶点后回到起点 $1$，因此序列</p>
+$$1 \rightarrow 2 \rightarrow 3 \rightarrow 4 \rightarrow 5 \rightarrow 1$$
+<p>就是该图的一个哈密顿环。注意对角线 $13$ 和 $24$ 并不参与这个环，它们的存在与否不影响这一环的合法性，但可能带来其他哈密顿环。</p>
+<p><strong>判定的难点与充分条件</strong>。对于一般的图，判断是否存在哈密顿环是一个 NP 完全问题——目前没有已知的多项式时间算法能对任意图给出判定，只能依赖启发式搜索或回溯法逐一尝试。但对于满足特定条件的图，可以给出保证存在哈密顿环的充分条件，其中最著名的是狄拉克定理：</p>
+<p>若图 $G$ 有 $n \geq 3$ 个顶点，且每个顶点的度数都满足</p>
+$$\deg(v) \geq \frac{n}{2}$$
+<p>则 $G$ 必定是哈密顿图。</p>
+<p>这一定理的价值在于把一个原本需要指数级搜索才能确认的性质，转化为对每个顶点度数的简单计数检验：只需逐一核对度数下界,便可在多项式时间内断定哈密顿环必然存在，而不必真正构造出来。这也是图论中"充分条件换取效率"的典型策略——牺牲判定的一般性，换取特定条件下的可计算性,广泛应用于路线规划、电路布线和任务调度等要求"逐点覆盖且不重复"的实际问题中。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Graph Theory Ch3: Network traversal (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

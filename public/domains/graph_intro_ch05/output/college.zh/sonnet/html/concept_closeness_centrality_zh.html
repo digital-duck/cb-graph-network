@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Closeness Centrality | Graph Intro Ch05</title>
+<script>
+MathJax = {
+  loader: { load: ['[tex]/mathtools'] },
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']],
+         packages: { '[+]': ['mathtools'] } },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="closeness-centrality-接近中心性">Closeness Centrality（接近中心性）</h2>
+<p><strong>定义</strong></p>
+<p>在一个图中，顶点 $u$ 的接近中心性衡量的是 $u$ 到网络中其他所有顶点的"平均接近程度"。其定义为 $u$ 到所有其他顶点最短路径长度之和的倒数：</p>
+$$
+C(u) = \frac{1}{\sum_{v \neq u} d(u, v)}
+$$
+<p>其中 $d(u, v)$ 表示顶点 $u$ 与顶点 $v$ 之间最短路径的长度（边数或加权距离）。直觉上，如果 $u$ 到其他顶点的距离普遍较小，那么求和项 $\sum_{v \neq u} d(u, v)$ 就小，倒数就大，说明 $u$ 在网络中处于"中心"位置，能够快速触达其他节点。反之，若 $u$ 位于网络边缘，距离之和较大，接近中心性就低。</p>
+<p>为了便于跨图比较（不同规模的图，距离之和的量级不同），常用<strong>标准化版本</strong>：</p>
+$$
+C_{\text{norm}}(u) = \frac{n - 1}{\sum_{v \neq u} d(u, v)}
+$$
+<p>其中 $n$ 是图中顶点总数，$n-1$ 是 $u$ 之外可能到达的顶点数。</p>
+<p><strong>实例演算</strong></p>
+<p>考虑一条链状图：$A - B - C - D - E$（五个顶点依次相连）。</p>
+<p>对顶点 $C$（中间节点）：到 $A$、$B$、$D$、$E$ 的距离分别为 $2, 1, 1, 2$，和为 $6$，故 $C(C) = \frac{1}{6}$，标准化后为 $C_{\text{norm}}(C) = \frac{4}{6} \approx 0.667$。</p>
+<p>对顶点 $A$（端点）：到 $B$、$C$、$D$、$E$ 的距离分别为 $1, 2, 3, 4$，和为 $10$，故 $C(A) = \frac{1}{10}$，标准化后为 $C_{\text{norm}}(A) = \frac{4}{10} = 0.4$。</p>
+<p>可见 $C$ 的接近中心性明显高于 $A$，这与直觉一致：链的中点比端点更"接近"整体网络。</p>
+<p><strong>问题求解应用</strong></p>
+<p>计算接近中心性通常依赖单源最短路径算法：对无权图用广度优先搜索（BFS），对带权图用 Dijkstra 算法，对每个顶点各跑一次，再求距离之和取倒数。若图不是连通的，某些顶点对之间不存在路径，此时惯例做法是仅对同一连通分量内的顶点求和，或将不可达顶点的距离记为无穷大从而使该顶点的中心性趋于零——具体采用哪种约定需在应用前明确说明。</p>
+<p>在实际网络分析中（如社交网络、交通网络、信息传播模型），接近中心性常用于识别"信息扩散最快"或"响应时间最短"的枢纽节点：选址问题（如新建一个消防站、仓库或服务器）常常等价于寻找使接近中心性最大化的顶点。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Graph Theory Ch5: Network analysis (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

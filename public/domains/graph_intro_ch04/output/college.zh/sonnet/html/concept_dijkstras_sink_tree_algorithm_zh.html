@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dijkstras Sink Tree Algorithm | Graph Intro Ch04</title>
+<script>
+MathJax = {
+  loader: { load: ['[tex]/mathtools'] },
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']],
+         packages: { '[+]': ['mathtools'] } },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="dijkstras-sink-tree-algorithm">Dijkstras Sink Tree Algorithm</h2>
+<p><strong>定义</strong></p>
+<p>汇聚树（sink tree）是一棵以某个目的顶点为根、方向朝向该根的树：对于图中每一个顶点，从它出发沿树中的边行走,最终都能到达根节点,且这条路径就是从该顶点到根节点的最短路径。给定一个有向加权图,且所有边的权重非负,狄克斯特拉汇聚树算法能够构造出以指定目的顶点为根的最优汇聚树。这本质上是标准狄克斯特拉最短路径算法的一个变体：把原算法中"从源点出发,沿边的方向"改为"到达目的点,沿边的反方向",在反向图上运行同样的贪心扩展过程,即可得到到达该目的点的所有最短路径构成的树。</p>
+<p>算法的核心不变量与标准狄克斯特拉算法相同：维护一个到根节点的当前最短距离估计 $d(v)$,每次从尚未确定的顶点集合中取出距离估计最小的顶点,将其"锁定"为最终值,并用它去松弛（relax）与之相邻的顶点。松弛操作的判定条件为</p>
+$$
+d(u) > d(v) + w(v, u)
+$$
+<p>其中 $w(v,u)$ 是从 $u$ 到 $v$（在反向图上）的边权。若该不等式成立,则更新 $d(u) = d(v) + w(v,u)$,并将 $u$ 的父指针指向 $v$，从而把 $u$ 挂接到正在生长的汇聚树上。</p>
+<p><strong>实例演算</strong></p>
+<p>考虑一个通信网络,四个路由器 $A, B, C, D$，目的顶点为 $D$（例如所有节点都要把数据汇聚到 $D$）。边及反向权重为：$A\to D$ 权重 4，$B\to D$ 权重 2，$C\to B$ 权重 3，$A\to C$ 权重 1。算法从 $D$ 出发,在反向图上扩展：先锁定 $D$（距离 0），随后锁定 $B$（距离 2，父节点为 $D$），再锁定 $C$（经 $B$，距离 5）与直接锁定 $A$（距离 4，父节点为 $D$）——由于 $4 < 5$，$A$ 的最优路径是直连 $D$,而不是经过 $C, B$。最终汇聚树为：$A\to D$，$B\to D$，$C\to B$，每个顶点到 $D$ 的路径都是全局最短路径。</p>
+<p><strong>问题求解应用</strong></p>
+<p>该算法直接解决"多对一"路由问题：网络监控、日志汇聚、传感器数据回传等场景中,所有节点需要把信息送到同一个中心节点,而不是中心节点向外广播。使用优先队列实现时,算法的时间复杂度为 $O((V+E)\log V)$，与单源最短路径完全一致,因为二者本质上是同一算法在正向图与反向图上的两次应用。工程上判断该用正向还是反向狄克斯特拉,只需明确：需求是"从一点到所有点"还是"从所有点到一点"。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Graph Theory Ch4: Trees (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

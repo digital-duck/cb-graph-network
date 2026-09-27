@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Traveling Salesman Problem | Graph Intro Ch03</title>
+<script>
+MathJax = {
+  loader: { load: ['[tex]/mathtools'] },
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']],
+         packages: { '[+]': ['mathtools'] } },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="traveling-salesman-problem-旅行商问题">Traveling Salesman Problem（旅行商问题）</h2>
+<p><strong>定义</strong></p>
+<p>旅行商问题要求在一组给定地点中，找到一条经过每个地点恰好一次、最终回到起点的路线，使总旅行代价最小。用图论语言描述：给定一个完全图 $G = (V, E)$，其中顶点集 $V$ 代表地点，边权 $w(u, v)$ 代表从 $u$ 到 $v$ 的代价（距离、时间或费用），目标是在所有哈密顿回路（Hamilton cycle，即访问每个顶点恰好一次并回到起点的闭合路径）中，找到边权总和最小的那一条：</p>
+$$
+\min_{\sigma} \sum_{i=1}^{n} w\big(\sigma(i), \sigma(i+1 \bmod n)\big)
+$$
+<p>其中 $\sigma$ 是顶点 $\{1, 2, \ldots, n\}$ 的一个排列，表示访问顺序。若图是有向图，$w(u,v)$ 与 $w(v,u)$ 可以不同，此时问题称为非对称旅行商问题。</p>
+<p>旅行商问题之所以成为计算机科学中的标志性难题，是因为它属于 NP 困难（NP-hard）问题：对于 $n$ 个地点，可能的路线数量为 $(n-1)!/2$（无向情形），随 $n$ 增长呈阶乘级爆炸。穷举搜索在 $n$ 超过约 20 时已不可行，而目前没有已知的多项式时间算法能保证求得最优解，也没有证据表明这样的算法不存在——这正是 P 与 NP 问题的核心悬念之一。</p>
+<p><strong>实例演算</strong></p>
+<p>考虑 4 个城市 $A, B, C, D$，边权（距离）如下：$w(A,B)=10$，$w(A,C)=15$，$w(A,D)=20$，$w(B,C)=35$，$w(B,D)=25$，$w(C,D)=30$。由于 $n=4$，共有 $3! = 6$ 种不同回路（考虑方向与起点对称性后为 3 条本质不同的回路）。逐一计算：</p>
+<li>$A \to B \to C \to D \to A$：$10+35+30+20 = 95$</li>
+<li>$A \to B \to D \to C \to A$：$10+25+30+15 = 80$</li>
+<li>$A \to C \to B \to D \to A$：$15+35+25+20 = 95$</li>
+<p>最优回路为 $A \to B \to D \to C \to A$，总代价为 80。</p>
+<p><strong>问题求解应用</strong></p>
+<p>对于中小规模实例，动态规划（Held–Karp 算法）可将时间复杂度从阶乘级降到 $O(n^2 \cdot 2^n)$，其思路是用状态 $(S, j)$ 记录“已访问顶点集合为 $S$、当前停留在顶点 $j$”时的最小代价，通过子问题递推求解。对于大规模实例（如物流配送路径规划），实践中转而采用近似算法（如最近邻启发式、2-opt 局部搜索）或元启发式方法（模拟退火、遗传算法），在可接受时间内求得接近最优的解，这体现了理论最优性与工程可行性之间的经典权衡。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Graph Theory Ch3: Network traversal (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

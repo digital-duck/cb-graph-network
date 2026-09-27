@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Autonomous System | Graph Intro Ch07</title>
+<script>
+MathJax = {
+  loader: { load: ['[tex]/mathtools'] },
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']],
+         packages: { '[+]': ['mathtools'] } },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="自治系统">自治系统</h2>
+<p>自治系统（Autonomous System，简称 AS）是指由同一个行政实体管理、遵循统一路由策略的一组网络的集合。在互联网的图模型中，每一个自治系统被抽象为图中的一个顶点，而自治系统之间的物理连接与商业互联关系则被抽象为连接这些顶点的边。这种抽象是理解互联网宏观结构的关键：互联网并非一张扁平的网络，而是数万个自治系统通过边界网关协议相互连接而成的网络的网络。每个自治系统内部可以自由选择自己的路由算法（如开放最短路径优先协议），但对外则通过统一的自治系统编号向其他自治系统宣告可达的地址前缀。</p>
+<p><strong>举例说明</strong>：一所大学的校园网络、一家互联网服务提供商的骨干网络、一家云计算公司的数据中心网络，通常各自构成一个自治系统，拥有独立的自治系统编号（例如某高校的编号为 AS7377）。当这所大学需要将流量发送到另一所大学时，数据包不会直接知道具体的物理路径，而是通过边界网关协议在自治系统这一层面进行路由决策：本地自治系统向邻居自治系统宣告"我可以到达某地址前缀"，邻居再根据自己的路由策略决定是否转发以及转发给谁。这个过程可以自然地用图论语言描述：设互联网图为 $G=(V,E)$，其中每个顶点 $v\in V$ 对应一个自治系统，边 $(u,v)\in E$ 表示 $u$ 与 $v$ 之间存在直接的对等或转接关系。两个自治系统之间的数据传输路径，对应图中一条连接相应顶点的路径。</p>
+<p><strong>问题求解应用</strong>：把互联网建模为自治系统图后，许多实际网络问题就转化为经典的图算法问题。例如，判断某条互联网连接中断后网络是否仍然连通，等价于判断去掉图中某个顶点或边后图是否仍保持连通——这可以用深度优先搜索或广度优先搜索在 $O(|V|+E|)$ 时间内验证。又如，边界网关协议为每个地址前缀选择的路径，本质上是在自治系统图上寻找满足特定路由策略（而非单纯最短路径）约束的路径，这类问题常用带权重和策略过滤的最短路径算法（如迪杰斯特拉算法的变体）建模。理解自治系统这一抽象层次，是分析互联网韧性、路由收敛速度以及网络攻击传播范围等实际工程问题的出发点。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Graph Theory Ch7: Modern computer networks (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

@@ -357,6 +357,14 @@ about:
         <a href="https://github.com/digital-duck/cb-zinets" target="_blank" rel="noopener">cb-zinets</a>
         — a concept-book fully built out around this founding use-case — if you'd like to dig deeper.
       </p>
+
+      <h2>Source material</h2>
+      <p>
+        The concept graphs in this app are derived from
+        <a href="https://www.distributed-systems.net/index.php/books/gtcn/" target="_blank" rel="noopener">Graph Theory and Complex Networks: An Introduction</a>
+        by Maarten van Steen (freely available textbook PDF; not OpenStax / not CC BY).
+        The concept graphs are a companion learning aid extracted from this material and are not a reproduction of the original text.
+      </p>
     zh: |
       <h1>关于 concept-book</h1>
       <p>
@@ -393,6 +401,14 @@ about:
         如想深入了解，请看
         <a href="https://github.com/digital-duck/cb-zinets" target="_blank" rel="noopener">cb-zinets</a>
         ——一个围绕这一缘起用例完整构建的概念书。
+      </p>
+
+      <h2>原始资料</h2>
+      <p>
+        本应用中的概念图源自
+        <a href="https://www.distributed-systems.net/index.php/books/gtcn/" target="_blank" rel="noopener">《图论与复杂网络：导论》</a>
+        ，作者 Maarten van Steen（免费提供的教材 PDF；非 OpenStax / 非 CC BY 协议）。
+        概念图是从原书中提炼的配套学习辅助材料，并非对原文的复制。
       </p>
 
 # Fixed strings in generated book pages (spl/tools.py build_book_index).
