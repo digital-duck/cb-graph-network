@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Directed Graph | Graph Intro Ch02</title>
+<title>In Out Neighbor Sets | Graph Intro Ch02</title>
 <script>
 MathJax = {
   loader: { load: ['[tex]/mathtools'] },
@@ -44,11 +44,18 @@ section:first-of-type{border-top:none;padding-top:0}
 <body>
 <div class="page">
   <main>
-    <h2 id="directed-graph">Directed Graph</h2>
-<p>A directed graph, or digraph, extends the idea of a graph by giving each connection a direction. Formally, a digraph is defined as $D = (V, A)$, where $V$ is a finite set of vertices and $A$ is a set of arcs (also called directed edges). Each arc is written as an ordered pair $\langle u, v \rangle$, where $u$ is the tail and $v$ is the head. The order matters: $\langle u, v \rangle$ represents a connection running from $u$ to $v$, and it is not the same as $\langle v, u \rangle$ unless both arcs are explicitly present. This distinguishes a digraph from an undirected graph, where an edge $\{u, v\}$ has no orientation.</p>
-<p>Two structural quantities matter for each vertex: the out-degree, the number of arcs leaving it, and the in-degree, the number of arcs entering it. A vertex with out-degree zero and positive in-degree acts as a sink; one with in-degree zero and positive out-degree acts as a source. Summing out-degrees over all vertices equals the total number of arcs $|A|$, and the same is true for in-degrees — every arc contributes exactly one unit of out-degree to its tail and one unit of in-degree to its head.</p>
-<p>Consider a small road network modeled as a digraph: $V = \{A, B, C\}$, with one-way streets given by arcs $\langle A, B \rangle$, $\langle B, C \rangle$, and $\langle C, A \rangle$. A driver at intersection $A$ can reach $B$ directly, but cannot travel from $B$ back to $A$ without first passing through $C$. This directional constraint is exactly what the digraph captures that an undirected graph would lose: an undirected edge $\{A, B\}$ would wrongly imply two-way travel.</p>
-<p>Digraphs are the natural model whenever a relationship is asymmetric — task dependencies in a project schedule, follower relationships on a social network, or hyperlinks between web pages. A common problem-solving task is determining reachability: given a starting vertex $s$, which vertices can be reached by following arcs in their given direction? Solving this requires tracing paths that respect arc orientation, which is the foundation for algorithms such as depth-first search applied to directed structures, and for detecting cycles that indicate circular dependencies in a system.</p>
+    <h2 id="in-out-neighbor-sets">In Out Neighbor Sets</h2>
+<p>In a directed graph, every arc has a direction, so each vertex plays two distinct roles: it can be the source of an arc or the destination of an arc. This asymmetry is captured by two companion sets. For a vertex $v$ in a digraph $G = (V, E)$, the in-neighbor set is defined as</p>
+$$
+N^-(v) = \{ u \in V : (u, v) \in E \}
+$$
+<p>the collection of all vertices with an arc pointing directly into $v$. The out-neighbor set is defined symmetrically as</p>
+$$
+N^+(v) = \{ w \in V : (v, w) \in E \}
+$$
+<p>the vertices that $v$ points to. These two sets need not be related in size or membership — a vertex can have many in-neighbors and no out-neighbors (a "sink"), or the reverse (a "source"). The sizes of these sets are exactly the in-degree, $|N^-(v)|$, and out-degree, $|N^+(v)|$, of $v$.</p>
+<p><strong>Worked example.</strong> Consider a digraph modeling a small social media network where an arc from $u$ to $v$ means "$u$ follows $v$." Suppose the arcs are: Ann → Bo, Cy → Bo, Bo → Dee, Dee → Ann. Then $N^-(\text{Bo}) = \{\text{Ann}, \text{Cy}\}$ (Bo's followers) and $N^+(\text{Bo}) = \{\text{Dee}\}$ (who Bo follows). Note Ann is in Bo's in-neighbor set but not vice versa — the relationship is one-directional, which is exactly what the two separate sets are built to express.</p>
+<p><strong>Problem-solving application.</strong> These sets are the computational backbone of graph traversal and dependency analysis. In a task-scheduling system represented as a digraph (arc $u \to v$ means "task $u$ must finish before task $v$ starts"), a task $v$ is ready to run only when every member of $N^-(v)$ has completed — this is precisely the check used in topological sorting algorithms like Kahn's algorithm, which repeatedly removes vertices whose in-neighbor set has shrunk to empty. Conversely, $N^+(v)$ tells you which tasks become unblocked once $v$ finishes, which is what you traverse when propagating a state change (as in a breadth-first search or a spreadsheet's dependency recalculation). In practice, an adjacency-list representation typically stores $N^+(v)$ directly per vertex, while $N^-(v)$ is either maintained as a separate reverse adjacency list or computed on demand by scanning all arcs — a design choice with real performance consequences when a program needs to repeatedly ask "who depends on this?"</p>
   </main>
   <footer class="spl-credit"><span class="spl-credit__meta">Graph Theory Ch2: Extensions (Level: College &middot; Language: EN &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
 </div>

@@ -1,6 +1,9 @@
 domain: graph_theory_and_complex_networks_an_introduction_ch2
 primitives:
   directed_graph:
+    diagram:
+      type: flowchart LR
+      hint: "left side: undirected graph — nodes A and B with a plain line (A—B, symmetric); right side: directed graph — same nodes with arrow A→B (one-way); label in-degree and out-degree on the directed side"
     defines: A digraph D = (V, A) consists of vertices and arcs, where each arc <u,v> joins a tail vertex
       u to a head vertex v.
     tier: 0
@@ -41,6 +44,9 @@ concepts:
     - in_out_neighbor_sets
     tier: 2
   degree_distribution:
+    diagram:
+      type: graph TD
+      hint: "bar chart shape: x-axis = degree k, y-axis = fraction of nodes P(k); random graph shows bell curve; scale-free network shows power-law decay with a few very high-degree hubs"
     defines: A distribution showing how many vertices in a (di)graph have each possible degree value,
       often used to assess vertex importance.
     composed_of:
@@ -130,6 +136,7 @@ applications:
     needs:
     - orientation
     - strong_weak_connectivity
+    - degree_distribution
     tier: 3
   communication_network_routing:
     defines: Modeling communication and transportation networks as digraphs where strong connectivity

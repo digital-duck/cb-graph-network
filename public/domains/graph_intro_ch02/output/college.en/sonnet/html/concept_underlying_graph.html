@@ -6,11 +6,15 @@
 <title>Underlying Graph | Graph Intro Ch02</title>
 <script>
 MathJax = {
-  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']] },
+  loader: { load: ['[tex]/mathtools'] },
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']],
+         packages: { '[+]': ['mathtools'] } },
   options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
 };
 </script>
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
@@ -26,6 +30,12 @@ p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
 footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
       font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
 footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.cb-figure{margin:24px 0;text-align:center}
+.cb-figure img{max-width:100%;height:auto;border:1px solid #e0e0d8;border-radius:6px}
+figcaption{font-size:.82rem;color:#666;margin-top:8px;font-style:italic;text-align:center}
+pre.mermaid{background:none;border:none;padding:0;overflow:visible;margin:16px 0}
 .page{max-width:780px;margin:0 auto;padding:40px 32px}
 section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
 section:first-of-type{border-top:none;padding-top:0}
@@ -35,14 +45,11 @@ section:first-of-type{border-top:none;padding-top:0}
 <div class="page">
   <main>
     <h2 id="underlying-graph">Underlying Graph</h2>
-<p>A directed graph (digraph) assigns a direction to every edge — each edge points from a source vertex to a target vertex. The <strong>underlying graph</strong> of a digraph is the undirected graph you get by stripping away those directions, keeping the same vertices and the same connections but treating every edge as a simple, two-way link.</p>
-<p>Formally, if $G = (V, E)$ is a digraph where each edge is an ordered pair $(u, v)$, then its underlying graph $G' = (V, E')$ replaces every directed edge $(u, v)$ (and its possible reverse $(v, u)$) with a single undirected edge $\{u, v\}$. If both $(u, v)$ and $(v, u)$ exist in $G$, they collapse to one edge in $G'$.</p>
-<p><strong>Worked example.</strong> Consider a digraph with vertices $\{A, B, C\}$ and directed edges $(A, B)$, $(B, C)$, $(A, C)$. Visually, every arrow points in one direction. The underlying graph simply connects $A$–$B$, $B$–$C$, and $A$–$C$ without any arrowheads — a triangle. Now add the reverse edge $(C, A)$ to the digraph. In the underlying graph, $A$–$C$ is already present, so nothing changes: the underlying graph is still the same triangle.</p>
-<p><strong>Why it matters in problem-solving.</strong> The underlying graph is the key tool for checking <strong>weak connectivity</strong> of a digraph. A digraph is <em>weakly connected</em> if its underlying graph is connected — meaning you can reach any vertex from any other vertex when you're allowed to travel edges in either direction. This is a weaker condition than <em>strong connectivity</em>, which requires a directed path in both directions between every pair of vertices.</p>
-<p>In practice, suppose you're modeling a one-way street network and want to verify that no neighborhood is completely isolated. You convert the street map to its underlying graph and run a standard breadth-first search (BFS) or depth-first search (DFS) on it. If BFS visits every intersection, the network is weakly connected — no neighborhood is cut off entirely, even if you can't drive back the same way you came. If some vertices are unreachable in the underlying graph, those locations are structurally isolated regardless of traffic direction, and the network has a design flaw worth fixing.</p>
-<p>The underlying graph thus acts as a diagnostic layer: it separates topology (what is connected to what) from flow (which direction information or traffic travels).</p>
+<p>Every digraph carries within it a shadow of undirected structure. Given a digraph $D = (V, A)$, the underlying graph of $D$, denoted $G(D)$, is the undirected graph $G(D) = (V, E)$ obtained by replacing each arc $(u, v) \in A$ with an undirected edge $\{u, v\}$. If both $(u, v)$ and $(v, u)$ appear as arcs in $D$ — a common situation when a relationship is mutual — they collapse into the single edge $\{u, v\}$ in $G(D)$, since an undirected graph does not distinguish direction or count parallel connections between the same pair of vertices. The underlying graph strips away directionality while preserving exactly which pairs of vertices are connected in some direction.</p>
+<p><strong>Worked example.</strong> Consider a digraph $D$ on vertices $\{A, B, C, D\}$ with arcs $A \to B$, $B \to C$, $C \to A$, and $B \to D$. To construct $G(D)$, replace each arc with an undirected edge: $\{A,B\}$, $\{B,C\}$, $\{A,C\}$, and $\{B,D\}$. The result is an undirected graph with a triangle on $\{A, B, C\}$ and a pendant edge to $D$. Notice that $D$ has 4 arcs and $G(D)$ has 4 edges here, but this need not hold in general — if $D$ also contained the arc $B \to A$, then $G(D)$ would still have only the single edge $\{A, B\}$, since $\{A,B\}$ was already present.</p>
+<p><strong>Problem-solving application.</strong> The underlying graph is the standard tool for importing undirected-graph theorems into directed settings. A key application: a digraph $D$ is called weakly connected if $G(D)$ is connected, meaning there is an undirected path between every pair of vertices once direction is ignored — a strictly weaker requirement than strong connectivity, where directed paths must exist in both directions. To test weak connectivity computationally, one simply builds $G(D)$ (by symmetrizing the adjacency matrix, effectively computing $A + A^{T}$ and treating any nonzero entry as an edge) and runs a standard connectivity check, such as breadth-first search, on the result. This reduction is why the underlying graph matters practically: rather than developing separate connectivity algorithms for directed structures, one converts the problem to the undirected case, solves it with familiar tools, and reads the answer back in terms of the original digraph.</p>
   </main>
-  <footer class="spl-credit">Generated by SPL &middot; Powered by SPL.py</footer>
+  <footer class="spl-credit"><span class="spl-credit__meta">Graph Theory Ch2: Extensions (Level: College &middot; Language: EN &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
 </div>
 </body>
 </html>

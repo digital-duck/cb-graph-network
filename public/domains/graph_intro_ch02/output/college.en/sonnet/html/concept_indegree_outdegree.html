@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Directed Graph | Graph Intro Ch02</title>
+<title>Indegree Outdegree | Graph Intro Ch02</title>
 <script>
 MathJax = {
   loader: { load: ['[tex]/mathtools'] },
@@ -44,11 +44,12 @@ section:first-of-type{border-top:none;padding-top:0}
 <body>
 <div class="page">
   <main>
-    <h2 id="directed-graph">Directed Graph</h2>
-<p>A directed graph, or digraph, extends the idea of a graph by giving each connection a direction. Formally, a digraph is defined as $D = (V, A)$, where $V$ is a finite set of vertices and $A$ is a set of arcs (also called directed edges). Each arc is written as an ordered pair $\langle u, v \rangle$, where $u$ is the tail and $v$ is the head. The order matters: $\langle u, v \rangle$ represents a connection running from $u$ to $v$, and it is not the same as $\langle v, u \rangle$ unless both arcs are explicitly present. This distinguishes a digraph from an undirected graph, where an edge $\{u, v\}$ has no orientation.</p>
-<p>Two structural quantities matter for each vertex: the out-degree, the number of arcs leaving it, and the in-degree, the number of arcs entering it. A vertex with out-degree zero and positive in-degree acts as a sink; one with in-degree zero and positive out-degree acts as a source. Summing out-degrees over all vertices equals the total number of arcs $|A|$, and the same is true for in-degrees — every arc contributes exactly one unit of out-degree to its tail and one unit of in-degree to its head.</p>
-<p>Consider a small road network modeled as a digraph: $V = \{A, B, C\}$, with one-way streets given by arcs $\langle A, B \rangle$, $\langle B, C \rangle$, and $\langle C, A \rangle$. A driver at intersection $A$ can reach $B$ directly, but cannot travel from $B$ back to $A$ without first passing through $C$. This directional constraint is exactly what the digraph captures that an undirected graph would lose: an undirected edge $\{A, B\}$ would wrongly imply two-way travel.</p>
-<p>Digraphs are the natural model whenever a relationship is asymmetric — task dependencies in a project schedule, follower relationships on a social network, or hyperlinks between web pages. A common problem-solving task is determining reachability: given a starting vertex $s$, which vertices can be reached by following arcs in their given direction? Solving this requires tracing paths that respect arc orientation, which is the foundation for algorithms such as depth-first search applied to directed structures, and for detecting cycles that indicate circular dependencies in a system.</p>
+    <h2 id="indegree-outdegree">Indegree Outdegree</h2>
+<p>In a directed graph, each arc has a direction: it leaves one vertex and enters another. This asymmetry means every vertex has two separate degree counts instead of one. The indegree of a vertex $v$, written $\deg^-(v)$, is the number of arcs that have $v$ as their head (arcs pointing into $v$). The outdegree, written $\deg^+(v)$, is the number of arcs that have $v$ as their tail (arcs pointing out of $v$). The total degree of $v$ is simply the sum $\deg(v) = \deg^-(v) + \deg^+(v)$.</p>
+<p>A key structural fact follows directly from the definitions: since every arc contributes exactly one head and one tail, summing indegree over all vertices must equal summing outdegree over all vertices, and both equal the total number of arcs $m$:</p>
+$$\sum_{v \in V} \deg^-(v) = \sum_{v \in V} \deg^+(v) = m$$
+<p><strong>Worked example.</strong> Consider a directed graph with arcs $(A,B)$, $(A,C)$, $(B,C)$, $(C,A)$. Vertex $A$ has one arc leaving to $B$ and one to $C$, so $\deg^+(A) = 2$; it has one arc entering from $C$, so $\deg^-(A) = 1$. Vertex $C$ has arcs entering from $A$ and $B$, giving $\deg^-(C) = 2$, and one arc leaving to $A$, giving $\deg^+(C) = 1$. Checking the totals: outdegrees sum to $2+1+1=4$, indegrees sum to $1+1+2=4$, matching the arc count $m=4$.</p>
+<p><strong>Problem-solving application.</strong> Indegree and outdegree let you diagnose structural roles in a network without inspecting the whole graph. A vertex with indegree zero is a source — nothing feeds into it, as with a task in a project schedule that has no prerequisites. A vertex with outdegree zero is a sink — a final deliverable, or a dead end in a web-crawl graph. In a web graph, a page's indegree measures how many other pages link to it, which is the raw signal behind PageRank-style ranking; its outdegree measures how many pages it links out to. When verifying whether a directed graph could represent a valid Eulerian circuit (a route traversing every arc exactly once and returning to the start), the required condition is that every vertex satisfies $\deg^-(v) = \deg^+(v)$. Computing these two counts for each vertex is also the first step in detecting sources, sinks, and bottlenecks before running algorithms like topological sort or network flow.</p>
   </main>
   <footer class="spl-credit"><span class="spl-credit__meta">Graph Theory Ch2: Extensions (Level: College &middot; Language: EN &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
 </div>

@@ -6,11 +6,15 @@
 <title>Orientation | Graph Intro Ch02</title>
 <script>
 MathJax = {
-  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']] },
+  loader: { load: ['[tex]/mathtools'] },
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']],
+         packages: { '[+]': ['mathtools'] } },
   options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
 };
 </script>
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
@@ -26,6 +30,12 @@ p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
 footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
       font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
 footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.cb-figure{margin:24px 0;text-align:center}
+.cb-figure img{max-width:100%;height:auto;border:1px solid #e0e0d8;border-radius:6px}
+figcaption{font-size:.82rem;color:#666;margin-top:8px;font-style:italic;text-align:center}
+pre.mermaid{background:none;border:none;padding:0;overflow:visible;margin:16px 0}
 .page{max-width:780px;margin:0 auto;padding:40px 32px}
 section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
 section:first-of-type{border-top:none;padding-top:0}
@@ -35,21 +45,12 @@ section:first-of-type{border-top:none;padding-top:0}
 <div class="page">
   <main>
     <h2 id="orientation">Orientation</h2>
-<p><strong>Orientation</strong> describes the <em>handedness</em> of an ordered arrangement — whether a sequence of vectors, vertices, or axes follows a consistent clockwise or counterclockwise sense. It is a binary property: every finite-dimensional vector space, polygon, or coordinate frame is either positively oriented or negatively oriented, and swapping any two elements flips it. This distinction is not cosmetic. Computer graphics, robotics, and computational geometry all depend on tracking orientation to avoid silently mirrored output.</p>
-<p>For a pair of vectors $\mathbf{u}, \mathbf{v}$ in $\mathbb{R}^2$, the signed area of the parallelogram they span is the determinant</p>
-$$\det\begin{pmatrix} u_1 & v_1 \\ u_2 & v_2 \end{pmatrix} = u_1 v_2 - u_2 v_1.$$
-<p>If this value is <strong>positive</strong>, the angle from $\mathbf{u}$ to $\mathbf{v}$ goes counterclockwise — the standard positive orientation. If <strong>negative</strong>, the rotation is clockwise, meaning the ordered pair is negatively oriented. A determinant of zero means the vectors are collinear and span no area, so orientation is undefined.</p>
-<p><strong>Worked example.</strong> A triangle has vertices listed as $A = (0,0)$, $B = (4,0)$, $C = (4,3)$. Form edge vectors from $A$: $\mathbf{u} = B - A = (4,0)$ and $\mathbf{v} = C - A = (4,3)$. Compute</p>
-$$\det\begin{pmatrix} 4 & 4 \\ 0 & 3 \end{pmatrix} = 12 - 0 = 12 > 0.$$
-<p>The vertices are in counterclockwise order, so the triangle is positively oriented.</p>
-<p><strong>Problem-solving application.</strong> Suppose a polygon-fill algorithm requires all input triangles to be counterclockwise. You receive a mesh where some triangles have their vertices listed in an unknown order. For each triangle with vertices $P_1, P_2, P_3$:</p>
-<li>Compute $d = (P_2 - P_1) \times (P_3 - P_1)$ (the 2-D cross product, i.e., the determinant above).</li>
-<li>If $d > 0$, the triangle is already counterclockwise — keep it.</li>
-<li>If $d < 0$, swap any two vertices (e.g., exchange $P_2$ and $P_3$) to reverse orientation.</li>
-<li>If $d = 0$, flag the triangle as degenerate and discard it.</li>
-<p>This three-line check, applied in a loop, normalizes an entire mesh in $O(n)$ time. The key insight is that orientation is encoded in the sign of a single determinant — you never need angles or trigonometry.</p>
+<p>An orientation of an undirected graph $G$ is an assignment of a direction to every edge of $G$, turning each edge $\{u,v\}$ into exactly one directed arc, either $(u,v)$ or $(v,u)$. The result is a directed graph $D(G)$, called an orientation of $G$, that has the same vertex set and the same underlying edges as $G$, but with each edge now traversable in only one direction. A single graph with $m$ edges has $2^m$ possible orientations, since each edge independently gets one of two directions.</p>
+<p>Orientation matters because many real systems are naturally undirected in structure but directional in function. Consider a graph representing a road network where every edge is a two-way street. If the city converts some streets to one-way to relieve congestion, it is choosing an orientation of the underlying graph. The choice is not arbitrary: a good orientation must still let every location reach every other location, and this is a property of $D(G)$, not of $G$ itself. In graph-theoretic terms, an orientation is called strongly connected if for every pair of vertices $u$ and $v$ there is a directed path from $u$ to $v$ and a directed path from $v$ to $u$. Robbins' theorem states that a connected graph $G$ has a strongly connected orientation if and only if $G$ is 2-edge-connected, meaning $G$ has no bridge (an edge whose removal disconnects the graph). This is a genuine structural theorem, not a restatement of intuition: it tells us exactly which graphs can be one-way-street systems without stranding any location.</p>
+<p>Worked example: take a graph on four vertices $A, B, C, D$ forming a cycle $A\!-\!B\!-\!C\!-\!D\!-\!A$, plus a chord $A\!-\!C$. This graph is 2-edge-connected, since every edge lies on a cycle, so Robbins' theorem guarantees a strongly connected orientation exists. One such orientation directs the cycle consistently, $A\to B\to C\to D\to A$, and directs the chord as $C\to A$. Checking reachability confirms every vertex can reach every other vertex in both directions around the cycle.</p>
+<p>Problem-solving application: to test whether a graph admits a strongly connected orientation, check for bridges first (via depth-first search low-link values); if none exist, orient each biconnected component consistently around a depth-first search tree, using tree edges forward and back edges backward — this constructive method, underlying Robbins' proof, directly produces a valid orientation rather than merely confirming one exists.</p>
   </main>
-  <footer class="spl-credit">Generated by SPL &middot; Powered by SPL.py</footer>
+  <footer class="spl-credit"><span class="spl-credit__meta">Graph Theory Ch2: Extensions (Level: College &middot; Language: EN &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
 </div>
 </body>
 </html>

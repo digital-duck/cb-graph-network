@@ -6,11 +6,15 @@
 <title>Communication Network Routing | Graph Intro Ch02</title>
 <script>
 MathJax = {
-  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']] },
+  loader: { load: ['[tex]/mathtools'] },
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']],
+         packages: { '[+]': ['mathtools'] } },
   options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
 };
 </script>
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
@@ -26,6 +30,12 @@ p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
 footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
       font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
 footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.cb-figure{margin:24px 0;text-align:center}
+.cb-figure img{max-width:100%;height:auto;border:1px solid #e0e0d8;border-radius:6px}
+figcaption{font-size:.82rem;color:#666;margin-top:8px;font-style:italic;text-align:center}
+pre.mermaid{background:none;border:none;padding:0;overflow:visible;margin:16px 0}
 .page{max-width:780px;margin:0 auto;padding:40px 32px}
 section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
 section:first-of-type{border-top:none;padding-top:0}
@@ -35,22 +45,17 @@ section:first-of-type{border-top:none;padding-top:0}
 <div class="page">
   <main>
     <h2 id="communication-network-routing">Communication Network Routing</h2>
-<p>When you send a message from your laptop to a server across the country, that message doesn't travel in a straight line — it hops through dozens of intermediate devices called <strong>routers</strong>, each one deciding where to forward your data next. <strong>Communication network routing</strong> is the process of finding paths through a network so that data packets move from source to destination efficiently, reliably, and without collisions.</p>
-<p>A network is naturally modeled as a <strong>weighted graph</strong>: nodes represent routers or endpoints, edges represent physical or wireless links, and edge weights capture cost — often latency (milliseconds of delay), bandwidth, or hop count. Routing reduces to a shortest-path problem on this graph.</p>
-<p>The most widely used algorithm in practice is <strong>Dijkstra's algorithm</strong>, which computes the minimum-cost path from one source node to all others. It maintains a priority queue of unvisited nodes, always expanding the node with the currently smallest known distance. Consider a small network:</p>
-<pre><code>A --2-- B --1-- D
-|               |
-4       3       2
-|               |
-C ------3------ E</code></pre>
-<p>Starting from A, Dijkstra proceeds:</p>
-<p>| Step | Visited | Distances (A, B, C, D, E) | |------|---------|--------------------------| | 0    | {A}     | 0, 2, 4, ∞, ∞            | | 1    | {A, B}  | 0, 2, 4, 3, ∞            | | 2    | {A, B, D}| 0, 2, 4, 3, 5           | | 3    | {A, B, D, C}| 0, 2, 4, 3, 5        | | 4    | {all}   | 0, 2, 4, 3, 5            |</p>
-<p>The shortest path from A to E is $A \to B \to D \to E$ with total cost $2 + 1 + 2 = 5$.</p>
-<p>Real routing protocols like <strong>OSPF</strong> (Open Shortest Path First) implement exactly this logic, but distributed across routers that share link-state information with neighbors. Each router independently runs Dijkstra on its local view of the network and forwards packets along the resulting best path.</p>
-<p><strong>Applying this to a problem:</strong> Suppose a new link is added between C and D with weight 1. You don't rerun Dijkstra from scratch across the whole network — a router only needs to update costs for nodes reachable through C or D, then re-compare. This incremental update pattern is why large networks can adapt to failures in milliseconds rather than seconds.</p>
-<p>When designing or analyzing a network, ask: what does each edge weight represent, and is minimizing it actually the goal? A video call prioritizes low latency; a file backup prioritizes high bandwidth. Choosing the right cost metric is as important as the algorithm itself.</p>
+<p>A communication or transportation network is naturally modeled as a directed graph (digraph) $G = (V, E)$, where nodes $V$ represent routers, cities, or relay stations, and directed edges $E$ represent one-way links — a fiber-optic connection, a one-way street, or an asymmetric radio channel. The central question for reliability is: can every node reach every other node? A digraph is <strong>strongly connected</strong> if, for every ordered pair of nodes $u, v \in V$, there exists a directed path from $u$ to $v$. This is a stronger requirement than ordinary (weak) connectivity, which only asks that the graph be connected if edge directions are ignored.</p>
+<p><strong>Worked example.</strong> Consider a four-node network with edges $A \to B$, $B \to C$, $C \to D$, and $D \to A$. This forms a directed cycle. Even though no single edge is bidirectional, every node can reach every other node by traveling around the cycle — for instance, $B$ reaches $D$ via $B \to C \to D$. This digraph is strongly connected. Now suppose we delete the edge $D \to A$. The graph is still weakly connected (ignoring direction, it's a path), but $D$ can no longer reach $A$, $B$, or $C$: strong connectivity fails. This distinction matters operationally — a network administrator glancing at an undirected sketch of the topology could wrongly conclude the system is robust, missing that traffic can flow in only one direction around the loop.</p>
+<p><strong>Problem-solving application.</strong> Testing strong connectivity by checking all $|V|(|V|-1)$ pairs is impractical for large networks. Instead, algorithms like Kosaraju's or Tarjan's compute the graph's <strong>strongly connected components (SCCs)</strong> — maximal subsets where every node reaches every other — in $O(|V| + |E|)$ time, using two depth-first searches. A network is strongly connected exactly when it consists of a single SCC. In practice, network engineers use this test to find single points of failure: an edge whose removal splits one SCC into several is a critical link, and the design task becomes adding a redundant reverse-direction path to restore full connectivity, guaranteeing that a message can always be rerouted even if one direction of a link fails.</p>
+<pre class="mermaid">graph LR
+    A --> B
+    B --> C
+    C --> D
+    D --> A</pre>
+<p><em>A directed cycle: removing any single edge, such as D → A, breaks strong connectivity even though the underlying undirected graph stays connected.</em></p>
   </main>
-  <footer class="spl-credit">Generated by SPL &middot; Powered by SPL.py</footer>
+  <footer class="spl-credit"><span class="spl-credit__meta">Graph Theory Ch2: Extensions (Level: College &middot; Language: EN &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
 </div>
 </body>
 </html>

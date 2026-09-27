@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Directed Graph | Graph Intro Ch02</title>
+<title>Degree Distribution | Graph Intro Ch02</title>
 <script>
 MathJax = {
   loader: { load: ['[tex]/mathtools'] },
@@ -44,11 +44,14 @@ section:first-of-type{border-top:none;padding-top:0}
 <body>
 <div class="page">
   <main>
-    <h2 id="directed-graph">Directed Graph</h2>
-<p>A directed graph, or digraph, extends the idea of a graph by giving each connection a direction. Formally, a digraph is defined as $D = (V, A)$, where $V$ is a finite set of vertices and $A$ is a set of arcs (also called directed edges). Each arc is written as an ordered pair $\langle u, v \rangle$, where $u$ is the tail and $v$ is the head. The order matters: $\langle u, v \rangle$ represents a connection running from $u$ to $v$, and it is not the same as $\langle v, u \rangle$ unless both arcs are explicitly present. This distinguishes a digraph from an undirected graph, where an edge $\{u, v\}$ has no orientation.</p>
-<p>Two structural quantities matter for each vertex: the out-degree, the number of arcs leaving it, and the in-degree, the number of arcs entering it. A vertex with out-degree zero and positive in-degree acts as a sink; one with in-degree zero and positive out-degree acts as a source. Summing out-degrees over all vertices equals the total number of arcs $|A|$, and the same is true for in-degrees — every arc contributes exactly one unit of out-degree to its tail and one unit of in-degree to its head.</p>
-<p>Consider a small road network modeled as a digraph: $V = \{A, B, C\}$, with one-way streets given by arcs $\langle A, B \rangle$, $\langle B, C \rangle$, and $\langle C, A \rangle$. A driver at intersection $A$ can reach $B$ directly, but cannot travel from $B$ back to $A$ without first passing through $C$. This directional constraint is exactly what the digraph captures that an undirected graph would lose: an undirected edge $\{A, B\}$ would wrongly imply two-way travel.</p>
-<p>Digraphs are the natural model whenever a relationship is asymmetric — task dependencies in a project schedule, follower relationships on a social network, or hyperlinks between web pages. A common problem-solving task is determining reachability: given a starting vertex $s$, which vertices can be reached by following arcs in their given direction? Solving this requires tracing paths that respect arc orientation, which is the foundation for algorithms such as depth-first search applied to directed structures, and for detecting cycles that indicate circular dependencies in a system.</p>
+    <h2 id="degree-distribution">Degree Distribution</h2>
+<p>For a graph with $n$ vertices, the degree distribution is the function $P(k)$ giving the fraction of vertices whose degree equals $k$:</p>
+$$
+P(k) = \frac{|\{v \in V : \deg(v) = k\}|}{n}
+$$
+<p>For a directed graph, in-degree and out-degree are tracked separately, giving two distributions, $P_{\text{in}}(k)$ and $P_{\text{out}}(k)$. Plotting $P(k)$ against $k$ reveals the overall connectivity pattern of the network: whether most vertices have similar degree, or whether degree varies widely across the population.</p>
+<p><strong>Worked example.</strong> Consider a graph with six vertices and degree sequence $\{1, 1, 2, 2, 3, 5\}$. Here $n = 6$, so the degree distribution is $P(1) = \frac{2}{6}$, $P(2) = \frac{2}{6}$, $P(3) = \frac{1}{6}$, and $P(5) = \frac{1}{6}$. This tells us a third of the vertices are leaves (degree 1), and one vertex — the degree-5 vertex — connects to every other vertex in the graph, making it a likely hub.</p>
+<p><strong>Problem-solving application.</strong> Degree distribution is the standard first diagnostic for network structure, because its shape distinguishes fundamentally different generative processes. A random graph (Erdős–Rényi model), where each edge is included independently with fixed probability, produces a binomial degree distribution that concentrates tightly around the mean degree — most vertices look alike. Many real-world networks, including the web graph, citation networks, and social networks, instead follow a power-law distribution, $P(k) \sim k^{-\gamma}$ for some constant $\gamma$, typically between 2 and 3. In a power-law network, most vertices have low degree, but a small number of hub vertices have very high degree, and this heavy tail has no natural scale — hence the name "scale-free network." Recognizing this pattern matters practically: it explains why such networks are robust to random vertex failure (removing a random vertex is unlikely to hit a hub) but fragile to targeted attack (removing the top hubs quickly fragments the network). To apply this, plot degree against frequency on log-log axes; a roughly straight line is evidence of a power law, and its slope estimates $\gamma$, which analysts use to compare the resilience and hub-dependence of different real-world networks.</p>
   </main>
   <footer class="spl-credit"><span class="spl-credit__meta">Graph Theory Ch2: Extensions (Level: College &middot; Language: EN &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
 </div>
