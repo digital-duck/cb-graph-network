@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Directed Graph | Graph Intro Ch02</title>
+<script>
+MathJax = {
+  loader: { load: ['[tex]/mathtools'] },
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']],
+         packages: { '[+]': ['mathtools'] } },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.cb-figure{margin:24px 0;text-align:center}
+.cb-figure img{max-width:100%;height:auto;border:1px solid #e0e0d8;border-radius:6px}
+figcaption{font-size:.82rem;color:#666;margin-top:8px;font-style:italic;text-align:center}
+pre.mermaid{background:none;border:none;padding:0;overflow:visible;margin:16px 0}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="directed-graph">Directed Graph</h2>
+<p>A directed graph, or digraph, extends the idea of a graph by giving each connection a direction. Formally, a digraph is defined as $D = (V, A)$, where $V$ is a finite set of vertices and $A$ is a set of arcs (also called directed edges). Each arc is written as an ordered pair $\langle u, v \rangle$, where $u$ is the tail and $v$ is the head. The order matters: $\langle u, v \rangle$ represents a connection running from $u$ to $v$, and it is not the same as $\langle v, u \rangle$ unless both arcs are explicitly present. This distinguishes a digraph from an undirected graph, where an edge $\{u, v\}$ has no orientation.</p>
+<p>Two structural quantities matter for each vertex: the out-degree, the number of arcs leaving it, and the in-degree, the number of arcs entering it. A vertex with out-degree zero and positive in-degree acts as a sink; one with in-degree zero and positive out-degree acts as a source. Summing out-degrees over all vertices equals the total number of arcs $|A|$, and the same is true for in-degrees — every arc contributes exactly one unit of out-degree to its tail and one unit of in-degree to its head.</p>
+<p>Consider a small road network modeled as a digraph: $V = \{A, B, C\}$, with one-way streets given by arcs $\langle A, B \rangle$, $\langle B, C \rangle$, and $\langle C, A \rangle$. A driver at intersection $A$ can reach $B$ directly, but cannot travel from $B$ back to $A$ without first passing through $C$. This directional constraint is exactly what the digraph captures that an undirected graph would lose: an undirected edge $\{A, B\}$ would wrongly imply two-way travel.</p>
+<p>Digraphs are the natural model whenever a relationship is asymmetric — task dependencies in a project schedule, follower relationships on a social network, or hyperlinks between web pages. A common problem-solving task is determining reachability: given a starting vertex $s$, which vertices can be reached by following arcs in their given direction? Solving this requires tracing paths that respect arc orientation, which is the foundation for algorithms such as depth-first search applied to directed structures, and for detecting cycles that indicate circular dependencies in a system.</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Graph Theory Ch2: Extensions (Level: College &middot; Language: EN &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

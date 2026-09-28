@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Url | Graph Intro Ch07</title>
+<script>
+MathJax = {
+  loader: { load: ['[tex]/mathtools'] },
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']],
+         packages: { '[+]': ['mathtools'] } },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="url">Url</h2>
+<p><strong>定义</strong></p>
+<p>统一资源定位符(URL, Uniform Resource Locator)是用于在超链接中标识并定位网络服务器上某一文档或资源的引用字符串。一个URL本质上回答了三个问题:使用什么协议访问资源、资源存放在哪一台服务器上、资源在该服务器上的具体路径是什么。一个完整的URL通常遵循固定的结构:</p>
+$$
+\text{协议}://\text{主机名}[:\text{端口}]/\text{路径}[?\text{查询参数}][\#\text{片段标识符}]
+$$
+<p>其中协议(如 <code>http</code>、<code>https</code>、<code>ftp</code>)规定了客户端与服务器之间的通信规则;主机名(如 <code>www.example.com</code>)通过域名系统(DNS)被解析为服务器的IP地址;路径指向服务器文件系统或应用程序中的具体资源;查询参数以键值对形式向服务器传递额外信息;片段标识符则指向文档内部的某个锚点,仅由浏览器本地处理,不会被发送到服务器。</p>
+<p><strong>实例解析</strong></p>
+<p>以URL <code>https://www.library.edu/search?query=数据结构&amp;page=2#results</code> 为例:<code>https</code> 表示使用加密的超文本传输协议;<code>www.library.edu</code> 是服务器的域名;<code>/search</code> 是服务器上处理搜索请求的程序路径;<code>?query=数据结构&amp;page=2</code> 是查询字符串,告诉服务器搜索关键词为"数据结构"且请求第2页结果;<code>#results</code> 则指示浏览器在页面加载后自动滚动到标识为"results"的区域。可以看到,同一个URL中不同部分承担着完全不同的职责,缺一不可。</p>
+<p><strong>问题解决应用</strong></p>
+<p>理解URL结构使我们能够诊断网络请求中的常见问题。例如,当一个链接指向 <code>http://example.com//images/photo.jpg</code> 时出现404错误,排查思路应是检查路径中多余的斜杠是否被服务器错误解析。又如,在设计一个网页表单时,若需要将用户输入的空格、中文字符或特殊符号(如 <code>&amp;</code>、<code>=</code>)传递给服务器,必须先对这些字符进行百分号编码(percent-encoding),否则它们会被误判为URL结构中的分隔符,导致查询参数解析错误——这正是为什么"数据结构"在实际网络请求中会显示为 <code>%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84</code>。掌握URL的分层结构,是排查网络请求错误、设计安全的Web接口、以及理解浏览器地址栏行为的基础技能。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Graph Theory Ch7: Modern computer networks (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

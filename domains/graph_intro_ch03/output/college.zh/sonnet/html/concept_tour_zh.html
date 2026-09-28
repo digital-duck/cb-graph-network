@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tour | Graph Intro Ch03</title>
+<script>
+MathJax = {
+  loader: { load: ['[tex]/mathtools'] },
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']],
+         packages: { '[+]': ['mathtools'] } },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="tour">Tour</h2>
+<p><strong>定义</strong>　设 $G=(V,E)$ 为一个图。图中的一条<strong>回路</strong>（tour）是一条闭合的 $(u,v)$-途径（walk），满足 $u=v$，并且这条途径经过图中<strong>每一条边至少一次</strong>。注意"途径"允许重复经过顶点，因此回路不要求是简单路径；它只关心边是否被覆盖，而不禁止重复访问某条边或某个顶点。</p>
+<p>回路是研究"欧拉性质"的核心对象：一个连通图存在一条恰好经过每条边<strong>正好一次</strong>的回路（称为欧拉回路），当且仅当图中每个顶点的度数都是偶数。这是图论中少数几个可以给出简洁必要且充分条件的经典结果，值得作为定理陈述：</p>
+$$
+G \text{ 存在欧拉回路} \iff G \text{ 连通，且 } \forall v \in V,\ \deg(v) \text{ 为偶数}
+$$
+<p>直观上，"必要性"的证明很简单：回路每次经过一个顶点时都是"进一次、出一次"，因此每个顶点被使用的边数必然成对出现，度数必为偶数。"充分性"的证明则依赖构造性论证（例如反复寻找并拼接子回路），这里不展开。</p>
+<p><strong>worked example</strong>　考虑一个由 $5$ 个顶点组成的环形图 $C_5$（顶点依次为 $v_1,v_2,v_3,v_4,v_5$，首尾相连成环）。每个顶点的度数都是 $2$（偶数），且图是连通的，因此按照上述定理，$C_5$ 存在欧拉回路。事实上，沿着环走一圈——$v_1 \to v_2 \to v_3 \to v_4 \to v_5 \to v_1$——就是一条回路：起点等于终点，且每条边恰好被使用一次。</p>
+<p><strong>问题求解应用</strong>　回路概念在实际中用于判断"一次性巡查"是否可行：例如邮递员投递路线、电路板走线检测、下水道管网巡检等场景，都要求从某点出发、经过所有边、再回到起点。判断可行性的第一步永远是检查每个顶点的度数：只要发现某个顶点度数为奇数，就可以立即断定不存在欧拉回路，此时问题退化为"如何用最少的重复边覆盖所有边"（即中国邮路问题）。反之，一旦验证所有顶点度数均为偶数且图连通，就可以直接调用 Hierholzer 算法（时间复杂度 $O(|E|)$）来构造出具体的回路，而不必依赖枚举搜索。这正是回路定义在算法设计中最直接的应用价值。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Graph Theory Ch3: Network traversal (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Graph Embedding | Graph Intro Ch01</title>
+<script>
+MathJax = {
+  loader: { load: ['[tex]/mathtools'] },
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']],
+         packages: { '[+]': ['mathtools'] } },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="graph-embedding">Graph Embedding</h2>
+<p><strong>定义</strong></p>
+<p>图嵌入（graph embedding）是将一个抽象图 $G = (V, E)$ 映射到某个几何曲面（通常是平面 $\mathbb{R}^2$）上的具体表示方法：每个顶点 $v \in V$ 被赋予一个坐标位置 $\phi(v) \in \mathbb{R}^2$，每条边 $(u, v) \in E$ 被绘制为连接 $\phi(u)$ 与 $\phi(v)$ 的一条曲线。需要强调的是，图本身作为抽象结构（顶点集合与边的连接关系）并不含有"位置"这一属性——同一个图可以有无数种不同的嵌入方式，它们在视觉上千差万别，但表达的连接关系完全相同。常见的嵌入策略包括：<strong>环形嵌入</strong>（circular embedding），将顶点按某种顺序均匀排列在一个圆周上，便于观察对称性与环路结构；<strong>分层嵌入</strong>（ranked/layered embedding），按照某个属性（如深度、层级、拓扑序）将顶点分配到不同的水平层，常用于展示有向无环图或层次结构；<strong>力导向嵌入</strong>（spring embedding），将边视为弹簧、顶点视为相互排斥的带电粒子，通过模拟物理系统达到能量最小的稳定布局，使连接紧密的顶点自然聚拢、整体结构清晰可读。</p>
+<p><strong>实例演示</strong></p>
+<p>考虑一个包含 5 个顶点的社交网络图，其中顶点代表人，边代表好友关系。若采用环形嵌入，将 5 人等距排列在圆周上，图的对称性、是否存在"团"（clique）等结构一目了然，但如果好友关系稀疏且不均匀，会产生大量交叉边，难以判断社区结构。若换用力导向嵌入，相互好友较多的人会被算法自动拉近，形成视觉上的"聚类"，从而直观揭示出潜在的社交圈子——这是环形嵌入无法做到的。</p>
+<p><strong>问题求解应用</strong></p>
+<p>在实际数据分析中，选择嵌入方式取决于要解决的问题：若任务是检测图中是否存在平面性（即能否画出零交叉边的嵌入），需要用到平面图判定算法（如 Kuratowski 定理的应用）；若任务是发现社区结构，力导向嵌入配合聚类算法更合适；若任务是展示流程或依赖关系（如项目管理中的任务先后顺序），分层嵌入能清楚表达先后次序。因此，选取嵌入方法本质上是一个将抽象连接关系转化为可读视觉信息的优化问题，目标是让嵌入尽可能反映图的内在结构特征，而非仅仅追求视觉美观。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Graph Theory Ch1: Foundations (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

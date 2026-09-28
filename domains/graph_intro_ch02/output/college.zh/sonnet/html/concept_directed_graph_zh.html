@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Directed Graph | Graph Intro Ch02</title>
+<script>
+MathJax = {
+  loader: { load: ['[tex]/mathtools'] },
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']],
+         packages: { '[+]': ['mathtools'] } },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.cb-figure{margin:24px 0;text-align:center}
+.cb-figure img{max-width:100%;height:auto;border:1px solid #e0e0d8;border-radius:6px}
+figcaption{font-size:.82rem;color:#666;margin-top:8px;font-style:italic;text-align:center}
+pre.mermaid{background:none;border:none;padding:0;overflow:visible;margin:16px 0}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="directed-graph">Directed Graph</h2>
+<p><strong>定义</strong></p>
+<p>有向图（记作 $D = (V, A)$）由一个顶点集 $V$ 和一个弧集 $A$ 组成，其中每条弧是一个有序对 $\langle u, v \rangle$，表示从尾顶点 $u$ 指向头顶点 $v$ 的一条单向连接。与无向图不同，弧 $\langle u, v \rangle$ 和 $\langle v, u \rangle$ 是两条不同的弧——方向承载了实际信息，例如"任务 $u$ 必须在任务 $v$ 之前完成"或"网页 $u$ 链接到网页 $v$"。对每个顶点 $v$，我们区分<strong>入度</strong>（指向 $v$ 的弧数，记作 $\deg^-(v)$）和<strong>出度</strong>（从 $v$ 发出的弧数，记作 $\deg^+(v)$）。全图弧的总数满足：</p>
+$$|A| = \sum_{v \in V} \deg^+(v) = \sum_{v \in V} \deg^-(v)$$
+<p>这个恒等式的直观理由是：每条弧恰好为某个顶点贡献一个出度，也恰好为另一个顶点贡献一个入度，因此两侧求和方式不同但计的是同一批弧。</p>
+<p><strong>实例求解</strong></p>
+<p>考虑一个课程先修关系图：顶点为课程 {微积分, 线性代数, 概率论, 机器学习}，弧集为 $\{\langle 微积分, 概率论 \rangle, \langle 线性代数, 概率论 \rangle, \langle 概率论, 机器学习 \rangle, \langle 线性代数, 机器学习 \rangle\}$。要判断"机器学习"能否被安排在学期末学习，先检查是否存在从它出发又能绕回自身的弧序列（即环）。逐一追踪：从机器学习出发没有任何出弧，所以它必然是终点之一，不可能出现在环中。计算每个顶点的入度和出度：概率论的入度为 2、出度为 1；机器学习的入度为 2、出度为 0。出度为 0 的顶点称为"汇点"，在课程排序问题中，它天然适合排在最后。</p>
+<p><strong>问题解决应用</strong></p>
+<p>有向图的核心应用在于<strong>依赖排序</strong>：给定一组带有先修约束的任务，能否找到一个满足所有弧方向的线性顺序（拓扑排序）？解决思路是：反复选取当前入度为 0 的顶点（即无待完成前提的任务），将其输出并从图中移除，同时更新其后继顶点的入度，直到所有顶点被处理。若在某一步找不到入度为 0 的顶点，但图中仍有顶点未处理，说明存在环——这类任务集合无法被线性排序（例如"课程 A 需要课程 B，课程 B 又需要课程 A"）。这一算法正是编译器处理模块导入顺序、项目管理软件计算关键路径的基础。</p>
+<pre class="mermaid">graph LR
+  A[微积分] --> C[概率论]
+  B[线性代数] --> C
+  C --> D[机器学习]
+  B --> D</pre>
+<p><em>该图展示了课程先修关系的有向图结构：箭头方向表示先修约束，机器学习的入度为2、出度为0，是图中的汇点。</em></p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Graph Theory Ch2: Extensions (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

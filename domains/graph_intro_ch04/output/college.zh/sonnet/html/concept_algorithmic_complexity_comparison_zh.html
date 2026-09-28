@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Algorithmic Complexity Comparison | Graph Intro Ch04</title>
+<script>
+MathJax = {
+  loader: { load: ['[tex]/mathtools'] },
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']],
+         packages: { '[+]': ['mathtools'] } },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="algorithmic-complexity-comparison">Algorithmic Complexity Comparison</h2>
+<p>在图论中，最短路径算法的效率取决于图的规模——顶点数 $V$ 和边数 $E$——以及边权是否允许为负。<strong>迪杰斯特拉算法</strong>（Dijkstra's Algorithm）使用最小堆维护待处理顶点，每次贪心地选取当前已知距离最小的顶点进行松弛操作，其时间复杂度为 $O((V + E)\log V)$，前提是所有边权非负。<strong>贝尔曼-福特算法</strong>（Bellman-Ford Algorithm）则通过对所有边进行最多 $V-1$ 轮松弛来逐步逼近最短路径，其时间复杂度为 $O(VE)$，代价是运行更慢，但换来的优势是能够正确处理负权边，并可检测负权环的存在。</p>
+<p>考虑一个具体场景：某物流公司需要在包含 1000 个仓库节点（$V=1000$）与 5000 条运输路线（$E=5000$）的网络中计算最短配送路径。若所有运费均为正值，迪杰斯特拉算法的运算量约为</p>
+$$
+(V+E)\log V \approx (1000+5000)\times \log_2(1000) \approx 6000 \times 10 = 60{,}000
+$$
+<p>次基本操作；而贝尔曼-福特算法则需要约</p>
+$$
+VE = 1000 \times 5000 = 5{,}000{,}000
+$$
+<p>次操作——差距超过两个数量级。这说明当边权非负时，迪杰斯特拉算法在稀疏图（$E$ 远小于 $V^2$）中具有显著优势。</p>
+<p>然而，若网络中存在补贴或退款机制导致某些"运费"为负值，迪杰斯特拉算法的贪心假设便不再成立，可能给出错误结果，此时必须使用贝尔曼-福特算法，即使其运行时间更长。</p>
+<p>在实际问题求解中，选择算法的关键步骤是：首先判断图中是否存在负权边；若无负权边且图规模较大（$V$、$E$ 均以万计），优先选用迪杰斯特拉算法以节省计算资源；若存在负权边，或需要检测负权环（例如判断套利机会是否存在于货币兑换图中），则必须采用贝尔曼-福特算法，接受其 $O(VE)$ 的代价以换取正确性。理解这种复杂度与适用条件之间的权衡，是设计高效且正确的最短路径求解系统的核心。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Graph Theory Ch4: Trees (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

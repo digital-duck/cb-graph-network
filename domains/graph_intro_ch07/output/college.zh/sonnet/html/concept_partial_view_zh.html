@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Partial View | Graph Intro Ch07</title>
+<script>
+MathJax = {
+  loader: { load: ['[tex]/mathtools'] },
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']],
+         packages: { '[+]': ['mathtools'] } },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="partial-view">Partial View</h2>
+<p>在结构化程度较低的覆盖网络（overlay network）中，一个节点不可能，也没有必要保存全网所有对等节点（peer）的地址。取而代之的是每个节点只维护一张固定大小的本地表，称为部分视图，表中记录若干个其他节点的引用（通常是地址加上一个时间戳或年龄字段）。这张表的大小 $c$ 与网络总节点数 $N$ 无关，是协议设计时选定的常数，通常取 $c = O(\log N)$——这一数量级的选择并非随意：它是 Gossip 型对等采样协议（peer sampling protocol，如 Cyclon、Newscast）能够以高概率维持网络连通、且不产生局部孤岛的理论下界。</p>
+<p>部分视图的运作依赖周期性的"视图交换"。每隔固定时间，一个节点会从自己的部分视图中挑选一个（通常是"最老"的）邻居，与其交换双方视图中的一部分条目，并淘汰过期或重复的记录。这样反复迭代，整个覆盖网络在宏观上逐渐逼近一个随机正则图：每个节点的出度约为 $c$，而任意两个节点之间存在通路的概率随迭代次数指数上升。可以把这一过程类比为不断"洗牌"的社交网络——没有人认识所有人，但只要每个人手里的"名片本"足够大且定期更新，消息仍能几步之内传遍全网。</p>
+<p>在实际问题中，部分视图大小的选择直接关系到系统的鲁棒性与开销之间的权衡。设视图大小为 $c$，网络规模为 $N$，可以用随机图理论估算连通失效概率：若每个节点独立随机选择 $c$ 个邻居，图不连通的概率随 $c$ 增大而迅速衰减，近似满足</p>
+$$
+P(\text{不连通}) \approx N e^{-c}
+$$
+<p>于是若要求失效概率控制在某个很小的阈值 $\epsilon$ 以内，只需令</p>
+$$
+c \geq \ln N - \ln \epsilon
+$$
+<p>这说明视图大小只需随 $\ln N$ 增长，而不必随 $N$ 线性增长，这正是部分视图机制能够支撑百万级节点覆盖网络、同时每个节点只需几十条记录的根本原因。设计者在实践中据此权衡：视图越大，网络越抗故障、但节点维护与交换的通信开销也越高。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Graph Theory Ch7: Modern computer networks (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

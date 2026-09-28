@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Successor | Graph Intro Ch07</title>
+<script>
+MathJax = {
+  loader: { load: ['[tex]/mathtools'] },
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']],
+         packages: { '[+]': ['mathtools'] } },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="successor">Successor</h2>
+<p>在 Chord 分布式哈希表（DHT）中,系统使用一致性哈希把每个节点和每份数据(键)映射到一个共同的环形标识符空间上,通常大小为 $2^m$。给定一个键 $k$,它的<strong>后继节点</strong>定义为:在该环上顺时针方向、标识符大于等于 $k$ 的所有节点中,标识符最小的那一个。这个节点被指定负责存储键 $k$ 对应的数据。这一定义保证了环上的每一个可能的键都有唯一且确定的归属节点,不会出现两个节点同时声称负责同一个键的情况。</p>
+<p><strong>举例说明</strong>。假设标识符空间大小为 $m = 6$,即环上共有 $2^6 = 64$ 个可能的位置(编号 $0$ 到 $63$)。现有三个节点实际存在于环上,标识符分别为 $10$、$24$、$32$。若要查找键 $k = 26$ 的归责节点,规则是顺时针寻找第一个标识符大于等于 $26$ 的节点:节点 $24$ 小于 $26$ 不满足,节点 $32$ 是顺时针方向第一个满足"标识符大于等于 $26$"的节点,因此 $32$ 就是键 $26$ 的后继节点,该节点负责存储这份数据。如果查询的键是 $k = 40$,环上没有标识符大于等于 $40$ 的节点(最大节点是 $32$),此时按照环形结构绕回起点,后继节点是标识符最小的节点,也就是 $10$。</p>
+<p><strong>在系统设计中的应用</strong>。后继节点这一概念是 Chord 协议路由与容错机制的基础。每个节点都维护一张"指位表"(finger table),表中记录了若干个后继节点的地址,用于实现对数级 $O(\log N)$ 步数的查找效率,而不必逐一节点线性遍历整个环。此外,当某个节点崩溃或离开网络时,该节点原本负责的键必须无缝转交给它的直接后继节点,系统通常还会维护一份"后继列表"(包含多个连续的后继节点)作为冗余备份,以应对单点故障导致的路由中断。因此,准确计算和维护后继关系,不仅决定了数据的存储位置,也直接决定了整个分布式系统在节点动态加入与退出过程中的稳定性和查询正确性。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Graph Theory Ch7: Modern computer networks (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

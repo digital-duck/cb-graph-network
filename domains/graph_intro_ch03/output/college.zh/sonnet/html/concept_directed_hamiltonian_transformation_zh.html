@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Directed Hamiltonian Transformation | Graph Intro Ch03</title>
+<script>
+MathJax = {
+  loader: { load: ['[tex]/mathtools'] },
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']],
+         packages: { '[+]': ['mathtools'] } },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="directed-hamiltonian-transformation-有向哈密顿变换">Directed Hamiltonian Transformation（有向哈密顿变换）</h2>
+<p><strong>定义</strong></p>
+<p>有向哈密顿变换是一种图论构造，用于把有向图中判定哈密顿回路（进而求解有向旅行商问题）的问题，转化为等价的无向图上的哈密顿回路问题，从而可以直接套用已经成熟的无向图算法与归约技巧。</p>
+<p>构造方法如下：给定有向图 $G = (V, E)$，对每个顶点 $v \in V$，用三个顶点 $v_{\text{in}}, v_{\text{mid}}, v_{\text{out}}$ 替换它，并加入两条无向边 $\{v_{\text{in}}, v_{\text{mid}}\}$ 与 $\{v_{\text{mid}}, v_{\text{out}}\}$，强制任何经过该三元组的路径必须按照"进入—中转—离开"的顺序穿越。对于原图中每一条有向边 $(u, v) \in E$，在新图中加入一条无向边 $\{u_{\text{out}}, v_{\text{in}}\}$。这样构造出的无向图记为 $G' = (V', E')$，其中 $|V'| = 3|V|$。</p>
+<p>这一构造的核心性质是：$G$ 中存在有向哈密顿回路，当且仅当 $G'$ 中存在无向哈密顿回路。原因在于，每个三元组的中转顶点 $v_{\text{mid}}$ 只能通过 $v_{\text{in}}$ 和 $v_{\text{out}}$ 连接，这就迫使无向回路在每个顶点处保持"先入后出"的方向性，从而精确模拟了原有向图中边的方向约束。</p>
+<p><strong>应用实例</strong></p>
+<p>考虑一个三节点有向图，边为 $(A,B), (B,C), (C,A)$，构成一个有向哈密顿回路。变换后得到 9 个顶点：$A_{\text{in}}, A_{\text{mid}}, A_{\text{out}}, B_{\text{in}}, B_{\text{mid}}, B_{\text{out}}, C_{\text{in}}, C_{\text{mid}}, C_{\text{out}}$。对应的无向哈密顿回路为 $A_{\text{in}} - A_{\text{mid}} - A_{\text{out}} - B_{\text{in}} - B_{\text{mid}} - B_{\text{out}} - C_{\text{in}} - C_{\text{mid}} - C_{\text{out}} - A_{\text{in}}$，可以验证它确实覆盖全部 9 个顶点且首尾相接。</p>
+<p><strong>问题求解应用</strong></p>
+<p>这一变换的实际价值在于归约（reduction）：如果我们已经有一个高效或经过充分研究的无向哈密顿回路算法（或其不可解性证明），就可以直接将其应用到有向版本上，而不需要为有向情形重新设计一套理论。在求解有向旅行商问题时，先做此变换，再对 $G'$ 套用标准的无向 TSP 近似算法或精确搜索算法，最后把结果中的三元组还原为原顶点，即可得到有向问题的解。这体现了图论中"归约"这一核心解题策略：证明或求解一个问题最直接的方式，往往是把它转化为一个已经解决的问题。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Graph Theory Ch3: Network traversal (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

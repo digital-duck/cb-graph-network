@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tree | Graph Intro Ch04</title>
+<script>
+MathJax = {
+  loader: { load: ['[tex]/mathtools'] },
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']],
+         packages: { '[+]': ['mathtools'] } },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="树">树</h2>
+<p><strong>定义</strong></p>
+<p>树是一个连通且无环的图。设图 $G=(V,E)$ 有 $n=|V|$ 个顶点，若 $G$ 是树，则它满足以下等价条件中的任意一个（且可以证明它们彼此等价）：</p>
+$$
+|E| = n - 1
+$$
+<p>即树恰好有 $n-1$ 条边——比顶点数少一条。直观上，树是把所有顶点用最少的边连成一整块、且不留下任何多余边构成回路的结构。去掉树中的任意一条边，图就会分裂成两个连通分量；而在树中添加任意一条新边，则必定产生一个环。这两条性质常被称为树的"极小连通性"与"极大无环性"。</p>
+<p><strong>定理（树的等价刻画）</strong>：对于顶点数为 $n$ 的图 $G$，下列命题相互等价：(1) $G$ 是树；(2) $G$ 连通且恰有 $n-1$ 条边；(3) $G$ 无环且恰有 $n-1$ 条边；(4) $G$ 中任意两个顶点之间存在唯一的路径。第(4)条尤其重要：树的"无环"性质保证了路径唯一，这也是许多算法（如树上倍增、最近公共祖先查询）成立的根本原因。</p>
+<p><strong>worked example</strong></p>
+<p>考虑一个有 5 个顶点 $\{A, B, C, D, E\}$ 的图，边集为 $\{(A,B), (B,C), (B,D), (D,E)\}$。顶点数 $n=5$，边数 $|E|=4=n-1$，且逐一验证可知图连通、无环，因此它是一棵树。若再加入一条边 $(A,E)$，边数变为 5，超过 $n-1$，图中出现环 $A \to B \to D \to E \to A$，此时该图不再是树，而是一个"带环的连通图"。</p>
+<p><strong>问题求解应用</strong></p>
+<p>判断一个连通图是否为树，只需检查边数是否恰为 $n-1$——这是一个 $O(1)$ 的计数检验，远比逐一寻找环高效。在实际算法设计中（例如最小生成树问题），克鲁斯克尔算法正是利用"树恰有 $n-1$ 条边、多一条边必成环"这一性质：每次选取权重最小的边加入结果集，若加入后不产生环，则接受该边，直到边数达到 $n-1$ 为止，此时算法保证得到一棵连接所有顶点、总权重最小的生成树。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Graph Theory Ch4: Trees (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clustering Coefficient | Graph Intro Ch05</title>
+<script>
+MathJax = {
+  loader: { load: ['[tex]/mathtools'] },
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']],
+         packages: { '[+]': ['mathtools'] } },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="clustering-coefficient">Clustering Coefficient</h2>
+<p><strong>定义</strong></p>
+<p>聚类系数（clustering coefficient）刻画一个图中"朋友的朋友是否也是朋友"这一局部聚集倾向。对图中某个顶点 $v$，设其度数为 $k_v$（即与 $v$ 相邻的顶点数），若 $k_v \geq 2$，则 $v$ 的邻居两两之间最多可能存在的边数为</p>
+$$
+\binom{k_v}{2} = \frac{k_v(k_v-1)}{2}
+$$
+<p>设 $e_v$ 为 $v$ 的邻居之间实际存在的边数，则顶点 $v$ 的局部聚类系数定义为</p>
+$$
+C_v = \frac{e_v}{\binom{k_v}{2}} = \frac{2e_v}{k_v(k_v-1)}
+$$
+<p>当 $k_v < 2$（即顶点度数为 0 或 1）时，$C_v$ 通常约定为 0，因为此时邻居对不存在。整张图的聚类系数则是对所有顶点局部聚类系数取平均：</p>
+$$
+C = \frac{1}{n}\sum_{v=1}^{n} C_v
+$$
+<p>其中 $n$ 是图中顶点总数。$C_v$ 的取值范围是 $[0,1]$：$C_v=1$ 表示 $v$ 的所有邻居彼此都相连（形成一个"团"）；$C_v=0$ 表示邻居之间完全没有连接。</p>
+<p><strong>实例演算</strong></p>
+<p>考虑一个社交网络片段：顶点 $v$ 有三个朋友 $a, b, c$。若 $a$-$b$、$b$-$c$ 相连而 $a$-$c$ 不相连，则 $k_v = 3$，可能的邻居对数为 $\binom{3}{2}=3$，实际存在的边数 $e_v = 2$，所以</p>
+$$
+C_v = \frac{2}{3} \approx 0.667
+$$
+<p>这意味着 $v$ 的朋友圈中三分之二的可能关系已经实现，社交结构相当紧密。</p>
+<p><strong>问题求解应用</strong></p>
+<p>聚类系数常用于判断网络是否具有"小世界"特征：真实社交网络、蛋白质交互网络往往聚类系数远高于同等规模和边数的随机图（Erdős–Rényi 图），后者的期望聚类系数接近于图的边密度 $p$。因此，在分析一个新数据集时，标准做法是：先计算每个顶点的 $C_v$ 并求平均得到 $C$，再与随机图基准比较，从而判断该网络是否存在真实的社区结构或"抱团"现象——这是社区发现、推荐系统好友推荐以及流行病传播建模中评估网络紧密程度的第一步。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Graph Theory Ch5: Network analysis (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

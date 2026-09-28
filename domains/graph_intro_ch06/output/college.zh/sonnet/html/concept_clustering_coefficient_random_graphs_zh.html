@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clustering Coefficient Random Graphs | Graph Intro Ch06</title>
+<script>
+MathJax = {
+  loader: { load: ['[tex]/mathtools'] },
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']],
+         packages: { '[+]': ['mathtools'] } },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="随机图的聚类系数">随机图的聚类系数</h2>
+<p>定义：对图中顶点 $i$，其局部聚类系数定义为其邻居之间实际存在边数与可能边数之比：</p>
+$$
+C_i = \frac{\text{邻居间存在的边数}}{\binom{k_i}{2}}
+$$
+<p>其中 $k_i$ 是顶点 $i$ 的度。直观上，$C_i$ 衡量"我的朋友之间是否也互为朋友"的程度，是三元闭合（triadic closure）倾向的度量。</p>
+<p>在Erdős–Rényi随机图模型 $G(n,p)$ 中，每一对顶点独立以概率 $p$ 连边，与其余边是否存在无关。设顶点 $i$ 的两个邻居为 $j,k$；它们之间是否连边，与 $i$-$j$、$i$-$k$ 两条边是否存在这一事实完全独立，因为随机图模型中所有边都是相互独立的伯努利试验。于是</p>
+$$
+E[C_i] = P(j\text{与}k\text{相连}) = p.
+$$
+<p>这一结果对任意顶点、任意度都成立，因此整张图的期望聚类系数恰好等于连边概率 $p$——这是随机图模型"无结构"特性最直接的数学体现。</p>
+<p><strong>计算示例</strong>：设 $n=1000$，$p=0.01$。平均度约为 $np\approx10$。若某顶点恰有 $k=10$ 个邻居，则这 $\binom{10}{2}=45$ 对邻居中，期望恰好有 $45\times0.01=0.45$ 对相连，该顶点聚类系数的期望值仍为 $0.45/45=0.01=p$，与具体度数无关——这正体现了期望值与度无关这一结论的普遍性。</p>
+<p><strong>问题求解应用</strong>：这一"期望聚类系数恰好等于 $p$"的精确结论,为检验真实网络是否具有超出随机图的结构提供了基准工具。做法是：先测得网络的平均度 $\bar{k}$，估计等效连边概率 $\hat p=\bar k/(n-1)$，再计算网络的实测平均聚类系数 $\bar C$。若 $\bar C \gg \hat p$——这在社交网络、蛋白质交互网络、引用网络中普遍观察到，常常高出一到两个数量级——则说明该网络存在ER模型无法解释的局部聚集结构（如社区、朋友圈）。这正是Watts–Strogatz小世界模型被提出以修正ER模型的直接动机：在保持短平均路径长度的同时，人为提升聚类系数以匹配真实网络的观测特征。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Graph Theory Ch6: Random networks (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

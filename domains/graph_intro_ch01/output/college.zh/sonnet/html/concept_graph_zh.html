@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Graph | Graph Intro Ch01</title>
+<script>
+MathJax = {
+  loader: { load: ['[tex]/mathtools'] },
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']],
+         packages: { '[+]': ['mathtools'] } },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="graph">Graph</h2>
+<p><strong>定义</strong></p>
+<p>图（graph）是一种由顶点（vertex）集合与边（edge）集合构成的数学结构，记作 $G = (V, E)$。其中 $V$ 是一个非空有限集合，其元素称为顶点或节点；$E$ 是顶点对的集合，其元素称为边，每条边恰好连接两个顶点。若边是无方向的，即边 $(u, v)$ 与 $(v, u)$ 表示同一条边，则称该图为无向图；若边具有方向，即 $(u, v)$ 与 $(v, u)$ 是不同的边，则称该图为有向图。图可以用来抽象表示任何"对象之间存在二元关系"的场景：顶点代表对象，边代表关系。</p>
+<p>一个顶点 $v$ 的度（degree）是与它相连的边的数目，记作 $\deg(v)$。对于无向图，所有顶点度数之和等于边数的两倍：</p>
+$$\sum_{v \in V} \deg(v) = 2|E|$$
+<p>这个关系成立的原因很直接：每条边贡献两个"端点计数"，一个给它连接的每一个顶点。</p>
+<p><strong>实例分析</strong></p>
+<p>考虑一个社交网络：顶点集合 $V = \{A, B, C, D\}$ 代表四位用户，边集合 $E = \{(A,B), (B,C), (C,D), (A,D)\}$ 代表"互相关注"关系。这是一个无向图，共有 $|V| = 4$ 个顶点、$|E| = 4$ 条边。每个顶点的度数都是 2（例如 $A$ 与 $B$、$D$ 相连），验证度数之和 $2+2+2+2 = 8 = 2 \times 4$，与上述公式吻合。</p>
+<p>若改为有向图，边 $(A, B)$ 表示"$A$ 关注 $B$"而非相互关系，则 $(A,B)$ 与 $(B,A)$ 是两条不同的边，此时需要分别定义入度（指向该顶点的边数）与出度（从该顶点发出的边数）。</p>
+<p><strong>问题求解应用</strong></p>
+<p>图结构的核心价值在于，一旦将现实问题转化为顶点与边的抽象形式，就可以套用一整套通用算法来求解。例如："在城市地图中寻找最短路径"对应"在带权图中求两顶点间的最短路径"（可用 Dijkstra 算法）；"判断两个用户是否存在社交关联"对应"判断图中两顶点是否连通"（可用广度优先搜索或深度优先搜索）；"课程先修关系排序"对应"对有向无环图做拓扑排序"。掌握图的建模能力——即准确识别问题中的"对象"与"关系"分别对应顶点与边——是应用后续图算法解决实际问题的第一步，也是最关键的一步。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Graph Theory Ch1: Foundations (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

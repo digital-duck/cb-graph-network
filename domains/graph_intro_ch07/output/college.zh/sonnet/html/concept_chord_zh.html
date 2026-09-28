@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chord | Graph Intro Ch07</title>
+<script>
+MathJax = {
+  loader: { load: ['[tex]/mathtools'] },
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']],
+         packages: { '[+]': ['mathtools'] } },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="chord">Chord</h2>
+<p>Chord 是一种分布式哈希表（DHT）协议，用于在对等网络（P2P）中实现高效的键值定位。协议将所有节点和键都通过一致性哈希函数映射到同一个 $m$ 位标识符空间，节点按标识符大小顺序排列成一个逻辑环，环上标识符范围是 $[0, 2^m - 1]$。核心规则是：键 $k$ 存储在环上第一个标识符大于或等于 $k$ 的节点上，该节点称为 $k$ 的<strong>后继节点</strong>（successor），记作 $\text{successor}(k)$。仅靠后继指针环，查找一个键需要遍历环上最多 $N$ 个节点（$N$ 为节点总数），代价是 $O(N)$。为了加速查找，每个节点维护一张<strong>指状表</strong>（finger table），第 $i$ 项指向标识符空间中 $(n + 2^{i-1}) \bmod 2^m$ 的后继节点，其中 $n$ 是当前节点的标识符，$i = 1, 2, \ldots, m$。</p>
+<p><strong>举例说明</strong>：设 $m = 6$，标识符空间为 $[0, 63]$，环上有节点 $\{0, 8, 16, 24, 32, 40, 48, 56\}$。若要查找键 $k = 30$ 存储在何处，从任意节点出发，每一步都跳转到指状表中不超过目标且最靠近目标的表项，逐步逼近，最终确定 $\text{successor}(30) = 32$（第一个标识符大于等于 30 的节点）。由于指状表使每一跳至少将剩余距离缩小一半，查找的跳数上界为</p>
+$$
+O(\log N)
+$$
+<p>这正是 Chord 相较于朴素环形查找的核心优势：将定位复杂度从线性降为对数级别，使系统能扩展到数百万节点规模。</p>
+<p><strong>问题求解应用</strong>：给定 $m = 8$（标识符空间 $[0, 255]$）和活跃节点集合 $\{20, 60, 100, 140, 180, 220\}$，若新键 $k = 205$ 加入系统，应先在标识符空间中顺时针寻找第一个大于等于 205 的节点标识符——本例中即节点 220——因此 $\text{successor}(205) = 220$，键 $k$ 应存储于此节点。若查询节点是标识符为 20 的节点，其指状表第 $i$ 项分别指向 $21, 22, 24, 28, 36, 52, 84, 148 \pmod{256}$ 对应的后继节点，实际查找会先跳到能覆盖最大跨度且不超过 205 的表项（对应节点 180），再从 180 跳到 220，仅需两跳即可定位，验证了对数级查找效率在实际路由中的体现。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Graph Theory Ch7: Modern computer networks (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

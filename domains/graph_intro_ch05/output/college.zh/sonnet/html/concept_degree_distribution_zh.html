@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Degree Distribution | Graph Intro Ch05</title>
+<script>
+MathJax = {
+  loader: { load: ['[tex]/mathtools'] },
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']],
+         packages: { '[+]': ['mathtools'] } },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="度分布">度分布</h2>
+<p><strong>定义</strong>：给定图 $G=(V,E)$，顶点 $v$ 的度 $\deg(v)$ 是与之相连的边数。度分布 $P(d)$ 定义为度数恰好等于 $d$ 的顶点占全部顶点的比例：</p>
+$$P(d) = \frac{|\{v \in V : \deg(v) = d\}|}{|V|}$$
+<p>将 $P(d)$ 对所有可能的 $d$ 作图，就得到一个直方图 $h(d)$，它刻画了整个网络"连接密集程度"的分布形态，而不只是某个顶点的局部信息。一个重要的校验关系是握手定理：所有顶点的度之和等于边数的两倍，</p>
+$$\sum_{v \in V} \deg(v) = 2|E|$$
+<p>这条恒等式在计算度分布之后，可以用来快速验证统计结果是否正确。</p>
+<p><strong>实例</strong>：考虑一个由 6 个顶点组成的社交网络，其中一人（记为中心节点）与其余 5 人都相连，而其余 5 人之间互不相连。度序列为 $\{5,1,1,1,1,1\}$，因此度分布为 $P(1)=5/6$，$P(5)=1/6$，其余 $P(d)=0$。这种"一个高度、其余低度"的分布形状，正是枢纽（hub）主导网络的典型特征；与之相对，若网络是规则图（如每个顶点度数都为 3 的环形结构），度分布会退化为集中在单一值上的一根竖线，即 $P(3)=1$。</p>
+<p><strong>问题求解应用</strong>：度分布是判断网络类型、预测其鲁棒性的关键工具。规则网络（度分布集中）中随机移除节点对整体连通性影响较小，因为不存在"关键节点"；而枢纽主导网络（度分布呈幂律衰减，形式为 $P(d) \sim d^{-\gamma}$，即无标度网络）中，随机移除通常影响很小，但如果精准移除度数最高的少数枢纽节点，网络会迅速瓦解——这正是分析互联网、传染病传播、社交媒体影响力时的核心方法。实际操作中，先计算每个顶点的度、构造直方图 $h(d)$，再观察其形状（尖峰集中 vs. 长尾衰减），即可判断该网络更接近规则结构还是枢纽结构，从而指导后续的容错设计或干预策略。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Graph Theory Ch5: Network analysis (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

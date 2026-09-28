@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Orientation | Graph Intro Ch02</title>
+<script>
+MathJax = {
+  loader: { load: ['[tex]/mathtools'] },
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']],
+         packages: { '[+]': ['mathtools'] } },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.cb-figure{margin:24px 0;text-align:center}
+.cb-figure img{max-width:100%;height:auto;border:1px solid #e0e0d8;border-radius:6px}
+figcaption{font-size:.82rem;color:#666;margin-top:8px;font-style:italic;text-align:center}
+pre.mermaid{background:none;border:none;padding:0;overflow:visible;margin:16px 0}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="定向">定向</h2>
+<p>给定一个无向图 $G=(V,E)$，为每一条边 $\{u,v\}\in E$ 选定唯一的方向——要么记作有向边 $(u,v)$，要么记作 $(v,u)$——所得到的有向图 $D(G)$ 称为 $G$ 的一个<strong>定向</strong>（orientation）。定向的关键要求是：每条无向边恰好变成一条有向边，既不能保留原来的双向连接，也不能丢弃这条边。同一个无向图往往存在指数多个不同的定向，每一个定向都是原图连通结构的一种"单向化"版本。</p>
+<p><strong>举例</strong>：考虑三角形 $K_3$，顶点为 $\{A,B,C\}$，边为 $\{A,B\},\{B,C\},\{C,A\}$。至少有两类本质不同的定向：其一是"循环式"定向 $A\to B\to C\to A$，这样得到的有向图是强连通的——从任一顶点出发都能沿有向边回到自身；其二是"传递式"定向 $A\to B,\ B\to C,\ A\to C$，此时不存在从 $C$ 回到 $A$ 的有向路径，图不再强连通，反而形成一个全序结构（这正是竞赛图/tournament 中"传递竞赛图"的雏形）。</p>
+<p><strong>问题求解中的应用</strong>：一个自然的问题是——给定的无向图 $G$，是否存在一个强连通的定向？这不是任意猜测能回答的问题，而由罗宾斯定理（Robbins' theorem, 1939）精确刻画：图 $G$ 存在强连通定向，当且仅当 $G$ 是连通且无桥的（即 2-边连通）。这一判据把"能否定向为强连通"这一有向图问题，转化为纯无向图上桥的检测问题——而桥可以用深度优先搜索在线性时间内找到。因此在实际问题中（例如判断一个道路网络能否改造为单行道系统且仍保持任意两地互达），只需先跑一次桥检测算法，再据此决定是否需要新增道路，而无需逐一尝试所有定向方案。</p>
+<pre class="mermaid">graph LR
+    A -->|定向| B
+    B -->|定向| C
+    C -->|定向| A</pre>
+<p><em>三角形 $K_3$ 的一个循环式定向，使 $D(G)$ 强连通。</em></p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Graph Theory Ch2: Extensions (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

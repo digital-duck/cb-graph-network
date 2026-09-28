@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bowtie Structure | Graph Intro Ch07</title>
+<script>
+MathJax = {
+  loader: { load: ['[tex]/mathtools'] },
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']],
+         packages: { '[+]': ['mathtools'] } },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="bowtie-structure">Bowtie Structure</h2>
+<p><strong>定义</strong>：蝴蝶结结构是对万维网有向图进行宏观分类的模型，其分类依据完全建立在有向可达性之上，而非页面内容或链接权重。给定有向图 $G=(V,E)$，定义两点 $u,v$ 之间的强连通关系：$u \sim v$ 当且仅当存在从 $u$ 到 $v$ 的有向路径，且同时存在从 $v$ 到 $u$ 的有向路径。可以证明 $\sim$ 是一个等价关系（自反、对称、传递），因此它把 $V$ 划分成若干等价类，每一类称为一个强连通分量（SCC）。万维网中最大的那个强连通分量记为核心 SCC，其余节点按照它们与该核心的可达关系分为四类：能到达 SCC 但不能被 SCC 到达的节点集合称为 IN；能被 SCC 到达但不能到达 SCC 的节点集合称为 OUT；既不能到达也不能被 SCC 到达、但通过 IN 或 OUT 间接相连的节点称为触须（tendrils）或管道（tubes，即连接 IN 与 OUT 但绕开 SCC 的路径）；完全没有路径连到上述任何部分的节点则构成孤立分量。</p>
+<p><strong>实例分析</strong>：2000 年 Broder 等人对约 2 亿个网页组成的爬取图进行了这一分类，发现四个主要部分（SCC、IN、OUT、触须与孤立部分）的规模大致相当，各占总节点数的四分之一左右；而且 SCC 内部任意两点间的平均最短路径长度约为 16，若允许无向穿行（忽略链接方向）则图的直径可达 28。这一结果表明，"网页之间高度互联"的直觉只对核心 SCC 成立，IN 和 OUT 部分的存在说明网络导航存在明显的方向性瓶颈。</p>
+<p><strong>问题求解应用</strong>：判断一个给定节点属于蝴蝶结的哪一部分，标准算法分两步。第一步用 Tarjan 算法或 Kosaraju 算法在线性时间 $O(|V|+|E|)$ 内求出所有强连通分量，取规模最大者为核心 SCC。第二步从 SCC 任选一点分别做正向广度优先搜索（沿边方向）与反向广度优先搜索（逆边方向）：正向可达且不在 SCC 中的节点归入 OUT，反向可达且不在 SCC 中的节点归入 IN；既非正向也非反向可达、但与 IN 或 OUT 存在路径连接的节点归入触须或管道，其余归为孤立分量。这一分类过程本质上是对可达性关系的两次遍历，是分析大规模有向图连通结构的通用方法，也应用于社交网络、引用网络等其他有向图的宏观结构分析。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Graph Theory Ch7: Modern computer networks (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

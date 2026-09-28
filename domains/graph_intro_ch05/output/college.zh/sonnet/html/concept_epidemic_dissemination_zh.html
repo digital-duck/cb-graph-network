@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Epidemic Dissemination | Graph Intro Ch05</title>
+<script>
+MathJax = {
+  loader: { load: ['[tex]/mathtools'] },
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']],
+         packages: { '[+]': ['mathtools'] } },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="传染式扩散">传染式扩散</h2>
+<p><strong>定义</strong></p>
+<p>传染式扩散模型描述信息、疾病或观点如何通过网络中"邻居对邻居"的局部更新规则逐节点传播。最基础的形式是易感-感染-恢复模型（SIR 模型）：网络中每个节点处于三种状态之一——易感（S）、感染（I）、恢复（R）。在每个时间步，感染节点以概率 $\beta$ 将状态传给其易感邻居，同时感染节点自身以概率 $\gamma$ 转为恢复状态（不再传播也不再被感染）。若用 $S(t)$、$I(t)$、$R(t)$ 表示三类节点在时刻 $t$ 的比例，均匀混合情形下的演化方程为：</p>
+$$
+\frac{dS}{dt} = -\beta S I, \quad \frac{dI}{dt} = \beta S I - \gamma I, \quad \frac{dR}{dt} = \gamma I
+$$
+<p>扩散能否形成大规模爆发，取决于基本再生数 $R_0 = \frac{\beta}{\gamma}$：当 $R_0 > 1$，感染人数会先增长后消退；当 $R_0 \le 1$，感染会迅速熄灭。这一阈值条件是流行病学中最核心的判据。</p>
+<p><strong>网络结构如何改变扩散速度</strong></p>
+<p>上述方程假设任意两个节点接触概率相等，但真实网络（社交网络、接触网络）具有聚类特性：一个节点的邻居们彼此之间也常常相连，形成局部的"熟人圈"。聚类系数 $C$ 衡量的正是这种局部抱团程度。高聚类网络中，感染节点的邻居们互相已经认识，因此新增的传播路径会大量重复指向同一批已经暴露过的节点，真正触及"全新"节点的有效路径变少，导致扩散速度整体变慢、传播更容易局限在局部簇内。相反，低聚类但含有少量长程连接（即"小世界"网络中的捷径边）会让感染迅速跳出局部簇，触达远处从未接触过的节点，从而大幅加快整体传播速度、扩大波及范围。</p>
+<p><strong>问题解决应用</strong></p>
+<p>假设某话题在一个高聚类的兴趣小组网络中传播，其等效 $\beta = 0.3$、$\gamma = 0.2$，先计算 $R_0 = \frac{0.3}{0.2} = 1.5 > 1$，说明该话题理论上会持续扩散而非自然消退。若目标是遏制传播（如辟谣或防疫干预），策略应从降低 $\beta$（切断部分连接、加强防护）或提高 $\gamma$（加快恢复/辟谣速度）入手，使 $R_0$ 降到 1 以下；而若目标是加速有益信息（如公共卫生教育）传播，则应有意识地在高聚类簇之间添加少量长程连接，借助小世界效应大幅缩短触达全网所需的时间。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Graph Theory Ch5: Network analysis (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

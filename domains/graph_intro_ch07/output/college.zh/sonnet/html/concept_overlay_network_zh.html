@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Overlay Network | Graph Intro Ch07</title>
+<script>
+MathJax = {
+  loader: { load: ['[tex]/mathtools'] },
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']],
+         packages: { '[+]': ['mathtools'] } },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="overlay-network-覆盖网络">Overlay Network（覆盖网络）</h2>
+<p><strong>定义</strong></p>
+<p>覆盖网络是分布式应用在对等节点（peer）之间构建的一层通信网络，它建立在互联网这一物理网络之上。每个节点并不掌握全局拓扑，而只维护一个局部视图——即它所直接连接的邻居节点集合。将整个系统抽象为一个图 $G = (V, E)$，其中顶点集 $V$ 表示所有参与的节点，边集 $E$ 表示节点之间建立的逻辑连接（通常是一条TCP连接或UDP会话）。关键在于：图中的一条边未必对应物理网络中的一条直连链路——两个逻辑相邻的节点，在互联网层面可能要经过十几个路由器才能互通。因此覆盖网络是"逻辑拓扑"叠加在"物理拓扑"之上的一层抽象，节点的度数（degree，即邻居数量）和图的直径（diameter，即任意两节点间最短路径的最大值）决定了消息扩散的效率与系统的容错能力。</p>
+<p><strong>实例讲解</strong></p>
+<p>以BitTorrent的对等节点网络为例：每个下载客户端只与几十个其他客户端保持连接（局部视图),这些连接共同构成一张随机图。当某个节点想知道谁拥有某个文件块时，它不需要知道全网所有节点，只需向自己的邻居查询，再由邻居转发（gossip协议）。这种设计使得系统不依赖任何中心服务器，即使某些节点随时加入或离开（这在P2P系统中称为"churn"），整体网络依然连通——前提是图的连通性和平均度数维持在一定水平之上，这正是随机图理论中关于连通性阈值的结论在工程中的直接体现。</p>
+<p><strong>问题求解应用</strong></p>
+<p>设计覆盖网络时的核心权衡是：局部视图越大（即节点维护的邻居越多），查询任意信息所需的跳数（hop count）越少，但维护成本（心跳检测、状态同步）越高。工程实践中常用的方法是构造结构化覆盖网络，例如Chord协议将节点和数据都散列到一个环形标识符空间上，使得任意查询的跳数被严格控制在 $O(\log N)$，其中 $N$ 为网络中节点总数——这是通过让每个节点维护指向环上呈指数递增距离节点的"手指表"（finger table）实现的。相比之下，非结构化覆盖网络（如早期Gnutella）虽然构建简单，但查询依赖洪泛（flooding），跳数与效率难以保证。因此在实际系统设计中，需要根据应用对查询延迟、维护开销和容错性的具体要求，在结构化与非结构化拓扑之间做出选择。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Graph Theory Ch7: Modern computer networks (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

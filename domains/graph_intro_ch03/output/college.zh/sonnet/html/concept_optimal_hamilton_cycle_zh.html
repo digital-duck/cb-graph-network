@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Optimal Hamilton Cycle | Graph Intro Ch03</title>
+<script>
+MathJax = {
+  loader: { load: ['[tex]/mathtools'] },
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']],
+         packages: { '[+]': ['mathtools'] } },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="optimal-hamilton-cycle">Optimal Hamilton Cycle</h2>
+<p>在一个带权完全图中，哈密顿圈是恰好经过每个顶点一次并回到起点的闭合回路。哈密顿圈优化问题要求在所有可能的哈密顿圈中，找到边权总和最小的那一个——这正是旅行商问题（Traveling Salesman Problem）的核心。由于图中哈密顿圈的数量随顶点数呈阶乘增长（$n$ 个顶点的完全图共有 $\frac{(n-1)!}{2}$ 条不同的哈密顿圈），穷举搜索在 $n$ 较大时完全不可行，因此需要启发式或局部搜索算法。</p>
+<p>最常用且易于理解的局部搜索方法是二边交换法（2-opt）。其思想是：给定一个哈密顿圈，任选两条不相邻的边，将其"断开"并以另一种方式重新连接顶点，同时保持仍是一个合法的哈密顿圈。如果重连后总权重下降，就接受这次交换；否则保留原圈。这个过程不断重复，直到没有任何一次二边交换能再降低总权重为止，此时得到的圈称为二边交换意义下的局部最优解。</p>
+<p><strong>举例说明</strong>：设有四座城市 $A, B, C, D$，初始路线为 $A \to B \to C \to D \to A$，其边权分别为 $AB=10$，$BC=15$，$CD=10$，$DA=12$，总权重为 $47$。若尝试交换边 $AB$ 与 $CD$，新路线变为 $A \to C \to B \to D \to A$（顶点 $B$、$C$ 之间的路径方向反转）。计算新路线权重：若 $AC=8$，$BD=9$，则总权重为 $8+15+9+12=44$，比原方案更优，于是接受这次交换。算法继续检验其余边对，直到无法再改进。</p>
+<p><strong>问题求解应用</strong>：在实际应用中（例如物流配送路径规划、电路板钻孔顺序、DNA 片段拼接排序），二边交换法通常从一个随机或贪心构造的初始圈出发，反复扫描所有边对组合，每次交换的计算代价为 $O(1)$（重新计算局部权重变化），而一轮完整扫描的代价为 $O(n^2)$。虽然这种方法不保证得到全局最优解——它可能陷入局部最优——但结合多次随机重启，或与三边交换（3-opt）、林-柯尼汉算法（Lin–Kernighan）等更强的邻域搜索方法组合，通常能在合理时间内得到非常接近最优的解。在评估任何近似算法时，关键的实践技巧是：将当前解与已知下界（如最小生成树权重）比较，从而估计当前方案离理论最优还有多远。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Graph Theory Ch3: Network traversal (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

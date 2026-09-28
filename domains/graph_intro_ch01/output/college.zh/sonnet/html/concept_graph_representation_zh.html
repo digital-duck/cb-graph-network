@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Graph Representation | Graph Intro Ch01</title>
+<script>
+MathJax = {
+  loader: { load: ['[tex]/mathtools'] },
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']],
+         packages: { '[+]': ['mathtools'] } },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="图的表示">图的表示</h2>
+<p>给定一个图 $G = (V, E)$，其中 $|V| = n$，$|E| = m$，我们需要选择一种数据结构在计算机中编码顶点与边的关系。不同的表示方式在存储空间和操作效率上有本质的权衡，选择哪一种取决于图的稠密程度以及算法需要频繁执行的操作类型。</p>
+<p><strong>邻接矩阵</strong>将图编码为一个 $n \times n$ 的矩阵 $A$，其中</p>
+$$
+A_{ij} = \begin{cases} 1, & (i,j) \in E \\ 0, & (i,j) \notin E \end{cases}
+$$
+<p>（带权图则令 $A_{ij}$ 等于边权）。判断任意两点是否相邻只需 $O(1)$ 时间查表，但无论边数多少都要占用 $O(n^2)$ 空间，适合稠密图。</p>
+<p><strong>邻接表</strong>为每个顶点维护一个链表或数组，存放与之相邻的顶点。空间开销为 $O(n+m)$，遍历某顶点的所有邻居效率高，是稀疏图（$m \ll n^2$）的首选，也是深度优先搜索、广度优先搜索等算法的标准输入结构。</p>
+<p><strong>关联矩阵</strong>则是一个 $n \times m$ 的矩阵 $B$，行对应顶点、列对应边，$B_{ie} = 1$ 表示顶点 $i$ 是边 $e$ 的端点之一（有向图中常用 $+1/-1$ 区分边的起点与终点）。它在描述"顶点—边"关系（如电路网络、关联结构的线性代数分析）时更自然，但空间为 $O(nm)$，在一般图算法中较少直接使用。</p>
+<p><strong>边列表</strong>只是简单地把每条边 $(u, v)$ 存成一条记录，空间为 $O(m)$，是最节省空间的表示，常用于输入输出或需要按边排序的算法（如克鲁斯卡尔最小生成树算法）。</p>
+<p><strong>问题求解应用</strong>：假设要判断一个有 $n = 10^6$ 个顶点、平均每个顶点只有 3 条边的社交网络图中两个用户是否互为好友。若用邻接矩阵，仅存储就需要约 $10^{12}$ 个单元，远超实际内存；而邻接表只需约 $3 \times 10^6$ 条记录即可完成同样的查询（通过遍历用户的邻居列表，代价为 $O(\deg(v))$）。这说明在实际工程中，选择表示方法的第一原则是先估算图的稠密度 $\frac{m}{n^2}$，稀疏图（该比值远小于 1）应优先选用邻接表或边列表。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Graph Theory Ch1: Foundations (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

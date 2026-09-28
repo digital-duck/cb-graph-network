@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fleurys Algorithm | Graph Intro Ch03</title>
+<script>
+MathJax = {
+  loader: { load: ['[tex]/mathtools'] },
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']],
+         packages: { '[+]': ['mathtools'] } },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="fleurys-algorithm">Fleurys Algorithm</h2>
+<p><strong>定义</strong></p>
+<p>弗罗莱算法（Fleury's Algorithm）是一种构造性算法，用于在欧拉图（Eulerian graph）中显式地找出一条欧拉回路——即一条恰好经过图中每条边一次并回到起点的闭合路径。算法的核心规则是：从任意顶点出发，每一步优先选择一条<strong>不是桥（bridge，即割边）</strong>的边前进；只有当当前顶点的所有剩余边都是桥时，才被迫选择一条桥继续前进。所谓桥，是指删去后会使图不连通（或使剩余边分裂为不可达部分）的边。这条规则背后依赖欧拉定理：一个连通图存在欧拉回路，当且仅当图中每个顶点的度数都是偶数；若恰好有两个奇度顶点，则存在欧拉路径（而非回路），且必须以这两个奇度顶点为起点和终点。</p>
+<p><strong>推理依据（简要说明）</strong></p>
+<p>为什么要避免走桥？因为一旦提前跨过桥，桥另一侧的边可能被永久隔离，导致后续无法回来遍历它们，算法就会在完成全部边之前被"困住"。只有当没有其他选择时走桥才是安全的，因为此时该桥所连接的一侧要么已经走完，要么必须现在通过才能继续。</p>
+<p><strong>实例演算</strong></p>
+<p>考虑一个由顶点 $A,B,C,D$ 构成的图：边为 $AB,BC,CD,DA,AC$，构成一个带对角线的四边形。检验度数：$A,C$ 度数为3（奇），$B,D$ 度数为2（偶）。按欧拉定理，存在一条从 $A$ 到 $C$ 的欧拉路径。执行算法：从 $A$ 出发，先走非桥边 $AB$（因为 $AC$ 此时是桥，删去后 $C$ 侧仍可达其余顶点，需检验），依次得到路径 $A\to B\to C\to D\to A\to C$，恰好覆盖全部5条边。</p>
+<p><strong>问题求解应用</strong></p>
+<p>在实际编程实现中，每一步都要判断某条边是否为桥，这一判断通常用深度优先搜索检测连通性，代价为 $O(E)$；由于每条边都可能触发一次这样的检测，弗罗莱算法总体时间复杂度为 $O(E^2)$。当图规模较大时，效率明显不如基于栈的希尔霍尔泽算法（Hierholzer's Algorithm，复杂度 $O(E)$）。因此在教学中弗罗莱算法用于直观理解"为何要避开割边"，而工程实践中更常用希尔霍尔泽算法。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Graph Theory Ch3: Network traversal (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

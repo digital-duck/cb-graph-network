@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Communication Network Routing | Graph Intro Ch02</title>
+<script>
+MathJax = {
+  loader: { load: ['[tex]/mathtools'] },
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']],
+         packages: { '[+]': ['mathtools'] } },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.cb-figure{margin:24px 0;text-align:center}
+.cb-figure img{max-width:100%;height:auto;border:1px solid #e0e0d8;border-radius:6px}
+figcaption{font-size:.82rem;color:#666;margin-top:8px;font-style:italic;text-align:center}
+pre.mermaid{background:none;border:none;padding:0;overflow:visible;margin:16px 0}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="communication-network-routing">Communication Network Routing</h2>
+<p>将通信网络或交通网络建模为有向图 $G=(V, E)$，顶点集合 $V$ 表示节点（路由器、城市、服务器），边集合 $E$ 表示带方向的连接。若 $(u,v)\in E$，表示信息可以从 $u$ 单向传递到 $v$，但不必然能从 $v$ 返回 $u$。当图中任意两个顶点 $u,v$ 之间，同时存在从 $u$ 到 $v$ 与从 $v$ 到 $u$ 的有向路径时，称该图是<strong>强连通的</strong>（strongly connected）。强连通性正是路由可靠性的数学保证：只要网络强连通，任何节点发出的信息最终都能到达网络中的任何其他节点，无论中间转发多少次。</p>
+<p>现实网络往往并非全局强连通。此时可将顶点划分为若干极大的<strong>强连通分量</strong>（strongly connected component，SCC）——同一分量内任意两点互相可达，不同分量之间至多单向可达。将每个分量收缩为一个点，得到的<strong>压缩图</strong>（condensation）一定是有向无环图（DAG）。用 Kosaraju 或 Tarjan 算法，可在线性时间 $O(|V|+|E|)$ 内求出所有 SCC，这比逐对检验可达性的 $O(|V|^2)$ 开销小得多，对大规模网络分析至关重要。</p>
+<p><strong>举例</strong>：五个路由器 $A,B,C,D,E$，边为 $A\to B,\ B\to C,\ C\to A,\ C\to D,\ D\to E$。$\{A,B,C\}$ 互相可达，构成一个 SCC；$D$、$E$ 各自是单点分量。压缩图是一条链 $\{A,B,C\}\to D\to E$：消息能从 $A$ 一路送到 $E$，但 $E$ 无法回传到 $A,B,C$，说明该网络尚未强连通。</p>
+<p><strong>工程应用</strong>：若要用最少的新链路使整张网络强连通，已知结果是</p>
+$$
+\text{最少新增边数} = \max(\,\text{压缩图中入度为0的分量数},\ \text{压缩图中出度为0的分量数}\,)
+$$
+<p>（当分量数大于 1 时）。上例中压缩图只有一个入度为零的源分量 $\{A,B,C\}$ 和一个出度为零的汇分量 $E$，故只需增加 1 条边，例如 $E\to A$，即可使全网强连通，实现任意节点间的双向路由。</p>
+<pre class="mermaid">flowchart LR
+    A(节点A) --> B(节点B)
+    B --> C(节点C)
+    C --> A
+    C --> D(节点D)
+    D --> E(节点E)
+    E -.新增边.-> A</pre>
+<p><em>示例网络的有向图：实线为原有连接，虚线为使全图强连通所需新增的最少边。</em></p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Graph Theory Ch2: Extensions (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>
