@@ -13,6 +13,8 @@ MathJax = {
 };
 </script>
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
@@ -30,6 +32,10 @@ footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
 footer.spl-credit a{color:#2563eb;text-decoration:none}
 footer.spl-credit span{display:block}
 footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.cb-figure{margin:24px 0;text-align:center}
+.cb-figure img{max-width:100%;height:auto;border:1px solid #e0e0d8;border-radius:6px}
+figcaption{font-size:.82rem;color:#666;margin-top:8px;font-style:italic;text-align:center}
+pre.mermaid{background:none;border:none;padding:0;overflow:visible;margin:16px 0}
 .page{max-width:780px;margin:0 auto;padding:40px 32px}
 section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
 section:first-of-type{border-top:none;padding-top:0}
@@ -39,11 +45,21 @@ section:first-of-type{border-top:none;padding-top:0}
 <div class="page">
   <main>
     <h2 id="strongly-connected-orientation">Strongly Connected Orientation</h2>
-<p><strong>定义</strong>：给定一个连通无向图 $G=(V,E)$，为每条边指定一个方向，得到一个有向图。如果所得的有向图是强连通的——即任意两个顶点之间都存在有向路径可以互相到达——就称这种定向为 $G$ 的一个<strong>强连通定向</strong>（strongly connected orientation）。</p>
-<p>并非所有连通图都存在强连通定向。判定条件由 Robbins 定理给出：连通图 $G$ 存在强连通定向，当且仅当 $G$ 是 2-边连通的，记作 $\lambda(G) \geq 2$，即删去任意一条边后图仍保持连通（不存在桥）。</p>
-<p><strong>为什么桥是关键障碍</strong>：如果边 $e=(u,v)$ 是桥，删去它会把图分成两个分支。无论把 $e$ 定向为 $u \to v$ 还是 $v \to u$，两个分支之间只有单向连接，导致某一侧无法到达另一侧，强连通性必然被破坏。因此桥的存在是强连通定向不可能实现的充分理由；Robbins 定理的价值在于证明了这也是<strong>充分</strong>条件——只要没有桥，就一定能构造出强连通定向。</p>
-<p><strong>构造性证明思路</strong>：对 2-边连通图 $G$ 做一次深度优先搜索（DFS），得到一棵 DFS 生成树。把所有树边定向为从父节点指向子节点（前向），把所有非树边（回边）定向为从后代指向祖先（反向）。由于 $G$ 没有桥，每一条非树边都能把某个子树"拉回"到更早访问的祖先，从而保证每个顶点都能沿树边向下、再借助回边向上返回根节点，因此整个有向图强连通。</p>
-<p><strong>问题求解应用</strong>：给定一个连通图，先用 Tarjan 桥查找算法（基于 DFS 时间戳 low-link 值）判断是否存在桥，时间复杂度为 $O(|V|+|E|)$。若不存在桥，则按照上述 DFS 定向规则直接输出一个强连通定向；若存在桥，则可以断言该图不存在强连通定向，桥本身必须保持"双向可达"的语义（在需要双向通行的场景中，如道路网络设计，桥两端的道路必须允许双向通行）。这一判定与构造过程常被用于电网、通信网络单向线路规划等实际问题中，用来验证网络在单向流量约束下是否仍能维持全局连通性。</p>
+<p><strong>定义</strong>：给定一个无向连通图 $G$，为它的每条边指定一个方向，得到一个有向图。如果这个定向后的有向图是强连通的——即对任意两点 $u, v$，既存在从 $u$ 到 $v$ 的有向路径，也存在从 $v$ 到 $u$ 的有向路径——就称这是 $G$ 的一个强连通定向。</p>
+<p>这个概念背后有一个精确的判定条件，由 Robbins 定理（单行道定理）给出：</p>
+$$
+G \text{ 存在强连通定向} \iff \lambda(G) \geq 2
+$$
+<p>其中 $\lambda(G)$ 表示 $G$ 的边连通度，即为了让图不连通所需删除的最少边数。直观上，$\lambda(G) \geq 2$ 意味着图中不存在桥（割边）。这个条件既是必要的也是充分的：如果 $G$ 含有一条桥 $e = (u,v)$，那么无论怎样给 $e$ 定向，都只能单向地在 $u$ 和 $v$ 之间通行，破坏了强连通性，所以桥的存在使强连通定向不可能；反过来，Robbins 证明了只要图是 2-边连通的（没有桥），就总能通过对每条边沿着某个深度优先搜索树的遍历顺序定向——树边一律指向遍历深入的方向，非树边（回边）一律指向遍历回溯的方向——从而得到一个强连通的有向图。</p>
+<p><strong>实例求解</strong>：考虑一个由两个三角形通过一条公共边连接而成的图（形似"蝴蝶结"但中间的边不是桥，而是两个环各自独立经过）。若该边是桥（即两个三角形仅由一条边相连、且删除后图断成两块），则边连通度为 1，无法强连通定向。但若额外加一条边使两个三角形之间形成两条不相交的连接路径，边连通度提升为 2，此时对图做一次深度优先遍历：树边指向遍历方向，回边指向祖先方向，即可验证任意两点间都存在双向路径。</p>
+<p><strong>应用</strong>：这一原理广泛用于单行道网络设计——城市规划者要将双向道路改为单行道系统时，必须先检验道路网络是否 2-边连通（无关键孤立路段），否则某些区域会变得不可达。</p>
+<pre class="mermaid">graph LR
+    A((A)) -->|树边| B((B))
+    B -->|树边| C((C))
+    C -->|回边| A
+    B -->|树边| D((D))
+    D -->|回边| B</pre>
+<p><em>深度优先遍历定向示例：树边沿遍历方向、回边沿回溯方向，构成强连通的有向图。</em></p>
   </main>
   <footer class="spl-credit"><span class="spl-credit__meta">Graph Theory Ch2: Extensions (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
 </div>

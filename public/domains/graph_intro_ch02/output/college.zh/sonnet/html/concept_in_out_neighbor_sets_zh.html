@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Strong Weak Connectivity | Graph Intro Ch02</title>
+<title>In Out Neighbor Sets | Graph Intro Ch02</title>
 <script>
 MathJax = {
   loader: { load: ['[tex]/mathtools'] },
@@ -44,19 +44,24 @@ section:first-of-type{border-top:none;padding-top:0}
 <body>
 <div class="page">
   <main>
-    <h2 id="strong-weak-connectivity">Strong Weak Connectivity</h2>
+    <h2 id="in-out-neighbor-sets">In Out Neighbor Sets</h2>
 <p><strong>定义</strong></p>
-<p>有向图（digraph）$G = (V, E)$ 中的连通性有两个层次。若对图中任意一对顶点 $u, v$，都存在一条从 $u$ 到 $v$ 的有向路径,<strong>且</strong>存在一条从 $v$ 到 $u$ 的有向路径,则称 $G$ 是<strong>强连通</strong>的。若只要求将每条有向边替换为无向边后得到的<strong>基础图</strong>（underlying graph）是连通的,则称 $G$ 是<strong>弱连通</strong>的。强连通蕴含弱连通,但反之不成立——弱连通只保证"能够到达",不保证"方向上能互达"。</p>
-<p><strong>判定方法</strong></p>
-<p>判断强连通性最直接的方法是：从任意顶点 $v$ 出发做一次深度优先搜索（DFS），若能到达所有其他顶点,再对边方向取反后的图 $G^T$（转置图）从 $v$ 出发再做一次 DFS,若同样能到达所有顶点,则 $G$ 强连通。这个判定基于一个事实：只要存在一个顶点 $v$ 能与所有其他顶点互达,则任意两点之间也必然互达（通过 $v$ 中转）。这两次 DFS 的总时间复杂度为 $O(|V| + |E|)$,与图的规模成线性关系。</p>
-<p><strong>应用举例</strong></p>
-<p>考虑一个由四个网页 $A, B, C, D$ 组成的超链接网络：$A \to B$、$B \to C$、$C \to A$、$C \to D$。检验发现 $A, B, C$ 三者之间互相可达,构成一个强连通分量;但没有任何边从 $D$ 指回 $A, B, C$,所以 $D$ 只能被到达,不能反向到达其他节点。整个图仍是弱连通的（去掉方向后所有点相连）,但不是强连通的。这类分析正是 Google 早期 PageRank 算法关注"强连通分量"的原因——只有在强连通的网页子集中,链接权重才能形成稳定的循环传递。识别一个大型有向图中的所有强连通分量,是 Kosaraju 算法或 Tarjan 算法要解决的核心问题,广泛用于编译器的依赖分析、社交网络的社区发现等场景。</p>
-<pre class="mermaid">graph TD
-    A((A)) --> B((B))
-    B((B)) --> C((C))
-    C((C)) --> A((A))
-    C((C)) --> D((D))</pre>
-<p><em>该图中 A、B、C 构成一个强连通分量（可互相到达）,而 D 只能被单向到达；整体仍是弱连通的，因为去除方向后所有节点相连。</em></p>
+<p>设 $D = (V, A)$ 为一个有向图（digraph），其中 $V$ 是顶点集，$A$ 是弧（有向边）集。对于顶点 $v \in V$，定义其<strong>入邻居集</strong>（in-neighbor set）为所有指向 $v$ 的顶点构成的集合：</p>
+$$
+N^-(v) = \{u \in V : (u, v) \in A\}
+$$
+<p>定义其<strong>出邻居集</strong>（out-neighbor set）为 $v$ 所指向的所有顶点构成的集合：</p>
+$$
+N^+(v) = \{w \in V : (v, w) \in A\}
+$$
+<p>这两个集合的大小分别称为 $v$ 的<strong>入度</strong>与<strong>出度</strong>，记作 $\deg^-(v) = |N^-(v)|$ 和 $\deg^+(v) = |N^+(v)|$。需要注意，在有向图中 $N^-(v)$ 和 $N^+(v)$ 一般不相等，这与无向图中"邻居集"只有一种定义形成鲜明对比——方向性正是有向图建模能力的核心。</p>
+<p><strong>举例说明</strong></p>
+<p>考虑一个简单的网页链接图：顶点 $A, B, C, D$ 代表四个网页，弧 $(A,B)$ 表示"网页 A 中有一个链接指向网页 B"。若弧集为 $A = \{(A,B), (A,C), (B,C), (D,C)\}$，那么：</p>
+<li>$N^+(A) = \{B, C\}$（A 链接到 B 和 C），$N^-(A) = \varnothing$（没有网页链接到 A）；</li>
+<li>$N^-(C) = \{A, B, D\}$，$N^+(C) = \varnothing$。</li>
+<p>顶点 $C$ 的入度为 3，说明它被大量引用，这正是网页排名（PageRank）等算法用来衡量"重要性"的基础信号。</p>
+<p><strong>解题应用</strong></p>
+<p>在算法实现中，入邻居集和出邻居集通常用邻接表存储：对每个顶点维护一个出邻居列表用于正向遍历（如广度优先搜索、拓扑排序），同时维护一个反向邻接表（入邻居列表）以支持逆向查询，例如"哪些顶点可以到达当前顶点"或计算入度用于 Kahn 算法的拓扑排序。构建反向邻接表的时间复杂度为 $O(|V| + |A|)$，与正向邻接表相同，因此在需要频繁做双向查询的场景（如网络流、依赖关系分析）中，同时维护两者是标准做法，而不会带来额外的渐近开销。</p>
   </main>
   <footer class="spl-credit"><span class="spl-credit__meta">Graph Theory Ch2: Extensions (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
 </div>

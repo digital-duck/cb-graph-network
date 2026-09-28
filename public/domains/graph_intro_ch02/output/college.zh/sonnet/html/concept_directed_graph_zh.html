@@ -13,6 +13,8 @@ MathJax = {
 };
 </script>
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
@@ -30,6 +32,10 @@ footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
 footer.spl-credit a{color:#2563eb;text-decoration:none}
 footer.spl-credit span{display:block}
 footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.cb-figure{margin:24px 0;text-align:center}
+.cb-figure img{max-width:100%;height:auto;border:1px solid #e0e0d8;border-radius:6px}
+figcaption{font-size:.82rem;color:#666;margin-top:8px;font-style:italic;text-align:center}
+pre.mermaid{background:none;border:none;padding:0;overflow:visible;margin:16px 0}
 .page{max-width:780px;margin:0 auto;padding:40px 32px}
 section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
 section:first-of-type{border-top:none;padding-top:0}
@@ -40,15 +46,19 @@ section:first-of-type{border-top:none;padding-top:0}
   <main>
     <h2 id="directed-graph">Directed Graph</h2>
 <p><strong>定义</strong></p>
-<p>有向图（记作 $D = (V, A)$）由一个顶点集合 $V$ 和一个弧集合 $A$ 组成，其中每条弧是一个有序对 $\langle u, v \rangle$，表示从尾顶点 $u$ 指向头顶点 $v$。与无向图不同，弧 $\langle u, v \rangle$ 和 $\langle v, u \rangle$ 是两条不同的弧，方向具有实际意义——它可以表示单向道路、任务的先后依赖、网页之间的超链接，或者电路中电流的流向。一个顶点的<strong>出度</strong>是以它为尾的弧的数目，<strong>入度</strong>是以它为头的弧的数目。整个图的弧总数满足以下关系：</p>
-$$
-\sum_{v \in V} \text{outdeg}(v) = \sum_{v \in V} \text{indeg}(v) = |A|
-$$
-<p>这是因为每条弧恰好贡献一次出度和一次入度，与弧的方向无关。</p>
-<p><strong>实例讲解</strong></p>
-<p>考虑一个课程先修关系图：顶点集合 $V = \{\text{微积分}, \text{线性代数}, \text{机器学习}\}$，弧集合 $A = \{\langle \text{微积分}, \text{机器学习} \rangle, \langle \text{线性代数}, \text{机器学习} \rangle\}$。这里"机器学习"的入度为 2（两门课都是它的先修条件），出度为 0；而"微积分"和"线性代数"的出度都是 1，入度都是 0。这个方向信息至关重要：它告诉我们不能反过来先学机器学习再学微积分。</p>
-<p><strong>问题求解应用</strong></p>
-<p>在实际问题中，有向图常用来判断"是否存在合法的执行顺序"。例如，若一个课程安排系统需要检测先修关系中是否存在矛盾（比如课程 A 需要 B，B 又需要 A），就等价于检测有向图中是否存在<strong>有向环</strong>。若图中不存在有向环（称为<strong>有向无环图</strong>，DAG），则可以通过拓扑排序算法，把所有顶点排成一个线性序列，使得每条弧都从序列中靠前的顶点指向靠后的顶点。这正是操作系统任务调度、编译器中变量依赖分析、以及项目管理中甘特图排期的数学基础。反之，若检测到环，则说明当前的依赖设计存在逻辑矛盾，必须重新设计。因此，理解有向图的方向语义，是解决一整类"顺序依赖"问题的第一步。</p>
+<p>有向图（记作 $D = (V, A)$）由一个顶点集 $V$ 和一个弧集 $A$ 组成，其中每条弧是一个有序对 $\langle u, v \rangle$，表示从尾顶点 $u$ 指向头顶点 $v$ 的一条单向连接。与无向图不同，弧 $\langle u, v \rangle$ 和 $\langle v, u \rangle$ 是两条不同的弧——方向承载了实际信息，例如"任务 $u$ 必须在任务 $v$ 之前完成"或"网页 $u$ 链接到网页 $v$"。对每个顶点 $v$，我们区分<strong>入度</strong>（指向 $v$ 的弧数，记作 $\deg^-(v)$）和<strong>出度</strong>（从 $v$ 发出的弧数，记作 $\deg^+(v)$）。全图弧的总数满足：</p>
+$$|A| = \sum_{v \in V} \deg^+(v) = \sum_{v \in V} \deg^-(v)$$
+<p>这个恒等式的直观理由是：每条弧恰好为某个顶点贡献一个出度，也恰好为另一个顶点贡献一个入度，因此两侧求和方式不同但计的是同一批弧。</p>
+<p><strong>实例求解</strong></p>
+<p>考虑一个课程先修关系图：顶点为课程 {微积分, 线性代数, 概率论, 机器学习}，弧集为 $\{\langle 微积分, 概率论 \rangle, \langle 线性代数, 概率论 \rangle, \langle 概率论, 机器学习 \rangle, \langle 线性代数, 机器学习 \rangle\}$。要判断"机器学习"能否被安排在学期末学习，先检查是否存在从它出发又能绕回自身的弧序列（即环）。逐一追踪：从机器学习出发没有任何出弧，所以它必然是终点之一，不可能出现在环中。计算每个顶点的入度和出度：概率论的入度为 2、出度为 1；机器学习的入度为 2、出度为 0。出度为 0 的顶点称为"汇点"，在课程排序问题中，它天然适合排在最后。</p>
+<p><strong>问题解决应用</strong></p>
+<p>有向图的核心应用在于<strong>依赖排序</strong>：给定一组带有先修约束的任务，能否找到一个满足所有弧方向的线性顺序（拓扑排序）？解决思路是：反复选取当前入度为 0 的顶点（即无待完成前提的任务），将其输出并从图中移除，同时更新其后继顶点的入度，直到所有顶点被处理。若在某一步找不到入度为 0 的顶点，但图中仍有顶点未处理，说明存在环——这类任务集合无法被线性排序（例如"课程 A 需要课程 B，课程 B 又需要课程 A"）。这一算法正是编译器处理模块导入顺序、项目管理软件计算关键路径的基础。</p>
+<pre class="mermaid">graph LR
+  A[微积分] --> C[概率论]
+  B[线性代数] --> C
+  C --> D[机器学习]
+  B --> D</pre>
+<p><em>该图展示了课程先修关系的有向图结构：箭头方向表示先修约束，机器学习的入度为2、出度为0，是图中的汇点。</em></p>
   </main>
   <footer class="spl-credit"><span class="spl-credit__meta">Graph Theory Ch2: Extensions (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
 </div>

@@ -13,6 +13,8 @@ MathJax = {
 };
 </script>
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
@@ -30,6 +32,10 @@ footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
 footer.spl-credit a{color:#2563eb;text-decoration:none}
 footer.spl-credit span{display:block}
 footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.cb-figure{margin:24px 0;text-align:center}
+.cb-figure img{max-width:100%;height:auto;border:1px solid #e0e0d8;border-radius:6px}
+figcaption{font-size:.82rem;color:#666;margin-top:8px;font-style:italic;text-align:center}
+pre.mermaid{background:none;border:none;padding:0;overflow:visible;margin:16px 0}
 .page{max-width:780px;margin:0 auto;padding:40px 32px}
 section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
 section:first-of-type{border-top:none;padding-top:0}
@@ -38,13 +44,14 @@ section:first-of-type{border-top:none;padding-top:0}
 <body>
 <div class="page">
   <main>
-    <h2 id="underlying-graph-基础图">Underlying Graph（基础图）</h2>
-<p><strong>定义</strong></p>
-<p>给定一个有向图 $D = (V, A)$，其中 $V$ 是顶点集，$A$ 是弧（有向边）集，$D$ 的<strong>基础图</strong>（underlying graph）是通过去掉每条弧的方向而得到的无向图 $G(D) = (V, E)$。具体地，若 $(u, v) \in A$，则在 $E$ 中对应产生一条无向边 $\{u, v\}$。如果 $D$ 中同时存在弧 $(u, v)$ 和 $(v, u)$（即一对反向弧），它们在基础图中只对应<strong>一条</strong>无向边（除非采用多重图约定保留重边）。基础图保留了原有向图的顶点集与"是否相连"这一结构信息，但丢弃了方向信息。</p>
-<p><strong>举例说明</strong></p>
-<p>设有向图 $D$ 的弧集为 $A = \{(1,2), (2,3), (3,1), (1,3)\}$。注意 $(3,1)$ 与 $(1,3)$ 是一对反向弧。取基础图时，$(1,2)$ 对应边 $\{1,2\}$，$(2,3)$ 对应边 $\{2,3\}$，而 $(3,1)$ 与 $(1,3)$ 都对应同一条边 $\{1,3\}$，因此在简单图约定下只保留一条。最终得到 $G(D)$ 的边集 $E = \{\{1,2\}, \{2,3\}, \{1,3\}\}$，恰好是一个三角形。可以看到，原本 $D$ 中的环（$1 \to 3 \to 1$）在基础图中只体现为一条普通的边，方向信息完全消失。</p>
-<p><strong>问题求解中的应用</strong></p>
-<p>基础图的价值在于把只对无向结构成立的定理，转移到有向图上使用。例如，判断一个有向图是否<strong>弱连通</strong>（weakly connected）——即忽略方向后任意两点间都存在路径——其标准做法正是：先构造 $D$ 的基础图 $G(D)$，再检验 $G(D)$ 是否连通，这可以直接套用无向图的连通性算法（如深度优先搜索）。同样，图着色数、树宽等许多无向图不变量，在分析有向图（如任务调度图、状态转移图）时，也常常通过先取基础图再计算得到。反之要注意：基础图会丢失强连通性、拓扑序等依赖方向的信息，因此使用基础图求解问题前，必须先确认所求性质确实与方向无关，否则会得到错误结论。</p>
+    <h2 id="underlying-graph-底图">Underlying Graph（底图）</h2>
+<p><strong>定义</strong>：给定有向图 $D = (V, A)$，其中 $V$ 是顶点集、$A$ 是弧（有向边）集，$D$ 的底图（underlying graph）$G(D) = (V, E)$ 是这样构造的无向图：对每条弧 $(u, v) \in A$，在 $E$ 中放入对应的无向边 $\{u, v\}$，即</p>
+$$
+E = \{\, \{u, v\} \mid (u, v) \in A \,\}.
+$$
+<p>直观地说，底图就是"去掉所有箭头方向"后得到的图：$D$ 中若存在弧 $u \to v$ 或 $v \to u$（甚至两者都有），底图中都只保留一条无向边 $\{u, v\}$——方向信息被丢弃，重复的一对顶点只算一条边。底图与原有向图拥有完全相同的顶点集，但边的数量可能因为双向弧合并而少于弧的数量。</p>
+<p><strong>举例</strong>：设 $D$ 的顶点集为 $\{A, B, C\}$，弧集为 $\{(A,B),\ (B,A),\ (B,C)\}$。注意 $A$ 与 $B$ 之间存在双向弧。取底图后，$(A,B)$ 与 $(B,A)$ 合并成同一条无向边 $\{A,B\}$，$(B,C)$ 变为 $\{B,C\}$。于是 $G(D)$ 的边集为 $E = \{\{A,B\}, \{B,C\}\}$，是一个只有两条边的简单无向图。</p>
+<p><strong>问题求解中的应用</strong>：底图最常被用来判断有向图的"弱连通性"。一个有向图 $D$ 被称为弱连通，当且仅当它的底图 $G(D)$ 是连通的——也就是说，如果不考虑方向、仅把每条弧看作双向可通行的道路，任意两个顶点之间都存在路径。这与"强连通"（要求严格按箭头方向也能相互到达）是两个不同的概念，二者之间只有强连通蕴含弱连通，反之不成立。在实践中，判断弱连通性的算法非常直接：先构造底图（把每条弧替换为无向边、去重),再对这个无向图跑一次标准的深度优先搜索或并查集（union-find），检查是否只有一个连通分量。这种"先转化再套用无向图算法"的思路，是处理有向图连通性问题的标准技巧。</p>
   </main>
   <footer class="spl-credit"><span class="spl-credit__meta">Graph Theory Ch2: Extensions (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
 </div>

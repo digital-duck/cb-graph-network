@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Strong Weak Connectivity | Graph Intro Ch02</title>
+<title>Indegree Outdegree | Graph Intro Ch02</title>
 <script>
 MathJax = {
   loader: { load: ['[tex]/mathtools'] },
@@ -44,19 +44,15 @@ section:first-of-type{border-top:none;padding-top:0}
 <body>
 <div class="page">
   <main>
-    <h2 id="strong-weak-connectivity">Strong Weak Connectivity</h2>
-<p><strong>定义</strong></p>
-<p>有向图（digraph）$G = (V, E)$ 中的连通性有两个层次。若对图中任意一对顶点 $u, v$，都存在一条从 $u$ 到 $v$ 的有向路径,<strong>且</strong>存在一条从 $v$ 到 $u$ 的有向路径,则称 $G$ 是<strong>强连通</strong>的。若只要求将每条有向边替换为无向边后得到的<strong>基础图</strong>（underlying graph）是连通的,则称 $G$ 是<strong>弱连通</strong>的。强连通蕴含弱连通,但反之不成立——弱连通只保证"能够到达",不保证"方向上能互达"。</p>
-<p><strong>判定方法</strong></p>
-<p>判断强连通性最直接的方法是：从任意顶点 $v$ 出发做一次深度优先搜索（DFS），若能到达所有其他顶点,再对边方向取反后的图 $G^T$（转置图）从 $v$ 出发再做一次 DFS,若同样能到达所有顶点,则 $G$ 强连通。这个判定基于一个事实：只要存在一个顶点 $v$ 能与所有其他顶点互达,则任意两点之间也必然互达（通过 $v$ 中转）。这两次 DFS 的总时间复杂度为 $O(|V| + |E|)$,与图的规模成线性关系。</p>
-<p><strong>应用举例</strong></p>
-<p>考虑一个由四个网页 $A, B, C, D$ 组成的超链接网络：$A \to B$、$B \to C$、$C \to A$、$C \to D$。检验发现 $A, B, C$ 三者之间互相可达,构成一个强连通分量;但没有任何边从 $D$ 指回 $A, B, C$,所以 $D$ 只能被到达,不能反向到达其他节点。整个图仍是弱连通的（去掉方向后所有点相连）,但不是强连通的。这类分析正是 Google 早期 PageRank 算法关注"强连通分量"的原因——只有在强连通的网页子集中,链接权重才能形成稳定的循环传递。识别一个大型有向图中的所有强连通分量,是 Kosaraju 算法或 Tarjan 算法要解决的核心问题,广泛用于编译器的依赖分析、社交网络的社区发现等场景。</p>
-<pre class="mermaid">graph TD
-    A((A)) --> B((B))
-    B((B)) --> C((C))
-    C((C)) --> A((A))
-    C((C)) --> D((D))</pre>
-<p><em>该图中 A、B、C 构成一个强连通分量（可互相到达）,而 D 只能被单向到达；整体仍是弱连通的，因为去除方向后所有节点相连。</em></p>
+    <h2 id="indegree-outdegree">Indegree Outdegree</h2>
+<p>在有向图中，每条弧（边）都有明确的方向——从一个顶点指向另一个顶点。这就产生了两个描述顶点连接情况的基本量：入度和出度。一个顶点的<strong>入度</strong>是指以该顶点为终点（头）的弧的数目；<strong>出度</strong>是指以该顶点为起点（尾）的弧的数目。如果把弧 $(u, v)$ 理解为"从 $u$ 指向 $v$"，那么这条弧对 $v$ 的入度贡献 $1$，对 $u$ 的出度贡献 $1$。</p>
+<p>对于一个有 $n$ 个顶点、$m$ 条弧的有向图，所有顶点的入度之和与出度之和分别都等于弧的总数：</p>
+$$
+\sum_{v \in V} \text{indeg}(v) = \sum_{v \in V} \text{outdeg}(v) = m
+$$
+<p>这个关系之所以成立，是因为每一条弧恰好为某个顶点贡献一次入度、为另一个顶点贡献一次出度，二者是对同一组弧从两个不同角度的计数，因此总和必然相等。</p>
+<p><strong>举例说明</strong>：考虑一个描述任务依赖关系的有向图，顶点表示任务，弧 $A \to B$ 表示"任务 $A$ 必须先于任务 $B$ 完成"。若顶点 $B$ 有弧 $A \to B$ 和 $C \to B$ 指向它，则 $B$ 的入度为 $2$，意味着有两个前置任务；若 $B$ 又有弧 $B \to D$ 指出，则 $B$ 的出度为 $1$。入度为零的顶点（如 $A$、$C$）没有前置依赖，是可以立即开始的任务；出度为零的顶点是没有后续任务的终点。</p>
+<p><strong>问题求解中的应用</strong>：入度和出度是判断图结构性质的关键工具。在任务调度问题中，入度为零的顶点集合正是拓扑排序算法的起始点；在网络流问题中，源点的入度通常为零、出度大于零，汇点则相反；在网页排名（如 PageRank 的雏形思想）中，一个网页被链接的次数（入度）反映了它的重要性。计算入度和出度的方法很直接：遍历弧的列表，每遇到一条弧 $(u, v)$，就将 $u$ 的出度计数加一、$v$ 的入度计数加一，整个过程的时间复杂度为 $O(m)$，是分析有向图结构最基础也最高效的第一步。</p>
   </main>
   <footer class="spl-credit"><span class="spl-credit__meta">Graph Theory Ch2: Extensions (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
 </div>

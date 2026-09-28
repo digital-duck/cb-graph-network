@@ -13,6 +13,8 @@ MathJax = {
 };
 </script>
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
@@ -30,6 +32,10 @@ footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
 footer.spl-credit a{color:#2563eb;text-decoration:none}
 footer.spl-credit span{display:block}
 footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.cb-figure{margin:24px 0;text-align:center}
+.cb-figure img{max-width:100%;height:auto;border:1px solid #e0e0d8;border-radius:6px}
+figcaption{font-size:.82rem;color:#666;margin-top:8px;font-style:italic;text-align:center}
+pre.mermaid{background:none;border:none;padding:0;overflow:visible;margin:16px 0}
 .page{display:grid;grid-template-columns:260px 1fr;min-height:100vh}
 nav.toc{position:sticky;top:0;height:100vh;overflow-y:auto;
         background:#1e3a5f;color:#e8f0fe;padding:24px 16px}
@@ -56,8 +62,11 @@ nav.toc{position:relative;height:auto}}
     <h2>目录</h2>
     <ol>
 <li><a href="concept_directed_graph_zh.html">Directed Graph</a></li>
+<li><a href="concept_in_out_neighbor_sets_zh.html">In Out Neighbor Sets</a></li>
 <li><a href="concept_directed_walks_paths_cycles_zh.html">Directed Walks Paths Cycles</a></li>
+<li><a href="concept_indegree_outdegree_zh.html">Indegree Outdegree</a></li>
 <li><a href="concept_underlying_graph_zh.html">Underlying Graph</a></li>
+<li><a href="concept_degree_distribution_zh.html">Degree Distribution</a></li>
 <li><a href="concept_orientation_zh.html">Orientation</a></li>
 <li><a href="concept_strong_weak_connectivity_zh.html">Strong Weak Connectivity</a></li>
 <li class="toc-target"><a href="concept_strongly_connected_orientation_zh.html">Strongly Connected Orientation</a></li>
@@ -69,11 +78,10 @@ nav.toc{position:relative;height:auto}}
     <section>
       <section>
       <h2 id="学以致用">学以致用</h2>
-<p>强连通定向定理（Robbins 定理）回答了一个看似简单却影响深远的问题：给一个无向图的每条边指定方向，能否让结果仍然保持"从任意一点出发都能到达任意其他点"？答案完全取决于图本身的连通结构，而不取决于我们如何选择方向——这正是它成为本书终章的原因：它把<strong>定向</strong>这一操作性概念与<strong>强弱连通性</strong>这一结构性概念焊接成一条充要条件，给出了一个可以直接判定、直接构造的结论。</p>
-<p><strong>定理（Robbins，1939）</strong>：设 $G$ 是一个连通无向图，$\lambda(G)$ 表示其边连通度。$G$ 存在一个强连通定向，当且仅当 $\lambda(G) \ge 2$，即 $G$ 是 2-边连通的（不含桥）。</p>
-<p>直觉上很好理解：如果 $G$ 中存在一座"桥"（删去后图不连通的边），那么无论把这座桥定向为哪个方向,两侧的顶点集合中总有一侧无法回到另一侧——强连通性当场破裂。反过来，如果图不含桥，则每条边都处在某个圈上，我们可以沿着一族圈的方向依次定向所有边（这一构造性证明本质上是对图做一次 DFS，把树边和回边分别定向，桥的缺失保证了每个"悬挂"分支都能通过某条回边被拉回主体），从而使整个图强连通。</p>
-<p>考虑一个实际场景：某城市规划部门想把所有双向道路改成单行道，以缓解交通拥堵，同时要求救护车仍能从城市任意一点抵达任意其他一点。把道路网络建模为无向图，这个需求就精确等价于寻找一个强连通定向。规划者只需先检查路网的边连通度：只要不存在"割边"（唯一连接某片区域的道路），单行道方案就一定存在，且可以用上述 DFS 构造法直接生成；一旦发现桥，则必须先修一条备用道路，把图变成 2-边连通,再谈定向。</p>
-<p>这就是定向与连通性两个概念的自然会合点：定向提供操作手段，连通性划定可行边界，Robbins 定理把两者精确对接。建议你动手验证——取一个含桥的图和一个 2-边连通的图，分别尝试定向，感受"卡死"与"畅通"的差异，你会对图论中"结构决定可能性"这一主题有更深的体会。</p>
+<p>一个连通的无向图 $G$ 何时可以把每条边都指定一个方向，使得结果变成一个"任意两点互相可达"的有向图？这正是强连通定向要回答的问题，而答案出人意料地简洁：当且仅当 $G$ 是 2-边连通的，也就是说它的边连通度满足 $\lambda(G) \geq 2$。这个结论是罗宾斯定理（Robbins' theorem），它把一个看似需要逐一尝试所有定向方案的组合难题，压缩成一个只需检验图的边连通性的判定条件。</p>
+<p>这个结果之所以是本书的自然终点，是因为它把前面几个概念严丝合缝地拼合在一起。度分布告诉我们每个顶点有多少条边可供分配方向；定向本身是把无向边替换成有向边这一操作的形式化；而强弱连通性则给出了判断"任意两点互相可达"的标准——强连通定向正是要求整张图在定向之后达到强连通。罗宾斯定理的证明思路依赖于图的边连通结构：如果 $G$ 中存在一座桥（一条删除后会断开图的边），那么无论怎样定向这条桥，都无法让两个方向的可达性同时成立，因为桥的两侧必然只能单向通行。反过来，如果 $G$ 没有桥（即 $\lambda(G) \geq 2$），可以通过深度优先搜索构造出耳分解（ear decomposition），逐步添加"耳朵"路径并保持强连通性，从而构造出一个具体的强连通定向。</p>
+<p>这个概念的现实回响随处可见：城市单行道系统的设计要求任意两个路口都能相互到达，规划者需要先确认路网是否 2-边连通，再决定具体的单行方向；通信网络中把双向链路改造成单向以节省带宽时，同样需要保证网络仍然全连通。</p>
+<p>理解了罗宾斯定理，你已经掌握了一套完整的思维工具：从统计一个图的局部特征（度分布），到操作它的边（定向），再到判定它的全局性质（强弱连通性），最后用一个优雅的充要条件把它们统一起来。不妨拿一张你熟悉的地图或网络图，先计算它的边连通度，再动手尝试构造一个强连通定向——这是检验你是否真正吃透这一整套连通性理论的最好方式。</p>
     </section>
     </section>
     <footer class="spl-credit"><span class="spl-credit__meta">Graph Theory Ch2: Extensions (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>

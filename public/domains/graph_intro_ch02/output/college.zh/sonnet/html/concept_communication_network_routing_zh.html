@@ -13,6 +13,8 @@ MathJax = {
 };
 </script>
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
@@ -30,6 +32,10 @@ footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
 footer.spl-credit a{color:#2563eb;text-decoration:none}
 footer.spl-credit span{display:block}
 footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.cb-figure{margin:24px 0;text-align:center}
+.cb-figure img{max-width:100%;height:auto;border:1px solid #e0e0d8;border-radius:6px}
+figcaption{font-size:.82rem;color:#666;margin-top:8px;font-style:italic;text-align:center}
+pre.mermaid{background:none;border:none;padding:0;overflow:visible;margin:16px 0}
 .page{max-width:780px;margin:0 auto;padding:40px 32px}
 section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
 section:first-of-type{border-top:none;padding-top:0}
@@ -38,13 +44,23 @@ section:first-of-type{border-top:none;padding-top:0}
 <body>
 <div class="page">
   <main>
-    <h2 id="通信网络路由">通信网络路由</h2>
-<p><strong>定义</strong></p>
-<p>通信网络与交通网络都可以抽象成一个有向图（digraph）：每个节点代表一个路由器、机场或城市，每条有向边代表一条单向可用的连接（例如一条通信链路或一条航线）。在这样的模型中，一个核心问题是：网络中任意一个节点是否都能把信息或流量送达任意另一个节点？这个性质被称为强连通性（strong connectivity）。一个有向图被称为<strong>强连通</strong>，当且仅当对图中任意两个节点 $u$ 和 $v$，都同时存在一条从 $u$ 到 $v$ 的有向路径，以及一条从 $v$ 到 $u$ 的有向路径。如果这一条件不成立，图可以被分解为若干个<strong>强连通分量</strong>（strongly connected component，简称SCC）：每个分量内部的节点彼此可达，但分量之间的可达性可能是单向的，甚至完全不通。</p>
-<p><strong>实例讲解</strong></p>
-<p>设想一个由五个路由器 $A, B, C, D, E$ 组成的小型网络，边为 $A\to B$、$B\to C$、$C\to A$、$C\to D$、$D\to E$。可以验证 $\{A, B, C\}$ 构成一个强连通分量：三者之间存在环路，任意两点互达。但 $D$ 和 $E$ 各自只有单向连接：数据可以从 $C$ 分量流向 $D$，再流向 $E$，却无法从 $E$ 或 $D$ 流回 $C$ 分量。这意味着如果 $E$ 作为服务器需要向 $A$ 发起请求（例如确认或反馈信号），当前网络拓扑下这是<strong>不可能</strong>完成的路由——除非增设一条从 $E$（或 $D$）指回 $\{A,B,C\}$ 的边。判定一个有向图是否强连通，以及找出所有强连通分量，标准算法是 Tarjan 算法或 Kosaraju 算法，两者均可在线性时间 $O(V+E)$ 内完成，其中 $V$ 为节点数，$E$ 为边数。</p>
-<p><strong>问题求解应用</strong></p>
-<p>在实际网络设计中，强连通性分析被用来定位<strong>单点故障</strong>和<strong>通信盲区</strong>。网络工程师会先构造有向图模型，运行强连通分量算法，得到分量集合；再将每个分量收缩为一个"超级节点"，形成一个新的有向无环图（DAG），称为<strong>凝聚图</strong>（condensation graph）。凝聚图揭示了信息流动的整体层级结构：位于凝聚图"上游"的分量能够单向影响"下游"分量，反之则不行。设计者据此可以判断：若要让全网具备双向通信能力，应在哪些分量之间补充哪些边，才能以最少的新增连接数使整个凝聚图坍缩为一个单一强连通分量。这类补边问题（strong connectivity augmentation）本身也是一个经典的图论优化问题，其最优解数目与凝聚图中"只入不出"和"只出不入"的分量个数直接相关。</p>
+    <h2 id="communication-network-routing">Communication Network Routing</h2>
+<p>将通信网络或交通网络建模为有向图 $G=(V, E)$，顶点集合 $V$ 表示节点（路由器、城市、服务器），边集合 $E$ 表示带方向的连接。若 $(u,v)\in E$，表示信息可以从 $u$ 单向传递到 $v$，但不必然能从 $v$ 返回 $u$。当图中任意两个顶点 $u,v$ 之间，同时存在从 $u$ 到 $v$ 与从 $v$ 到 $u$ 的有向路径时，称该图是<strong>强连通的</strong>（strongly connected）。强连通性正是路由可靠性的数学保证：只要网络强连通，任何节点发出的信息最终都能到达网络中的任何其他节点，无论中间转发多少次。</p>
+<p>现实网络往往并非全局强连通。此时可将顶点划分为若干极大的<strong>强连通分量</strong>（strongly connected component，SCC）——同一分量内任意两点互相可达，不同分量之间至多单向可达。将每个分量收缩为一个点，得到的<strong>压缩图</strong>（condensation）一定是有向无环图（DAG）。用 Kosaraju 或 Tarjan 算法，可在线性时间 $O(|V|+|E|)$ 内求出所有 SCC，这比逐对检验可达性的 $O(|V|^2)$ 开销小得多，对大规模网络分析至关重要。</p>
+<p><strong>举例</strong>：五个路由器 $A,B,C,D,E$，边为 $A\to B,\ B\to C,\ C\to A,\ C\to D,\ D\to E$。$\{A,B,C\}$ 互相可达，构成一个 SCC；$D$、$E$ 各自是单点分量。压缩图是一条链 $\{A,B,C\}\to D\to E$：消息能从 $A$ 一路送到 $E$，但 $E$ 无法回传到 $A,B,C$，说明该网络尚未强连通。</p>
+<p><strong>工程应用</strong>：若要用最少的新链路使整张网络强连通，已知结果是</p>
+$$
+\text{最少新增边数} = \max(\,\text{压缩图中入度为0的分量数},\ \text{压缩图中出度为0的分量数}\,)
+$$
+<p>（当分量数大于 1 时）。上例中压缩图只有一个入度为零的源分量 $\{A,B,C\}$ 和一个出度为零的汇分量 $E$，故只需增加 1 条边，例如 $E\to A$，即可使全网强连通，实现任意节点间的双向路由。</p>
+<pre class="mermaid">flowchart LR
+    A(节点A) --> B(节点B)
+    B --> C(节点C)
+    C --> A
+    C --> D(节点D)
+    D --> E(节点E)
+    E -.新增边.-> A</pre>
+<p><em>示例网络的有向图：实线为原有连接，虚线为使全图强连通所需新增的最少边。</em></p>
   </main>
   <footer class="spl-credit"><span class="spl-credit__meta">Graph Theory Ch2: Extensions (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
 </div>

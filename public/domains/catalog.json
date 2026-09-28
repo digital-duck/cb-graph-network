@@ -273,21 +273,14 @@
       {
         "name": "chromatic_number",
         "label": "Chromatic Number",
-        "file": "output/college.zh/sonnet/html/concept_chromatic_number_zh.html",
-        "model": "sonnet",
-        "language": "zh"
-      },
-      {
-        "name": "chromatic_number",
-        "label": "Chromatic Number",
         "file": "output/college.en/sonnet/html/concept_chromatic_number.html",
         "model": "sonnet",
         "language": "en"
       },
       {
-        "name": "class_scheduling_application",
-        "label": "Class Scheduling Application",
-        "file": "output/college.zh/sonnet/html/concept_class_scheduling_application_zh.html",
+        "name": "chromatic_number",
+        "label": "Chromatic Number",
+        "file": "output/college.zh/sonnet/html/concept_chromatic_number_zh.html",
         "model": "sonnet",
         "language": "zh"
       },
@@ -299,9 +292,9 @@
         "language": "en"
       },
       {
-        "name": "communication_network_routing",
-        "label": "Communication Network Routing",
-        "file": "output/college.zh/sonnet/html/concept_communication_network_routing_zh.html",
+        "name": "class_scheduling_application",
+        "label": "Class Scheduling Application",
+        "file": "output/college.zh/sonnet/html/concept_class_scheduling_application_zh.html",
         "model": "sonnet",
         "language": "zh"
       },
@@ -313,6 +306,13 @@
         "language": "en"
       },
       {
+        "name": "communication_network_routing",
+        "label": "Communication Network Routing",
+        "file": "output/college.zh/sonnet/html/concept_communication_network_routing_zh.html",
+        "model": "sonnet",
+        "language": "zh"
+      },
+      {
         "name": "degree_distribution",
         "label": "Degree Distribution",
         "file": "output/college.en/sonnet/html/concept_degree_distribution.html",
@@ -320,9 +320,9 @@
         "language": "en"
       },
       {
-        "name": "directed_graph",
-        "label": "Directed Graph",
-        "file": "output/college.zh/sonnet/html/concept_directed_graph_zh.html",
+        "name": "degree_distribution",
+        "label": "Degree Distribution",
+        "file": "output/college.zh/sonnet/html/concept_degree_distribution_zh.html",
         "model": "sonnet",
         "language": "zh"
       },
@@ -334,9 +334,9 @@
         "language": "en"
       },
       {
-        "name": "directed_walks_paths_cycles",
-        "label": "Directed Walks Paths Cycles",
-        "file": "output/college.zh/sonnet/html/concept_directed_walks_paths_cycles_zh.html",
+        "name": "directed_graph",
+        "label": "Directed Graph",
+        "file": "output/college.zh/sonnet/html/concept_directed_graph_zh.html",
         "model": "sonnet",
         "language": "zh"
       },
@@ -348,9 +348,9 @@
         "language": "en"
       },
       {
-        "name": "edge_chromatic_number",
-        "label": "Edge Chromatic Number",
-        "file": "output/college.zh/sonnet/html/concept_edge_chromatic_number_zh.html",
+        "name": "directed_walks_paths_cycles",
+        "label": "Directed Walks Paths Cycles",
+        "file": "output/college.zh/sonnet/html/concept_directed_walks_paths_cycles_zh.html",
         "model": "sonnet",
         "language": "zh"
       },
@@ -362,9 +362,9 @@
         "language": "en"
       },
       {
-        "name": "edge_coloring",
-        "label": "Edge Coloring",
-        "file": "output/college.zh/sonnet/html/concept_edge_coloring_zh.html",
+        "name": "edge_chromatic_number",
+        "label": "Edge Chromatic Number",
+        "file": "output/college.zh/sonnet/html/concept_edge_chromatic_number_zh.html",
         "model": "sonnet",
         "language": "zh"
       },
@@ -376,9 +376,9 @@
         "language": "en"
       },
       {
-        "name": "four_color_theorem",
-        "label": "Four Color Theorem",
-        "file": "output/college.zh/sonnet/html/concept_four_color_theorem_zh.html",
+        "name": "edge_coloring",
+        "label": "Edge Coloring",
+        "file": "output/college.zh/sonnet/html/concept_edge_coloring_zh.html",
         "model": "sonnet",
         "language": "zh"
       },
@@ -390,11 +390,25 @@
         "language": "en"
       },
       {
+        "name": "four_color_theorem",
+        "label": "Four Color Theorem",
+        "file": "output/college.zh/sonnet/html/concept_four_color_theorem_zh.html",
+        "model": "sonnet",
+        "language": "zh"
+      },
+      {
         "name": "in_out_neighbor_sets",
         "label": "In Out Neighbor Sets",
         "file": "output/college.en/sonnet/html/concept_in_out_neighbor_sets.html",
         "model": "sonnet",
         "language": "en"
+      },
+      {
+        "name": "in_out_neighbor_sets",
+        "label": "In Out Neighbor Sets",
+        "file": "output/college.zh/sonnet/html/concept_in_out_neighbor_sets_zh.html",
+        "model": "sonnet",
+        "language": "zh"
       },
       {
         "name": "indegree_outdegree",
@@ -404,9 +418,9 @@
         "language": "en"
       },
       {
-        "name": "orientation",
-        "label": "Orientation",
-        "file": "output/college.zh/sonnet/html/concept_orientation_zh.html",
+        "name": "indegree_outdegree",
+        "label": "Indegree Outdegree",
+        "file": "output/college.zh/sonnet/html/concept_indegree_outdegree_zh.html",
         "model": "sonnet",
         "language": "zh"
       },
@@ -418,9 +432,9 @@
         "language": "en"
       },
       {
-        "name": "storage_load_balancing",
-        "label": "Storage Load Balancing",
-        "file": "output/college.zh/sonnet/html/concept_storage_load_balancing_zh.html",
+        "name": "orientation",
+        "label": "Orientation",
+        "file": "output/college.zh/sonnet/html/concept_orientation_zh.html",
         "model": "sonnet",
         "language": "zh"
       },
@@ -432,9 +446,9 @@
         "language": "en"
       },
       {
-        "name": "strong_weak_connectivity",
-        "label": "Strong Weak Connectivity",
-        "file": "output/college.zh/sonnet/html/concept_strong_weak_connectivity_zh.html",
+        "name": "storage_load_balancing",
+        "label": "Storage Load Balancing",
+        "file": "output/college.zh/sonnet/html/concept_storage_load_balancing_zh.html",
         "model": "sonnet",
         "language": "zh"
       },
@@ -446,9 +460,9 @@
         "language": "en"
       },
       {
-        "name": "strongly_connected_orientation",
-        "label": "Strongly Connected Orientation",
-        "file": "output/college.zh/sonnet/html/concept_strongly_connected_orientation_zh.html",
+        "name": "strong_weak_connectivity",
+        "label": "Strong Weak Connectivity",
+        "file": "output/college.zh/sonnet/html/concept_strong_weak_connectivity_zh.html",
         "model": "sonnet",
         "language": "zh"
       },
@@ -460,9 +474,9 @@
         "language": "en"
       },
       {
-        "name": "underlying_graph",
-        "label": "Underlying Graph",
-        "file": "output/college.zh/sonnet/html/concept_underlying_graph_zh.html",
+        "name": "strongly_connected_orientation",
+        "label": "Strongly Connected Orientation",
+        "file": "output/college.zh/sonnet/html/concept_strongly_connected_orientation_zh.html",
         "model": "sonnet",
         "language": "zh"
       },
@@ -474,9 +488,9 @@
         "language": "en"
       },
       {
-        "name": "vertex_coloring",
-        "label": "Vertex Coloring",
-        "file": "output/college.zh/sonnet/html/concept_vertex_coloring_zh.html",
+        "name": "underlying_graph",
+        "label": "Underlying Graph",
+        "file": "output/college.zh/sonnet/html/concept_underlying_graph_zh.html",
         "model": "sonnet",
         "language": "zh"
       },
@@ -486,6 +500,13 @@
         "file": "output/college.en/sonnet/html/concept_vertex_coloring.html",
         "model": "sonnet",
         "language": "en"
+      },
+      {
+        "name": "vertex_coloring",
+        "label": "Vertex Coloring",
+        "file": "output/college.zh/sonnet/html/concept_vertex_coloring_zh.html",
+        "model": "sonnet",
+        "language": "zh"
       }
     ],
     "source": {
