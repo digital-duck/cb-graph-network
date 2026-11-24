@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>As Topology | Graph Intro Ch07</title>
+<script>
+MathJax = {
+  loader: { load: ['[tex]/mathtools'] },
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']],
+         packages: { '[+]': ['mathtools'] } },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="as拓扑结构">As拓扑结构</h2>
+<p>互联网并非单一实体，而是由数万个"自治系统"（Autonomous System，简称AS）相互连接组成的网络——每个自治系统对应一个独立管理的网络域，例如一所大学、一家互联网服务提供商，或一家云计算公司。自治系统之间通过边界网关协议（BGP）建立"对等互联"关系，交换路由信息。如果把每个自治系统看作图中的一个顶点，把两个自治系统之间的对等互联关系看作一条边，就得到了互联网的自治系统拓扑图。研究者通过分析大量BGP路由表数据，发现这张图具有两个显著的统计特征：无标度性（scale-free）和小世界性（small-world）。</p>
+<p>无标度性指的是节点的度数分布近似服从幂律，即顶点度数为 $k$ 的概率满足</p>
+$$
+P(k) \sim k^{-\gamma}
+$$
+<p>其中指数 $\gamma$ 通常介于2到3之间。这意味着绝大多数自治系统只与少数几个邻居相连，而极少数"枢纽"节点（例如大型骨干网运营商）却拥有成千上万条连接。这种分布与随机图（其度数近似服从泊松分布，各节点度数相近）形成鲜明对比。小世界性则指任意两个自治系统之间的平均最短路径长度很小，通常只有3到4跳，尽管整个图包含数万个节点。这两个特征共同解释了互联网既高效又脆弱的特性：信息可以在少数几步内到达任何目的地，但少数枢纽节点一旦失效，可能造成大范围的连通性损失。</p>
+<p><strong>问题求解应用</strong>：假设某互联网服务提供商希望评估其骨干网络在遭受随机故障与蓄意攻击下的鲁棒性。基于无标度网络理论，可以预测：如果故障是随机发生的（等概率地移除节点），网络的整体连通性几乎不受影响，因为大多数节点度数很低，随机移除很难命中枢纽节点；但如果攻击是有针对性的（优先移除度数最高的节点），网络会迅速碎片化，因为少数高连接度枢纽节点承担了大部分的路径中转功能。这一分析框架被广泛用于评估网络安全策略、设计容灾冗余方案，以及理解为何大型枢纽自治系统（如一级互联网服务提供商）需要更高等级的可靠性保障与安全防护。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Graph Theory Ch7: Modern computer networks (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bellman Ford Algorithm | Graph Intro Ch04</title>
+<script>
+MathJax = {
+  loader: { load: ['[tex]/mathtools'] },
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']],
+         packages: { '[+]': ['mathtools'] } },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="bellman-ford-algorithm">Bellman Ford Algorithm</h2>
+<p><strong>定义</strong></p>
+<p>贝尔曼-福特算法是一种计算单源最短路径的图算法，其核心操作是"松弛"：对于每条边 $(u, v)$，如果经过 $u$ 到达 $v$ 的路径比当前已知的路径更短，就更新 $v$ 的距离估计值。其状态转移可写为</p>
+$$
+d[v] = \min\bigl(d[v],\ d[u] + w(u, v)\bigr)
+$$
+<p>其中 $d[v]$ 表示源点到节点 $v$ 的当前最短距离估计，$w(u,v)$ 是边 $(u,v)$ 的权重。算法对图中所有边重复执行这一松弛操作，最多进行 $|V|-1$ 轮，其中 $|V|$ 是节点数。这个次数上限并非任意选定：任意一条最短路径最多包含 $|V|-1$ 条边，因此 $|V|-1$ 轮足以让最短距离信息传播到图中每一个节点。该算法之所以被称为"去中心化"，是因为每个节点只需要知道自己邻居的距离信息就能更新自己的估计值——不需要任何节点掌握全局拓扑结构。这正是它区别于迪杰斯特拉算法之处，也是它被用作分布式路由协议（如早期互联网的距离向量路由协议 RIP）理论基础的原因。</p>
+<p><strong>范例</strong></p>
+<p>设想一个由四个路由器组成的网络：A、B、C、D，边权重代表链路延迟。A 初始只知道到自己距离为 0，其余节点距离为无穷大。每一轮，A 把自己的距离向量广播给邻居 B，B 收到后执行松弛：如果"A 到 B 的延迟"加上"A 的已知最短距离"小于 B 当前记录的距离，B 就更新自己的值，并在下一轮把更新后的向量转发给它的邻居 C。经过若干轮广播-松弛的迭代，所有节点的距离估计值会收敛到全局最短路径，即便没有任何单一节点见过完整的网络拓扑图。</p>
+<p><strong>问题求解应用</strong></p>
+<p>贝尔曼-福特算法相较迪杰斯特拉算法的关键优势在于它能正确处理带负权重的边，并且可以检测负权环：只需在 $|V|-1$ 轮松弛结束后再多做一轮，如果仍存在可以继续松弛的边，就说明图中存在负权环，最短路径不再有定义。算法的时间复杂度为 $O(|V|\cdot|E|)$，其中 $|E|$ 是边数——这一复杂度上界直接来自"轮数 × 每轮检查所有边"的结构，因此在稠密图或需要负权检测的场景（例如金融套利环检测）中，即使比迪杰斯特拉算法慢，贝尔曼-福特算法仍是不可替代的工具。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Graph Theory Ch4: Trees (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

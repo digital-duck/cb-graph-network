@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Power Law Distribution | Graph Intro Ch06</title>
+<script>
+MathJax = {
+  loader: { load: ['[tex]/mathtools'] },
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']],
+         packages: { '[+]': ['mathtools'] } },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="power-law-distribution">Power Law Distribution</h2>
+<p><strong>定义</strong></p>
+<p>幂律分布（power law distribution）描述这样一类随机变量：某个量取值为 $x$ 的概率密度与 $x$ 的某个负幂成正比，即</p>
+$$
+p(x) = C x^{-\alpha}, \qquad x \geq x_{\min} > 0
+$$
+<p>其中 $\alpha > 1$ 称为标度指数（scaling exponent），$C$ 是归一化常数。由归一化条件 $\int_{x_{\min}}^{\infty} p(x)\, dx = 1$ 可解得 $C = (\alpha - 1) x_{\min}^{\alpha - 1}$。</p>
+<p>幂律分布最本质的数学性质是标度不变性（scale invariance）：如果把 $x$ 按任意常数 $\lambda$ 重新标度，即令 $x' = \lambda x$，分布的函数形式保持不变，只相差一个常数因子：</p>
+$$
+p(\lambda x) = C(\lambda x)^{-\alpha} = \lambda^{-\alpha} p(x)
+$$
+<p>这意味着幂律曲线在对数—对数坐标下是一条直线，斜率为 $-\alpha$——这也是判断经验数据是否服从幂律的常用可视化方法。这与指数分布或正态分布形成鲜明对比：后两者都存在一个特征尺度（characteristic scale），而幂律分布在理想情况下没有这样的尺度，无论在哪个数量级上观察，分布"看起来都一样"。</p>
+<p><strong>推导：期望值的存在性</strong></p>
+<p>幂律分布的一个重要理论结果是：其矩（moment）是否有限依赖于 $\alpha$ 的大小。计算期望值：</p>
+$$
+E[X] = \int_{x_{\min}}^{\infty} x \cdot C x^{-\alpha}\, dx = C \int_{x_{\min}}^{\infty} x^{1-\alpha}\, dx
+$$
+<p>当 $\alpha \leq 2$ 时，指数 $1-\alpha \geq -1$，该积分在上限处发散，即期望值不存在（无穷大）；只有当 $\alpha > 2$ 时，积分才收敛,期望值才有限。这解释了为何许多真实世界的幂律现象（如财富分布、城市人口规模、网络节点度数）会表现出"厚尾"（heavy tail）：极端事件出现的概率远高于正态分布的预测，均值甚至方差可能不稳定或无意义。</p>
+<p><strong>应用：判断与估计</strong></p>
+<p>在实际问题中,给定一组经验数据，常见任务是估计标度指数 $\alpha$。一种稳健方法是最大似然估计：</p>
+$$
+\hat{\alpha} = 1 + n \left[ \sum_{i=1}^{n} \ln \frac{x_i}{x_{\min}} \right]^{-1}
+$$
+<p>例如，若测得某社交网络中节点度数的样本，代入上式即可估计其标度指数，进而判断该网络是否属于"无标度网络"（scale-free network），并预测极端连接节点（枢纽节点）出现的概率是否不可忽略——这正是幂律分布在风险评估、网络鲁棒性分析中的核心应用。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Graph Theory Ch6: Random networks (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

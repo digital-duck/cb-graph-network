@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Minimum Spanning Tree | Graph Intro Ch04</title>
+<script>
+MathJax = {
+  loader: { load: ['[tex]/mathtools'] },
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']],
+         packages: { '[+]': ['mathtools'] } },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="minimum-spanning-tree-最小生成树">Minimum Spanning Tree（最小生成树）</h2>
+<p><strong>定义</strong></p>
+<p>给定一个带权连通图 $G = (V, E)$，其中每条边 $e$ 都有一个权重 $w(e)$（表示成本、距离或时间），一棵<strong>生成树</strong>是 $G$ 的一个子图，它包含所有顶点、不含回路，且恰好用 $|V| - 1$ 条边把所有顶点连接起来。一个连通图通常存在多棵不同的生成树，每棵树的总权重（各边权重之和）也各不相同。<strong>最小生成树</strong>就是所有生成树中总权重最小的那一棵。</p>
+<p>需要强调的是，最小生成树未必唯一——如果多条边权重相同，可能存在多棵总权重相等的最小生成树；但只要所有边权互不相同，最小生成树就是唯一的。</p>
+<p><strong>核心性质：割性质（Cut Property）</strong></p>
+<p>最小生成树算法之所以正确，依赖于图论中的一个基本结论——割性质：对图的顶点集合任意划分成两个非空子集 $S$ 和 $V - S$，如果一条边 $e$ 是所有跨越这个划分的边中权重最小的一条，那么 $e$ 一定属于某棵最小生成树。这个性质保证了"每一步都贪心地选最小边"这一策略不会导致错误，是 Kruskal 算法与 Prim 算法共同的理论基础。</p>
+<p><strong>worked example（求解示例）</strong></p>
+<p>考虑一个有 4 个顶点 $\{A, B, C, D\}$ 的图，边及其权重为：$AB=1$，$BC=2$，$CD=3$，$AD=4$，$AC=5$。</p>
+<p>用 Kruskal 算法求解：先把所有边按权重从小到大排序，然后依次检查每条边——如果加入这条边不会形成回路，就保留它，否则丢弃。</p>
+<li>选 $AB=1$（连接 $A,B$，无回路）</li>
+<li>选 $BC=2$（连接 $\{A,B\}$ 与 $C$，无回路）</li>
+<li>选 $CD=3$（连接 $\{A,B,C\}$ 与 $D$，无回路，此时已有 3 条边，覆盖 4 个顶点，生成树完成）</li>
+<li>$AD=4$ 与 $AC=5$ 会形成回路，直接丢弃</li>
+<p>最终最小生成树的总权重为 $1+2+3=6$。</p>
+<p><strong>problem-solving application（问题求解应用）</strong></p>
+<p>Kruskal 算法的效率主要来自排序（时间复杂度 $O(E \log E)$）以及用<strong>并查集</strong>（Union-Find）数据结构快速判断"加入某条边是否会形成回路"。工程实践中，最小生成树被用来设计成本最低的网络布线方案（例如电网、光缆网络），或作为聚类算法（如层次聚类）中判断"最紧密连接"的依据。解题时的关键技巧是：先确认问题本质是否为"用最少总代价连通所有节点"，若是，则可直接建模为最小生成树问题并套用 Kruskal 或 Prim 算法求解。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Graph Theory Ch4: Trees (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

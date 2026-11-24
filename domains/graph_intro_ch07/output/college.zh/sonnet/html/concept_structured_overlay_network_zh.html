@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Structured Overlay Network | Graph Intro Ch07</title>
+<script>
+MathJax = {
+  loader: { load: ['[tex]/mathtools'] },
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']],
+         packages: { '[+]': ['mathtools'] } },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="structured-overlay-network-结构化覆盖网络">Structured Overlay Network(结构化覆盖网络)</h2>
+<p><strong>定义</strong></p>
+<p>结构化覆盖网络是一种对等网络（P2P network），其中每个节点维护的"邻居视图"并非随机选取，而是按照一套确定性规则从整个节点地址空间中挑选出来的。这套规则通常基于分布式哈希表（Distributed Hash Table，DHT）：系统为每个节点和每份数据都计算一个哈希值，并将其映射到同一个环形或树形的标识符空间中，节点只与那些标识符满足特定数学关系的对等节点建立连接。这种确定性结构使得"给定一个键，应该去问哪个节点"这一问题有了可预测、可推导的答案，而不必依赖洪泛式的盲目搜索。</p>
+<p><strong>工作原理与复杂度分析</strong></p>
+<p>以经典的 Chord 协议为例：所有节点被哈希到一个大小为 $2^m$ 的标识符环上，节点 $n$ 需要维护一张"指位表"（finger table），其第 $i$ 项指向环上负责区间起点</p>
+$$
+n + 2^{i-1} \pmod{2^m}, \quad i = 1, 2, \dots, m
+$$
+<p>的那个节点。查找某个键 $k$ 时，节点每次都把请求转发给指位表中标识符最接近但不超过 $k$ 的那个"跳板"节点。由于每一跳都能让当前节点与目标 $k$ 之间的距离至少减半，经过至多 $m = \log_2 N$ 跳（$N$ 为网络中节点总数）即可定位到负责 $k$ 的节点。因此查找的期望跳数为</p>
+$$
+O(\log N)
+$$
+<p>而每个节点只需维护 $O(\log N)$ 条邻居记录，这与非结构化覆盖网络中节点需要洪泛查询、跳数和消息量都可能是 $O(N)$ 形成鲜明对比。</p>
+<p><strong>问题求解应用</strong></p>
+<p>假设一个 DHT 网络中有 $N = 2^{20}$（约一百万）个节点，若采用非结构化的随机游走查找，最坏情况下可能需要遍历接近全网节点；而在结构化覆盖网络中，只需 $\log_2(2^{20}) = 20$ 跳即可定位到目标数据所在节点。这正是 BitTorrent 的 Mainline DHT、IPFS 底层的 Kademlia 网络等真实系统能够在千万级节点规模下仍保持毫秒级查找延迟的根本原因：确定性的邻居选择规则把一个看似需要全网搜索的问题，转化为了一个对数复杂度的路由问题。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Graph Theory Ch7: Modern computer networks (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

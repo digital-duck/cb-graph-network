@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Social Network | Graph Intro Ch08</title>
+<script>
+MathJax = {
+  loader: { load: ['[tex]/mathtools'] },
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']],
+         packages: { '[+]': ['mathtools'] } },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="社会网络">社会网络</h2>
+<p>社会网络（Social Network）是一种图结构，用有向图或无向图 $G = (V, E)$ 表示社会实体之间的关系：顶点集合 $V$ 代表个体（人、组织或账号），边集合 $E \subseteq V \times V$ 代表个体之间的特定关系，例如朋友关系、关注关系或合作关系。若关系是相互的（如"好友"），则用无向边表示；若关系有方向性（如"关注"），则用有向边表示，此时边 $(u, v) \in E$ 表示顶点 $u$ 指向顶点 $v$。每条边还可以携带权重 $w(u, v)$，用来量化关系的强度，例如互动频率或信任程度。</p>
+<p><strong>结构分析的核心工具是"度"（degree）</strong>。在无向图中，顶点 $v$ 的度 $\deg(v)$ 是与之相连的边数，度较大的顶点往往是社会网络中的"中心人物"。在有向图中，需要区分入度（被关注数）与出度（关注数）。度分布——即随机顶点的度落在某个数值的概率分布——是刻画网络整体结构的重要统计量：真实社会网络的度分布通常呈现幂律特征，也就是少数顶点拥有极高的度（枢纽节点），而大多数顶点度很低，这与随机图的度分布（近似正态或泊松分布）有本质区别。</p>
+<p><strong>worked example（应用实例）</strong>：假设某在线社区有 6 名用户 $\{A, B, C, D, E, F\}$，其关注关系构成有向图：$A \to B$，$A \to C$，$B \to C$，$C \to D$，$D \to E$，$E \to C$，$F \to A$。计算可知顶点 $C$ 的入度为 3（来自 $A$、$B$、$E$），是网络中的信息汇聚点；而 $F$ 的出度为 1、入度为 0，属于边缘节点。若要判断"$A$ 的关注是否能间接影响到 $E$"，本质上是在图上做可达性分析：从 $A$ 出发，经 $A \to C \to D \to E$，可知 $A$ 对 $E$ 存在长度为 3 的有向路径，即信息可以间接传播过去。</p>
+<p><strong>问题求解应用</strong>：社会网络分析中常见任务包括——用广度优先搜索（BFS）计算两个用户之间的最短关系路径（即"六度分隔"问题的图论基础）；用连通分量算法识别独立的社交圈子；用介数中心性（betweenness centrality）衡量某顶点在多少条最短路径上充当"桥梁"，从而识别信息传播的关键节点。这些算法的时间复杂度直接决定了社会网络分析工具能否扩展到百万级用户规模的真实平台。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Graph Theory Ch8: Social networks (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

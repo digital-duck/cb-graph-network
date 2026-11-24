@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Triple | Graph Intro Ch05</title>
+<script>
+MathJax = {
+  loader: { load: ['[tex]/mathtools'] },
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']],
+         packages: { '[+]': ['mathtools'] } },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="triple">Triple</h2>
+<p><strong>定义</strong></p>
+<p>在图论中，"三元组"（triple）指一个恰好由三个顶点和两条边构成的子图，其中存在一个特定的顶点 $v$，它同时与这两条边相连。换句话说，三元组描述的是围绕某个中心顶点 $v$ 的一对"开放"边——$v$ 通过一条边连接到顶点 $u$，又通过另一条边连接到顶点 $w$，而 $u$ 与 $w$ 之间是否存在边则不作要求。若用集合记号表示，一个以 $v$ 为中心的三元组可以写作 $\{u, v\}$ 与 $\{v, w\}$ 这两条边的组合，其中 $u \neq w$。</p>
+<p>三元组是研究网络结构的基本构件之一，尤其在社会网络分析中十分重要。它衡量的是"共同邻居"关系：如果 $u$ 和 $w$ 都与 $v$ 相连，那么 $(u, v, w)$ 就构成了一个三元组。这个概念是理解"传递性"（transitivity）和"聚类系数"（clustering coefficient）的基础——聚类系数正是通过计算有多少个三元组进一步"闭合"成三角形（即 $u$ 与 $w$ 之间也存在边）来定义的。</p>
+<p><strong>实例分析</strong></p>
+<p>设想一个由四位朋友组成的小型社交网络：Alice、Bob、Carol、David。假设边的关系为 Alice–Bob、Alice–Carol、Alice–David、Bob–Carol。以 Alice 为中心顶点 $v$，我们可以数出以下三元组： （Bob, Alice, Carol）、（Bob, Alice, David）、（Carol, Alice, David）。 共计三个三元组，因为 Alice 有三条边（度数为 3），任选其中两条边就构成一个以 Alice 为中心的三元组。</p>
+<p><strong>问题解决应用</strong></p>
+<p>三元组的计数与顶点的度数密切相关：若顶点 $v$ 的度数为 $d(v)$，那么以 $v$ 为中心的三元组数量等于从这 $d(v)$ 条边中任选两条的组合数，即</p>
+$$
+\binom{d(v)}{2} = \frac{d(v)(d(v)-1)}{2}
+$$
+<p>这一公式在计算全局聚类系数时至关重要：全局聚类系数定义为"闭合三元组"（即构成三角形的三元组）数量与"三元组总数"之比。要计算一个网络的聚类系数，第一步就是对每个顶点应用上述公式求出其贡献的三元组数，再对全图求和作为分母；分子则是实际闭合为三角形的三元组数乘以三（因为每个三角形对应三个不同中心顶点的三元组）。</p>
+<p>例如，若某网络中顶点 $v$ 的度数为 $4$，则以 $v$ 为中心的三元组数为 $\binom{4}{2} = 6$。若这 $6$ 个三元组中有 $2$ 个进一步闭合为三角形，则这一局部结构对聚类系数的贡献即可通过此比值直接算出，从而量化该顶点周围的"抱团"程度。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Graph Theory Ch5: Network analysis (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

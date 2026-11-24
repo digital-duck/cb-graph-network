@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Edge Coloring | Graph Intro Ch02</title>
+<script>
+MathJax = {
+  loader: { load: ['[tex]/mathtools'] },
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']],
+         packages: { '[+]': ['mathtools'] } },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="edge-coloring-边染色">Edge Coloring（边染色）</h2>
+<p><strong>定义</strong>：给定一个图 $G=(V,E)$，边染色是指为每条边分配一种颜色，使得共享同一顶点（即相邻）的任意两条边颜色不同。使用的最少颜色数称为该图的<strong>边色数</strong>（chromatic index），记作 $\chi'(G)$。这与顶点染色不同：顶点染色约束的是相邻顶点，边染色约束的是共享端点的边——本质上是在"线图"（line graph）上做顶点染色。</p>
+<p><strong>基本下界</strong>：设 $\Delta(G)$ 为图中最大顶点度数（即与某个顶点相连的边数的最大值）。由于同一个顶点发出的 $\Delta(G)$ 条边两两相邻，它们必须各自使用不同颜色，因此：</p>
+$$
+\chi'(G) \ge \Delta(G)
+$$
+<p><strong>Vizing定理</strong>：对任意简单图 $G$（无自环、无重边），其边色数满足：</p>
+$$
+\Delta(G) \le \chi'(G) \le \Delta(G) + 1
+$$
+<p>这是图论中少数几个"几乎精确"刻画一个染色参数的经典结果——它把所有简单图分成两类：第一类（$\chi'(G)=\Delta(G)$）和第二类（$\chi'(G)=\Delta(G)+1$），而判断一个图属于哪一类本身是NP完全问题。</p>
+<p><strong>求解示例</strong>：考虑一个4个顶点的完全图 $K_4$（每对顶点都相连）。每个顶点的度数为3，所以 $\Delta(K_4)=3$。可以验证 $K_4$ 恰好可以用3种颜色完成边染色：将6条边两两配成3组"完美匹配"，每组一种颜色，任意两条同色边不共享端点。因此 $\chi'(K_4)=3=\Delta(K_4)$，属于第一类图。</p>
+<p><strong>应用场景</strong>：边染色的经典应用是<strong>时间表调度</strong>问题——例如一场循环赛中，每对选手需要比赛一次，且每位选手同一时段只能参加一场比赛。将选手看作顶点、比赛看作边，一种合法的比赛日程安排就等价于一次边染色，颜色代表时间段。求最少需要多少轮比赛，就是求该图的边色数。类似地，网络中的无冲突信道分配、并行任务调度等问题，都可以转化为边染色模型求解。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Graph Theory Ch2: Extensions (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

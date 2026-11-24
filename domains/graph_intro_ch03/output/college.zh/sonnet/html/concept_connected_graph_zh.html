@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Connected Graph | Graph Intro Ch03</title>
+<script>
+MathJax = {
+  loader: { load: ['[tex]/mathtools'] },
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']],
+         packages: { '[+]': ['mathtools'] } },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="连通图">连通图</h2>
+<p><strong>定义</strong>　设图 $G = (V, E)$，其中 $V$ 为顶点集，$E$ 为边集。若对于 $V$ 中任意一对顶点 $u, v$，都存在一条从 $u$ 到 $v$ 的路径（即一系列由边相连的顶点序列 $u = v_0, v_1, \dots, v_k = v$，使得每个 $(v_{i-1}, v_i) \in E$），则称 $G$ 是<strong>连通图</strong>（connected graph）。若图不连通，则它由若干个极大连通子图组成，每个这样的子图称为一个<strong>连通分量</strong>（connected component）。形式地，顶点集 $V$ 上可定义一个等价关系：$u \sim v$ 当且仅当 $u$ 与 $v$ 之间存在路径；每个等价类就是一个连通分量。判断图是否连通，等价于判断该等价关系是否只有一个等价类。</p>
+<p><strong>判定方法（举例）</strong>　给定图 $G$，从任意顶点 $s$ 出发执行一次深度优先搜索（DFS）或广度优先搜索（BFS），记录所有被访问到的顶点集合 $R(s)$。若 $R(s) = V$，即从 $s$ 出发能够到达所有顶点，则 $G$ 连通；否则，$V \setminus R(s)$ 中的顶点属于其他连通分量。例如，考虑顶点集 $V = \{A, B, C, D, E\}$，边集 $E = \{(A,B), (B,C), (D,E)\}$。从 $A$ 出发做 BFS，只能到达 $\{A, B, C\}$，无法到达 $D, E$，因此该图不连通，含有两个连通分量：$\{A, B, C\}$ 与 $\{D, E\}$。</p>
+<p><strong>在算法设计中的应用</strong>　连通性是本章后续遍历定理成立的前提条件：诸如"单次 DFS/BFS 可访问图中全部顶点""生成树存在"等结论，均默认图是连通的。在实际问题求解中，判断连通性常常是算法的第一步——例如判断一个通信网络是否所有节点都能互相通信，或判断一张地图上的所有城市是否可通过道路网络相互抵达。对于含有 $n$ 个顶点、$m$ 条边的图，用邻接表实现的 DFS/BFS 判定连通性的时间复杂度为 $O(n + m)$，这是判断连通性能达到的最优复杂度量级，因为算法至少需要检查每条边一次才能确认其连接关系。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Graph Theory Ch3: Network traversal (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

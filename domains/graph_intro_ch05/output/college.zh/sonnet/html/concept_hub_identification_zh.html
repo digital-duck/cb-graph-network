@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hub Identification | Graph Intro Ch05</title>
+<script>
+MathJax = {
+  loader: { load: ['[tex]/mathtools'] },
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']],
+         packages: { '[+]': ['mathtools'] } },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="hub-identification-枢纽节点识别">Hub Identification（枢纽节点识别）</h2>
+<p><strong>定义</strong>：在一个网络（图）中，每个顶点的度是与其相连的边数。把所有顶点的度按大小排列所得到的序列称为度序列。大多数真实网络（互联网、社交网络、蛋白质相互作用网络）的度序列并非均匀分布，而是高度偏斜的：绝大多数顶点度很小，只有极少数顶点度极高。这类偏斜分布常可用幂律近似描述：</p>
+$$
+P(k) \sim k^{-\gamma}
+$$
+<p>其中 $P(k)$ 是随机选取一个顶点其度恰为 $k$ 的概率，$\gamma$ 通常在 2 到 3 之间。度显著高于平均值的顶点称为枢纽节点（hub）。枢纽节点识别，就是通过考察度序列的尾部，找出这些高度顶点，因为它们往往是维系全网连通性的关键节点：移除它们比移除随机顶点更容易把网络切割成互不相连的多个部分。</p>
+<p><strong>范例</strong>：考虑一个由 7 个顶点组成的小型网络，其中顶点 $A$ 与其余 6 个顶点全部相连，其余顶点之间只有零星几条边。顶点 $A$ 的度为 6，远高于其他顶点（度多为 1 或 2）。若删去 $A$，图会立刻分裂为若干孤立分量；而删去任意一个度为 1 的顶点，网络的连通结构几乎不受影响。这说明枢纽节点在拓扑上承担了"桥梁"的作用，它的度和它的结构重要性高度相关。</p>
+<p><strong>问题求解应用</strong>：枢纽节点识别的实际价值在于评估网络对攻击和随机故障的鲁棒性差异。度分布的二阶矩 $\langle k^2 \rangle$ 与一阶矩 $\langle k \rangle$ 之比给出了 Molloy–Reed 判据，用来判断网络是否存在把大多数节点连通起来的"巨分量"：</p>
+$$
+\kappa = \frac{\langle k^2 \rangle}{\langle k \rangle} > 2
+$$
+<p>当满足此条件时，随机移除少量顶点通常不会破坏巨分量，因为随机移除更可能击中低度顶点；但如果按度从高到低"定点打击"，先移除枢纽节点，$\langle k^2 \rangle$ 会迅速下降，$\kappa$ 很快跌破阈值，网络随之瓦解。这正是为什么互联网对随机硬件故障高度容错、却对精心策划的针对枢纽路由器的攻击异常脆弱——识别枢纽节点是理解并设计这种鲁棒—脆弱二重性的第一步。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Graph Theory Ch5: Network analysis (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

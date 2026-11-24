@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Four Color Theorem | Graph Intro Ch02</title>
+<script>
+MathJax = {
+  loader: { load: ['[tex]/mathtools'] },
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']],
+         packages: { '[+]': ['mathtools'] } },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="四色定理">四色定理</h2>
+<p><strong>定义</strong></p>
+<p>四色定理是图论中的一个经典结果：任何平面图（即可以画在平面上使得边不相交的图）的顶点都可以用最多四种颜色着色，使得每一条边所连接的两个顶点颜色不同。这个问题最初来源于地图着色——给定一张地图，如何用最少的颜色给相邻的国家或地区着色，使得共享边界的两个区域颜色不同。将每个区域看作图的一个顶点，两个区域相邻则在对应顶点间连一条边，地图着色问题就转化为平面图的顶点着色问题。定理断言：不论地图多么复杂，四种颜色总是足够的。</p>
+<p>用符号表述，设 $G$ 为一个平面图，$\chi(G)$ 为其色数（即所需最少颜色数），则</p>
+$$
+\chi(G) \le 4
+$$
+<p>对所有平面图 $G$ 成立。</p>
+<p><strong>证明历史</strong></p>
+<p>这一命题在1852年由弗朗西斯·古思里提出猜想，历经百余年未被证明，直到1976年阿佩尔（Appel）与哈肯（Haken）给出证明。他们的方法极具争议性和历史意义：先用数学分析证明，任何反例（即需要五种颜色的平面图）必定包含大约1900多种"不可避免的局部结构"之一；再借助计算机穷举检验，证明这些结构都可以被"约化"，从而不可能构成最小反例。这是数学史上首个依赖大规模计算机验证、而非纯手工推导的重要定理证明，引发了关于"什么算作数学证明"的哲学讨论。</p>
+<p><strong>问题求解应用</strong></p>
+<p>在实际应用中，四色定理保证了任何地图或平面网络规划问题存在四色着色方案，但寻找具体的着色方案仍需算法（如回溯搜索或贪心着色）。例如，给一张有12个国家的地图着色，可以先构造相邻关系图，再用回溯法尝试分配颜色：从颜色数最少的顶点开始，若某着色导致后续无法完成，则回溯并更换颜色，直至找到合法四色方案。这类算法在实际电路布线、频率分配、任务调度等需要避免"冲突"的资源分配问题中广泛应用。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Graph Theory Ch2: Extensions (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

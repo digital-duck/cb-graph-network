@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Giant Component | Graph Intro Ch06</title>
+<script>
+MathJax = {
+  loader: { load: ['[tex]/mathtools'] },
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']],
+         packages: { '[+]': ['mathtools'] } },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="巨型连通分量">巨型连通分量</h2>
+<p>在随机图模型 $G(n, p)$ 中（$n$ 个顶点，每条边以独立概率 $p$ 存在），当连接概率 $p$ 越过某个临界阈值时，图的结构会发生突变：原本由许多小碎片组成的图，突然出现一个规模与顶点总数 $n$ 同阶的连通分量，其余分量则退化为对数量级的微小碎片。这个占主导地位的分量被称为巨型连通分量，这一现象本身称为相变。</p>
+<p>Erdős 与 Rényi 于 1960 年证明了这一相变的精确位置，其判据由平均度 $np$（每个顶点连出边数的期望）给出：</p>
+$$
+np < 1 \implies \text{最大连通分量的大小为 } O(\log n)
+$$
+$$
+np > 1 \implies \text{存在唯一的巨型连通分量，其大小为 } \Theta(n)
+$$
+<p>直观理解可借助分支过程：从任一顶点出发，向外探索连通分量相当于一个每代产生泊松分布（均值 $np$）个"子代"的分支过程。当 $np < 1$ 时，该过程几乎必然在有限步内灭绝，因此连通分量都很小；当 $np > 1$ 时，过程有正概率无限扩张，图中因此会出现一个吞并了正比例顶点的巨型分量。</p>
+<p><strong>举例</strong>：设 $n = 1000$。若 $p = 0.0005$，则 $np = 0.5 < 1$，图应呈碎片化，各分量规模约为 $\log(1000) \approx 6.9$ 量级。若 $p = 0.003$，则 $np = 3 > 1$，理论预测会出现一个约占顶点总数正比例（具体比例由 $np$ 决定，可通过求解 $1 - e^{-npf} = f$ 得到吞没比例 $f$）的巨型分量。</p>
+<p><strong>应用于问题求解</strong>：给定一个大规模网络（如社交网络、传染病接触网），只需估计其平均度 $\bar{d} \approx np$，即可判断网络是否已越过巨型分量阈值。这一判据广泛用于流行病学中判断疫情是否会大规模扩散（对应巨型分量的出现），以及网络工程中评估随机故障或攻击后网络连通性是否会崩溃。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Graph Theory Ch6: Random networks (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

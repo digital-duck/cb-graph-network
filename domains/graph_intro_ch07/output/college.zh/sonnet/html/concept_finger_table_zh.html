@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Finger Table | Graph Intro Ch07</title>
+<script>
+MathJax = {
+  loader: { load: ['[tex]/mathtools'] },
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']],
+         packages: { '[+]': ['mathtools'] } },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="指标表">指标表</h2>
+<p><strong>定义</strong>　在 Chord 分布式哈希表（DHT）协议中，指标表是每个节点维护的一份"部分视图"，用于避免遍历整条环形拓扑就能完成路由。设标识符空间大小为 $2^m$（即节点与数据键都被哈希到 $0$ 到 $2^m-1$ 的环上），节点 $n$ 的指标表包含 $m$ 条记录。第 $i$ 条记录（$i = 1, 2, \ldots, m$）指向环上位置</p>
+$$
+n + 2^{i-1} \pmod{2^m}
+$$
+<p>的后继节点，即负责该位置对应键的那个节点。由于第 $i$ 条指针的跨度是 $2^{i-1}$，随着 $i$ 增大，指针跳跃的距离呈指数增长——第一条指针只跨越一步，而最后一条几乎跨越半个环。这种指数间隔的设计,使指标表只需 $O(\log N)$ 条记录（$N$ 为环上活跃节点数),却能覆盖整个标识符空间的路由需求。</p>
+<p><strong>举例说明</strong>　设 $m = 6$，环上共有 $64$ 个可能的位置。节点 $n = 10$ 的指标表第 $i$ 条记录分别指向位置 $11, 12, 14, 18, 26, 42$（即 $10+2^0, 10+2^1, \ldots, 10+2^5$，均对 $64$ 取模）后的第一个实际存在的节点。若要查找键 $58$，节点 $10$ 会在自己的指标表中选择不超过目标又最接近目标的那一条指针（例如指向 $42$ 的那条），跳转到该节点后重复此过程，而不是逐个节点地"数过去"。</p>
+<p><strong>解决问题的应用</strong>　这种设计的核心价值在于查找复杂度：每次转发都至少将节点与目标之间的环上距离减半，因此从任意节点发起的查找,最多经过 $O(\log N)$ 次转发即可定位到负责某个键的节点。相比之下,若每个节点只知道自己的直接后继（即链表式路由），查找复杂度将退化为 $O(N)$。在工程实践中，指标表的维护还需处理节点加入与离开——每当环上成员变化，受影响节点需要周期性地"稳定化"（stabilize）并修正指标表中失效的指针,以保证路由的正确性和对数级效率不被破坏。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Graph Theory Ch7: Modern computer networks (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

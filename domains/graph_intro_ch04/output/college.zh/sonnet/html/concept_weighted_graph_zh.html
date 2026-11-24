@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Weighted Graph | Graph Intro Ch04</title>
+<script>
+MathJax = {
+  loader: { load: ['[tex]/mathtools'] },
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']],
+         packages: { '[+]': ['mathtools'] } },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="带权图">带权图</h2>
+<p><strong>定义</strong></p>
+<p>带权图是在图的基础上，为每一条边额外赋予一个实数值（称为权重）的数据结构。形式化地，一个带权图可以表示为三元组 $G = (V, E, w)$，其中 $V$ 是顶点集合，$E \subseteq V \times V$ 是边集合，$w: E \to \mathbb{R}$ 是权重函数，将每条边 $(u, v) \in E$ 映射到一个实数 $w(u, v)$。权重的含义取决于具体应用场景：可以表示距离、时间、成本、带宽，甚至是概率或相似度。与无权图相比，带权图中"路径长度"不再是简单的边数统计，而是路径上所有边权重之和：</p>
+$$
+\text{path\_length}(v_0, v_1, \ldots, v_k) = \sum_{i=1}^{k} w(v_{i-1}, v_i)
+$$
+<p>正是这一权重求和的定义，使得带权图上的最短路径问题（如迪杰斯特拉算法、贝尔曼-福特算法）与无权图上简单的广度优先搜索有本质区别——边数最少的路径未必是权重之和最小的路径。</p>
+<p><strong>实例演示</strong></p>
+<p>考虑一张城市交通网络图：顶点是城市，边是道路，权重是行驶时间（单位：分钟）。假设有城市 A、B、C，边 $(A, B)$ 权重为 10，边 $(B, C)$ 权重为 5，边 $(A, C)$ 权重为 20。若只看边数，$A \to C$ 直达只需一条边；但若比较权重之和，经由 B 中转的路径 $A \to B \to C$ 总权重为 $10 + 5 = 15$，小于直达的 20。因此带权图揭示了一个反直觉但常见的现象：绕路有时反而更快。这正是导航软件规划路线时必须依赖带权最短路径算法，而非简单边数统计的原因。</p>
+<p><strong>问题求解应用</strong></p>
+<p>在实践中，构建带权图的第一步是明确权重的语义，并选择合适的数据结构存储它——邻接矩阵中每个单元格存权重值（无边处记作 $\infty$ 或特殊标记），邻接表中每条边记录 (目标顶点, 权重) 二元组。例如用 Python 的字典嵌套字典表示：<code>graph = {"A": {"B": 10, "C": 20}, "B": {"C": 5}}</code>。求解时需注意：若权重可能为负，迪杰斯特拉算法会失效，必须改用贝尔曼-福特算法；若图中存在负权环，则"最短路径"本身失去意义（权重之和可以无限趋近负无穷）。练习：给定一张有 5 个顶点、8 条带权边的图，分别用邻接矩阵和邻接表实现存储，并计算从起点到所有其他顶点的最短路径总权重，体会两种数据结构在稀疏图与稠密图上的空间效率差异。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Graph Theory Ch4: Trees (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

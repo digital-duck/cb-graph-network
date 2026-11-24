@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Routing Protocol | Graph Intro Ch04</title>
+<script>
+MathJax = {
+  loader: { load: ['[tex]/mathtools'] },
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']],
+         packages: { '[+]': ['mathtools'] } },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="routing-protocol-路由协议">Routing Protocol（路由协议）</h2>
+<p><strong>定义</strong></p>
+<p>路由协议是一套规范，规定网络中的节点如何决定将一条消息转发到下一跳，最终送达目的地。它要解决两个层面的问题：一是每个节点如何获知"到某个目的地该往哪个方向走"（即构建路由表），二是当网络拓扑发生变化(链路断开、新节点加入)时,如何更新这些信息。路由协议本质上是分布式算法:没有任何一个节点掌握全网的完整视图,却要通过局部信息交换,让整体行为收敛到"每条消息都能找到路径"这一目标。</p>
+<p>路由协议大体分两类。距离向量协议(如RIP)让每个节点只与相邻节点交换"我到某目的地的距离是多少",通过反复交换和更新,逐步逼近最短路径,其数学基础是贝尔曼-福特(Bellman-Ford)算法。链路状态协议(如OSPF)则让每个节点先广播自己与邻居的连接信息,使全网每个节点都能重建出完整拓扑图,再各自在本地运行迪杰斯特拉(Dijkstra)最短路径算法计算路由表。</p>
+<p><strong>最短路径的形式化</strong></p>
+<p>以链路状态协议为例,网络可建模为带权有向图 $G=(V,E)$,其中顶点 $V$ 是节点,边权 $w(u,v)$ 是链路代价(如延迟或跳数)。路由协议要为每个节点 $s$ 求出到所有其他节点的最短路径,即求解:</p>
+$$d(s,v)=\min_{p \in P(s,v)} \sum_{(u,w)\in p} w(u,w)$$
+<p>其中 $P(s,v)$ 是从 $s$ 到 $v$ 的所有路径集合。迪杰斯特拉算法在无负权边时能以 $O((|V|+|E|)\log|V|)$ 的时间复杂度求出这一最优解,这正是链路状态协议能在毫秒级内计算出全网路由表的理论保证。</p>
+<p><strong>解决实际问题</strong></p>
+<p>假设一个数据中心网络有5台交换机,链路延迟各不相同,某条链路突然中断。距离向量协议中,相邻节点会检测到该链路代价变为无穷大,并将更新过的距离向量传播给邻居;但若拓扑存在环路,更新信息可能来回震荡,导致"计数到无穷"问题,需要引入水平分割等技术抑制。链路状态协议则因为每个节点独立重算最短路径树,收敛更快且不易产生环路,这也是大型网络(如互联网骨干网所用的OSPF、BGP)普遍采用链路状态或路径向量思想的原因。理解这套权衡,是设计可靠通信系统的基本功。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Graph Theory Ch4: Trees (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

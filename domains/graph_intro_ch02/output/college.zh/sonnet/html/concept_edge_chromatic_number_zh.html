@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Edge Chromatic Number | Graph Intro Ch02</title>
+<script>
+MathJax = {
+  loader: { load: ['[tex]/mathtools'] },
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']],
+         packages: { '[+]': ['mathtools'] } },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="边色数">边色数</h2>
+<p><strong>定义</strong>　图 $G$ 的一个 <strong>边染色</strong>（edge coloring）是给每条边分配一种颜色，使得共享同一顶点的两条边（即相邻边）颜色不同。若某种染色方案只用了 $k$ 种颜色，就称 $G$ 是 <strong>$k$-边可染色的</strong>。使 $G$ 可以被 $k$ 种颜色边染色的最小整数 $k$，称为 $G$ 的 <strong>边色数</strong>，记作 $\chi'(G)$。</p>
+<p>边色数与更常见的（顶点）色数 $\chi(G)$ 是两个不同的概念：顶点染色约束的是相邻顶点，边染色约束的是共享顶点的边。两者可以通过一个变换联系起来——把 $G$ 的每条边看作新图 $L(G)$（$G$ 的<strong>线图</strong>）的一个顶点，$L(G)$ 中两点相邻当且仅当对应两条边在 $G$ 中共享端点，于是 $\chi'(G) = \chi(L(G))$。</p>
+<p><strong>关键下界</strong>　设 $\Delta(G)$ 为 $G$ 中顶点的最大度数。由于与某个度数为 $\Delta$ 的顶点相邻的所有边两两相邻，它们必须两两异色，因此任何边染色至少需要 $\Delta(G)$ 种颜色：</p>
+$$\chi'(G) \ge \Delta(G)$$
+<p><strong>维津定理（Vizing's Theorem）</strong>　对于任意简单图（无重边、无自环），边色数不会超过最大度数太多：</p>
+$$\Delta(G) \le \chi'(G) \le \Delta(G) + 1$$
+<p>这意味着每个简单图只属于两类之一：<strong>第一类</strong>（$\chi'(G)=\Delta(G)$）或<strong>第二类</strong>（$\chi'(G)=\Delta(G)+1$）。</p>
+<p><strong>例题</strong>　考虑完全图 $K_4$（4 个顶点，每两点均相连，共 6 条边），每个顶点度数为 3，故 $\Delta=3$。可以验证 $K_4$ 恰好能用 3 种颜色完成边染色：把 6 条边分成 3 组两两不相邻的边（称为<strong>完美匹配</strong>），每组一色。因此 $\chi'(K_4)=3=\Delta$，属于第一类。</p>
+<p>再看奇数长度的圈 $C_5$（5 个顶点，5 条边，每点度数为 2）。若只用 2 种颜色染色，沿圈依次交替染色，走完 5 条边后颜色必然冲突（因为 5 是奇数）。故 $\chi'(C_5)=3=\Delta+1$，属于第二类。</p>
+<p><strong>求解策略</strong>　遇到边染色问题时，先计算 $\Delta(G)$ 作为下界，再尝试构造一个用 $\Delta(G)$ 种颜色的染色方案；若构造失败（常见于奇圈、某些正则图），再验证是否需要 $\Delta(G)+1$ 种颜色。对二部图，柯尼希定理保证 $\chi'(G)=\Delta(G)$ 恒成立，这是判断第一类图的实用捷径。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Graph Theory Ch2: Extensions (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

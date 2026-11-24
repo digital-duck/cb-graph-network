@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Connectivity Numbers | Graph Intro Ch01</title>
+<script>
+MathJax = {
+  loader: { load: ['[tex]/mathtools'] },
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']],
+         packages: { '[+]': ['mathtools'] } },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="连通度">连通度</h2>
+<p>图的连通度衡量的是要拆散一个连通图,最少需要破坏多少个顶点或多少条边。这不是一个模糊的"稳固程度"描述,而是一个精确定义的整数。<strong>点连通度</strong>(记作 $\kappa(G)$)定义为使图 $G$ 不连通(或变为只剩一个顶点的图)所需删除的最少顶点数;<strong>边连通度</strong>(记作 $\lambda(G)$)定义为使图不连通所需删除的最少边数。这两个数之间以及它们与图的最小顶点度 $\delta(G)$ 之间,存在一个基本不等式:</p>
+$$\kappa(G) \leq \lambda(G) \leq \delta(G)$$
+<p>这个不等式的直觉并不难理解。右边 $\lambda(G) \leq \delta(G)$ 成立的原因是:任取图中度数最小的顶点 $v$,只要删掉它所连的全部 $\delta(G)$ 条边,$v$ 就被孤立了,图自然不连通——所以边连通度不可能超过最小度。左边 $\kappa(G) \leq \lambda(G)$ 则来自一个更巧妙的事实:给定任意一个大小为 $\lambda(G)$ 的最小边割集,只要每条被割断的边选一个端点删除,就足以破坏这些边的连通作用,因此用不超过 $\lambda(G)$ 个顶点也能拆散图。</p>
+<p><strong>举例说明</strong>:考虑一个环形网络,五个节点依次相连成一个圈(即五边形结构)。每个顶点的度都是 2,所以 $\delta(G) = 2$。要切断这个圈,删去任意一条边就能让它变成一条链而不再是圈——但链仍然连通,必须删去两条边才能真正拆成两个分离的部分,所以 $\lambda(G) = 2$。同样,删去任意一个顶点也只是把圈打开成一条链,仍连通,需要删去两个顶点才能拆散,所以 $\kappa(G) = 2$。这里三个数恰好相等:$\kappa = \lambda = \delta = 2$,说明这个圈网络在点和边两种意义下都同样"脆弱"。</p>
+<p><strong>问题求解应用</strong>:这个不等式在工程实践中最重要的用途是提供一个<strong>可快速计算的下界</strong>。计算精确的连通度往往需要遍历大量顶点或边的组合,代价很高;但计算最小度 $\delta(G)$ 只需扫描一遍所有顶点,是线性时间的操作。因此,在设计通信网络或电力网时,工程师常先计算 $\delta(G)$ 作为容错能力的上限估计——如果 $\delta(G)$ 已经很小(比如某个节点只有一条连接),那么无论如何设计,$\kappa(G)$ 和 $\lambda(G)$ 都不会超过这个值,该节点就是网络中天然的薄弱环节,应优先加固。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Graph Theory Ch1: Foundations (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

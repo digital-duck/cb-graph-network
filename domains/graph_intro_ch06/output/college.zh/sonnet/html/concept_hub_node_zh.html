@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hub Node | Graph Intro Ch06</title>
+<script>
+MathJax = {
+  loader: { load: ['[tex]/mathtools'] },
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']],
+         packages: { '[+]': ['mathtools'] } },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="hub-node">Hub Node</h2>
+<p><strong>定义</strong></p>
+<p>在无标度网络（scale-free network）中，枢纽节点（hub node）是指度数（degree，即与该节点相连的边数）远高于网络平均水平的少数顶点。这类节点的存在源于无标度网络的度分布服从幂律（power law）：</p>
+$$P(k) \sim k^{-\gamma}$$
+<p>其中 $P(k)$ 表示网络中随机选取一个节点、其度数恰为 $k$ 的概率，$\gamma$ 通常介于 2 到 3 之间。幂律分布意味着高度数节点出现的概率不会像正态分布那样迅速衰减为零，因此网络中总会存在极少数度数异常大的枢纽节点，它们像交通枢纽机场一样，承担着连接大量彼此并不直接相连的节点的中介作用。</p>
+<p><strong>实例分析</strong></p>
+<p>以航空网络为例：大多数机场只与本地区少数机场直连，但如芝加哥奥黑尔或亚特兰大这样的枢纽机场却与数百个机场相连。若把机场视为节点、航线视为边，统计各机场的度数分布，会发现绝大多数机场度数集中在个位数，而少数机场的度数高达三位数——这正是幂律分布"长尾"特征的直接体现。移除一个普通机场对整体连通性影响甚微,但移除一个枢纽机场,则会使大量原本依赖它中转的航线断裂，网络平均路径长度显著上升，甚至导致网络分裂为多个孤立部分。</p>
+<p><strong>问题解决应用</strong></p>
+<p>识别枢纽节点是网络分析的核心任务之一,常用度中心性（degree centrality）排序,即按各节点度数从高到低排列,取排名靠前者。在实际问题中,这一概念被用于：设计更具攻击容错性的基础设施(如在互联网骨干网中冗余备份枢纽路由器)；制定精准防疫策略(优先隔离社交网络中的高连接个体以阻断传播路径);以及优化广告投放(通过意见领袖类枢纽用户实现信息的高效扩散)。反过来,枢纽节点也是网络最脆弱的环节——工程师在设计容错系统时,必须评估：若某一枢纽节点失效,网络的连通性与效率会受到怎样的冲击,并据此决定是否需要为其增设备用连接。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Graph Theory Ch6: Random networks (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

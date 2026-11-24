@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Network Resilience | Graph Intro Ch06</title>
+<script>
+MathJax = {
+  loader: { load: ['[tex]/mathtools'] },
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']],
+         packages: { '[+]': ['mathtools'] } },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="网络韧性">网络韧性</h2>
+<p><strong>定义</strong></p>
+<p>网络韧性描述的是一个现象：在随机网络中，即使随机删除相当一部分节点，网络中仍然存在一个包含绝大多数剩余节点的"巨大连通分量"（giant component），而不会碎裂成大量孤立的小片段。这一性质源于渗流理论（percolation theory）。对于埃尔德什-雷尼（Erdős–Rényi）随机图 $G(n,p)$，当平均度 $\langle k \rangle = n p$ 超过临界值 $\langle k \rangle_c = 1$ 时，图中就会出现规模与 $n$ 同阶的巨大连通分量；低于此临界值时，所有连通分量的规模都只是 $O(\log n)$。这个临界点被称为渗流阈值。</p>
+<p><strong>渗流阈值的推导</strong></p>
+<p>设随机删除节点的比例为 $f$，剩余网络的巨大连通分量能否存在，取决于莫洛伊-里德判据（Molloy–Reed criterion）：</p>
+$$
+\kappa = \frac{\langle k^2 \rangle}{\langle k \rangle} > 2
+$$
+<p>其中 $\langle k \rangle$ 与 $\langle k^2 \rangle$ 分别是剩余网络度分布的一阶矩与二阶矩。当随机删除比例为 $f$ 时，节点的度分布近似按比例 $(1-f)$ 缩减，巨大连通分量存在的条件变为：</p>
+$$
+f_c = 1 - \frac{1}{\kappa - 1}
+$$
+<p>$f_c$ 即为使网络恰好碎裂的临界删除比例。</p>
+<p><strong>工作实例</strong></p>
+<p>考虑一个平均度 $\langle k \rangle = 4$、近似泊松度分布的随机网络（此时 $\langle k^2 \rangle \approx \langle k \rangle^2 + \langle k \rangle = 20$，故 $\kappa = 5$）。代入上式得 $f_c = 1 - \frac{1}{4} = 0.75$。也就是说，即使随机移除高达 75% 的节点，网络仍然维持一个巨大连通分量；这正是"随机网络出人意料地稳健"这一观察的数学根源。</p>
+<p><strong>问题求解应用</strong></p>
+<p>这一理论最实际的价值在于区分"随机故障"与"蓄意攻击"。对于无标度网络（度分布服从幂律 $P(k) \sim k^{-\gamma}$，且 $2 < \gamma < 3$），$\langle k^2 \rangle$ 随网络规模发散，导致 $f_c \to 1$——网络对随机故障几乎"免疫"。但若按度数从高到低定向移除枢纽节点（hub），网络会在极小的删除比例下迅速崩溃。这解释了互联网、电网等无标度网络"抗随机故障、惧定向攻击"的双重特性，也是设计冗余基础设施和评估网络安全策略时的核心判据。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Graph Theory Ch6: Random networks (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

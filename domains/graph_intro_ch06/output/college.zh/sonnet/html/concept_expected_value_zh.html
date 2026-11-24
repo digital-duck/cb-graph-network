@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Expected Value | Graph Intro Ch06</title>
+<script>
+MathJax = {
+  loader: { load: ['[tex]/mathtools'] },
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']],
+         packages: { '[+]': ['mathtools'] } },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="期望值">期望值</h2>
+<p>期望值是随机变量所有可能取值的加权平均，权重就是各取值发生的概率。它回答的问题是："如果这个随机过程重复无数次，平均结果会是多少？"</p>
+<p>对于一个离散型随机变量 $X$，它可能取值 $x_1, x_2, \ldots, x_n$，对应概率为 $p_1, p_2, \ldots, p_n$，期望值定义为：</p>
+$$
+E(X) = \sum_{i=1}^{n} x_i \, p_i
+$$
+<p>对于连续型随机变量，求和换成积分，概率质量换成概率密度函数 $f(x)$：</p>
+$$
+E(X) = \int_{-\infty}^{\infty} x \, f(x) \, dx
+$$
+<p>需要强调的是，期望值不一定是随机变量实际能取到的某个具体值，它是长期平均的理论值。</p>
+<p><strong>例题</strong>：某游戏中掷一枚骰子，若掷出 6 则获得 60 元，否则输掉 10 元。求这局游戏的期望收益。</p>
+<p>设随机变量 $X$ 表示收益，则 $X = 60$ 的概率是 $\frac{1}{6}$，$X = -10$ 的概率是 $\frac{5}{6}$。于是：</p>
+$$
+E(X) = 60 \times \frac{1}{6} + (-10) \times \frac{5}{6} = 10 - \frac{50}{6} = \frac{10}{6} \approx 1.67
+$$
+<p>平均而言，每玩一局大约能赢 1.67 元，长期来看这是一个对玩家有利的游戏。</p>
+<p><strong>解题应用</strong>：期望值的核心用途是在不确定情形下做出理性决策——比较不同方案的"平均回报"，而不是只看某一次的结果好坏。它满足线性性质：对任意常数 $a, b$，有 $E(aX + b) = a\,E(X) + b$；对两个随机变量，$E(X + Y) = E(X) + E(Y)$，无论 $X$ 与 $Y$ 是否独立。这一性质在实际问题中极为有用，因为它允许把复杂的随机变量拆解成若干简单变量之和，分别求期望后再相加，从而大幅简化计算，例如在保险定价、投资组合评估、赌博游戏公平性判断等场景中，期望值都是决策的第一步依据。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Graph Theory Ch6: Random networks (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Collaboration And Citation Networks | Graph Intro Ch06</title>
+<script>
+MathJax = {
+  loader: { load: ['[tex]/mathtools'] },
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']],
+         packages: { '[+]': ['mathtools'] } },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="collaboration-and-citation-networks">Collaboration And Citation Networks</h2>
+<p><strong>定义</strong></p>
+<p>合作网络与引用网络都可以形式化为图 $G=(V,E)$：在合作网络中，顶点 $V$ 代表个体（演员、科学家），边 $E$ 表示两者曾共同参与一部作品或一篇论文；在引用网络中，边是有方向的，从引用论文指向被引论文，因此 $G$ 是一个有向图。这类真实网络的规模巨大，无法逐条边分析，于是随机图理论提供了一个"零模型"（null model）：Erdős–Rényi 模型 $G(n,p)$ 假设 $n$ 个顶点之间每一对独立地以概率 $p$ 相连。在该模型下，顶点的度数近似服从二项分布，当 $n$ 很大、平均度 $\langle k\rangle = (n-1)p$ 固定时，度分布收敛为泊松分布：</p>
+$$P(k)=\frac{\langle k\rangle^{k}e^{-\langle k\rangle}}{k!}$$
+<p>真实的合作与引用网络与该零模型的偏差，正是揭示其结构规律的关键。</p>
+<p><strong>实例分析</strong></p>
+<p>以科学家合作网络为例：多数学者只与少数同事合作，但少数"明星"学者却与成百上千人合作过——这种度分布在双对数坐标下呈直线，服从幂律 $P(k)\sim k^{-\gamma}$，而非泊松分布的钟形曲线。这类网络被称为无标度网络，其存在少数枢纽节点（hub），是随机图模型无法预测的现象。引用网络也表现出类似特征：少数经典论文获得远超平均水平的引用次数，这与合作网络中的"明星效应"来源相同——新节点加入网络时倾向于连接已经拥有高连接度的旧节点，这一机制被称为优先连接。</p>
+<p><strong>应用于问题求解</strong></p>
+<p>要在引用网络中识别真正有影响力的论文，仅统计入度（被引次数）并不充分，因为它忽略了"由谁引用"这一质量信息。PageRank 算法通过迭代方式解决此问题：节点 $i$ 的重要性得分满足</p>
+$$PR(i)=\frac{1-d}{n}+d\sum_{j\to i}\frac{PR(j)}{k_{j}^{\text{out}}}$$
+<p>其中 $d$ 为阻尼系数，$k_{j}^{\text{out}}$ 是节点 $j$ 的出度。求解时把该方程组表示为矩阵形式 $\mathbf{PR}=\left(\frac{1-d}{n}\right)\mathbf{1}+d\,M\mathbf{PR}$，通过幂迭代收敛到主特征向量。这一方法不仅用于排序网页，也被直接用于评估论文、学者乃至专利的长期学术影响力，是连接随机图理论与真实数据分析的核心工具。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Graph Theory Ch6: Random networks (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

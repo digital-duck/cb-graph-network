@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Computer Network | Graph Intro Ch07</title>
+<script>
+MathJax = {
+  loader: { load: ['[tex]/mathtools'] },
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']],
+         packages: { '[+]': ['mathtools'] } },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="computer-network">Computer Network</h2>
+<p><strong>定义</strong></p>
+<p>计算机网络（computer network）是由若干台主机（host）通过通信链路和网络设备（如路由器、交换机）互连而成的系统，使得主机之间能够按照约定的协议交换数据分组（packet）。这里有三个关键要素：主机是产生和消费数据的终端设备；链路和交换设备构成传输数据的物理与逻辑通路；协议则是收发双方共同遵守的数据格式和交互规则，保证异构设备之间可以正确通信。根据覆盖范围，网络可分为局域网（LAN，覆盖一栋楼或一个校园）、广域网（WAN，跨城市或跨国）以及由无数网络互联而成的互联网（Internet）。</p>
+<p><strong>性能量化：延迟的构成</strong></p>
+<p>评价一个网络连接质量的核心指标是延迟（latency）。当一个大小为 $L$（比特）的分组通过一条带宽为 $R$（比特/秒）的链路发送，并且链路的物理长度为 $d$、信号传播速度为 $s$ 时，端到端延迟由两部分组成：</p>
+$$
+D_{total} = D_{trans} + D_{prop} = \frac{L}{R} + \frac{d}{s}
+$$
+<p>其中 $D_{trans}$ 是发送延迟（把整个分组"推"上链路所需时间，取决于分组大小和带宽），$D_{prop}$ 是传播延迟（信号在物理介质中跑完链路长度所需时间，取决于距离和介质中的信号速度，通常接近光速）。这个公式说明一个常见的误解：带宽再高，如果传播距离很远（例如跨洋光缆），延迟也不会归零——这正是为什么内容分发网络（CDN）要把服务器部署得离用户更近。</p>
+<p><strong>问题求解应用</strong></p>
+<p>假设你要把一个 10 MB（约 $8\times10^7$ 比特）的文件从上海发送到纽约，链路带宽为 100 Mbps，光纤中信号传播速度约为 $2\times10^8$ m/s，两地光纤线路长度约为 20,000 km。发送延迟为 $\frac{8\times10^7}{100\times10^6}=0.8$ 秒；传播延迟为 $\frac{2\times10^7}{2\times10^8}=0.1$ 秒。总延迟约 0.9 秒，其中发送延迟占主导——这说明在这个场景下，提升带宽比缩短物理距离更能改善用户体验。反过来，如果发送一个很小的心跳包（几十字节），发送延迟几乎可以忽略，此时传播延迟（受光速和距离限制）就成为不可压缩的下限，这正是设计低延迟系统（如高频交易、实时游戏）时必须面对的物理约束。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Graph Theory Ch7: Modern computer networks (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

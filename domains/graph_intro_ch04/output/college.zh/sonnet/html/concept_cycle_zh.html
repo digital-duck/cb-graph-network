@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cycle | Graph Intro Ch04</title>
+<script>
+MathJax = {
+  loader: { load: ['[tex]/mathtools'] },
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']],
+         packages: { '[+]': ['mathtools'] } },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="cycle-环">Cycle（环）</h2>
+<p><strong>定义</strong></p>
+<p>在图论中，<strong>环</strong>（cycle）是图中一条闭合路径：从某个顶点出发，沿着一系列边行走，最终回到起点，且路径中不重复经过任何一条边。若路径中除首尾顶点外也不重复经过任何顶点，则称为<strong>简单环</strong>（simple cycle）。一个环至少包含 3 个顶点（在简单图中），记作 $v_1 \to v_2 \to \cdots \to v_k \to v_1$，其中 $v_1, v_2, \ldots, v_k$ 两两不同。不含环的图称为<strong>无环图</strong>（acyclic graph），其中最重要的一类是<strong>树</strong>（tree）——树是连通且无环的图。判断图中是否存在环，等价于判断该图是否为树（在连通图的前提下）。</p>
+<p><strong>图示与判定</strong></p>
+<p>设有向图 $G = (V, E)$。判断 $G$ 中是否存在环，可以通过深度优先搜索（DFS）实现：在遍历过程中维护每个顶点的三种状态——未访问、正在访问（位于当前递归栈中）、已完成。若在遍历某条边 $(u, v)$ 时发现 $v$ 处于"正在访问"状态，说明存在一条<strong>回边</strong>（back edge），从而构成环。这一判定的时间复杂度为 $O(|V| + |E|)$，因为每个顶点和每条边都只被访问常数次。</p>
+<p>对于无向图，判定方法稍有不同：若在 DFS 中访问到一个已访问过的顶点，且该顶点不是当前顶点的直接父节点，则存在环。</p>
+<p><strong>应用：检测有向图中的死锁</strong></p>
+<p>环检测在实际系统中至关重要。例如，在任务调度系统中，若任务 A 依赖任务 B，任务 B 又依赖任务 A，则这两个任务构成一个环，调度器将永远无法确定执行顺序——这正是<strong>死锁</strong>（deadlock）的图论表示。同理，包管理器（如 npm、pip）在安装依赖前，会将依赖关系建模为有向图，并运行环检测算法，一旦发现循环依赖（如包 A 依赖包 B、包 B 又依赖包 A），就会立即报错，避免陷入无限安装循环。</p>
+<p><strong>解题练习</strong></p>
+<p>给定有向图的邻接表：$A \to B$，$B \to C$，$C \to A$，$C \to D$。要求判断该图中是否存在环，并指出具体是哪些顶点构成了环。通过 DFS 从 $A$ 出发，依次进入 $B$、$C$，再回到 $A$ 时发现 $A$ 仍处于"正在访问"状态，从而确认 $A \to B \to C \to A$ 构成一个环；顶点 $D$ 不参与任何环。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Graph Theory Ch4: Trees (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

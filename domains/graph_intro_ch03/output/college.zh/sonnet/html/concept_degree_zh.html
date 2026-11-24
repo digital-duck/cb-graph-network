@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Degree | Graph Intro Ch03</title>
+<script>
+MathJax = {
+  loader: { load: ['[tex]/mathtools'] },
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']],
+         packages: { '[+]': ['mathtools'] } },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="度">度</h2>
+<p>在图论中，顶点的<strong>度</strong>（degree）是指与该顶点相关联的边的数目，记作 $\deg(v)$。如果一条边的两个端点相同（即自环），通常约定它对该顶点的度贡献 $2$，因为自环在该顶点处产生了两个"边端"。度是刻画图的局部连接结构的最基本指标：度越大，说明该顶点与图中其他部分的连接越密集。</p>
+<p>所有顶点的度之和与图中边的总数之间存在一个基本而重要的关系，称为<strong>握手定理</strong>（Handshaking Lemma）：</p>
+$$\sum_{v \in V} \deg(v) = 2|E|$$
+<p>这个等式成立的原因很直观：每一条边恰好贡献两个"端点"，因此在对所有顶点的度求和时，每条边都被计数了两次。这个定理直接推出一个重要推论：<strong>任意图中度为奇数的顶点个数必为偶数</strong>。这是因为总和 $2|E|$ 是偶数，若奇度顶点的个数是奇数，则所有奇度顶点的度之和会是奇数，与偶数个偶度顶点之和相加后不可能得到偶数总和，产生矛盾。</p>
+<p><strong>举例说明</strong>：考虑一个有 $4$ 个顶点、边集为 $\{(A,B), (B,C), (C,D), (D,A), (A,C)\}$ 的图。逐一计算：$\deg(A)=3$（连接 B、D、C），$\deg(B)=2$，$\deg(C)=3$，$\deg(D)=2$。度之和为 $3+2+3+2=10$，而边数 $|E|=5$，验证 $2|E|=10$ 成立。同时，奇度顶点为 $A$ 和 $C$，共 $2$ 个，符合"奇度顶点个数为偶数"的结论。</p>
+<p><strong>问题求解应用</strong>：度的奇偶性是判断图是否存在欧拉回路或欧拉路径的关键依据（这正是欧拉在解决"哥尼斯堡七桥问题"时提出的判据）。具体规则是：若一个连通图的所有顶点度数都是偶数，则图中存在欧拉回路（可从任意顶点出发，不重复地走遍每条边后回到起点）；若恰好有两个奇度顶点，则存在欧拉路径（起点和终点为这两个奇度顶点，但不能回到起点）；若奇度顶点多于两个，则既不存在欧拉回路也不存在欧拉路径。因此，在实际问题中，只需统计每个顶点的度并检查奇偶性，就能迅速判断某个路线规划问题是否有解，而无需真正尝试遍历所有边。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Graph Theory Ch3: Network traversal (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sink Tree | Graph Intro Ch04</title>
+<script>
+MathJax = {
+  loader: { load: ['[tex]/mathtools'] },
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']],
+         packages: { '[+]': ['mathtools'] } },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="汇聚树">汇聚树</h2>
+<p><strong>定义</strong>　设网络拓扑为一个带权图 $G=(V,E)$，其中顶点集 $V$ 表示路由器（节点），边权 $w(e)$ 表示链路代价（跳数、时延或带宽的倒数）。对于某一目的节点 $u\in V$，以 $u$ 为根的<strong>汇聚树</strong>（sink tree）$T_u$ 是 $G$ 的一棵生成树，满足：对任意节点 $v\in V$，$v$ 在 $T_u$ 中到根 $u$ 的唯一路径，恰好是 $v$ 到 $u$ 在整个图 $G$ 中的最短路径。用公式表示这一最优性条件即为</p>
+$$
+d_{T_u}(v,u) = \min_{P:\,v\to u \text{ in } G} \sum_{e\in P} w(e) = d_G(v,u)
+$$
+<p>也就是说，沿汇聚树发往 $u$ 的每一条消息都走的是全局最优路径，而不仅仅是局部感觉上"合理"的路径。整个网络中每个可能的目的地都对应一棵这样的树，这些树共享同一顶点集 $V$，但边的方向和形状各不相同。</p>
+<p><strong>举例说明</strong>　设想一个四节点网络 $A,B,C,D$，边权分别为 $w(A,B)=1$，$w(B,C)=1$，$w(A,C)=4$，$w(C,D)=1$。若目的节点为 $D$，用 Dijkstra 算法从 $D$ 出发反向计算最短路径树：$C$ 到 $D$ 直接一跳，代价 $1$；$B$ 到 $D$ 经 $C$，代价 $2$；$A$ 到 $D$ 经 $B\to C$，代价 $3$（优于直接经 $C$ 的代价 $4+1=5$）。于是汇聚树 $T_D$ 的边集为 $\{(A,B),(B,C),(C,D)\}$，是一条链，而不包含 $(A,C)$ 这条边——尽管它在原图中存在。</p>
+<p><strong>问题求解应用</strong>　在链路状态路由协议（如 OSPF）中，每台路由器都持有整个拓扑图的副本，并对每一个目的节点独立运行最短路径算法，从而在本地重建出该目的地对应的汇聚树；路由表中"下一跳"字段实际上就是本节点在该汇聚树中指向根的那条边。工程实践中的关键问题是：当某条链路的权重发生变化（如拥塞导致时延上升）时，哪些节点的汇聚树会改变、需要重新计算——这决定了路由收敛的范围和速度，也是评估路由协议可扩展性的核心指标。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Graph Theory Ch4: Trees (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

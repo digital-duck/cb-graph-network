@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Random Variable | Graph Intro Ch06</title>
+<script>
+MathJax = {
+  loader: { load: ['[tex]/mathtools'] },
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']],
+         packages: { '[+]': ['mathtools'] } },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="随机变量">随机变量</h2>
+<p><strong>定义</strong></p>
+<p>随机变量是一个把随机试验的每一个可能结果映射为一个数值的函数。严格地说，若样本空间为 $\Omega$，随机变量 $X$ 是定义在 $\Omega$ 上的函数 $X:\Omega \to \mathbb{R}$。本节只讨论离散型随机变量，即 $X$ 的取值范围是有限集合或可数集合 $\{x_1, x_2, x_3, \dots\}$。</p>
+<p>每个取值 $x_i$ 都对应一个发生概率 $P(X = x_i)$，这个对应关系称为<strong>概率质量函数</strong>（probability mass function，简写 PMF），记作 $p(x_i) = P(X = x_i)$。它必须满足两个条件：</p>
+$$
+p(x_i) \geq 0 \quad \text{对所有 } i, \qquad \sum_{i} p(x_i) = 1
+$$
+<p>第一个条件说明概率不能为负；第二个条件说明所有可能结果的概率加起来必须等于 1——因为试验一定会产生某个结果。</p>
+<p><strong>举例说明</strong></p>
+<p>考虑掷一枚均匀骰子的试验，令随机变量 $X$ 表示朝上一面的点数。这里 $X$ 的可能取值是 $\{1, 2, 3, 4, 5, 6\}$，且每个取值的概率相等：</p>
+$$
+p(x_i) = P(X = x_i) = \frac{1}{6}, \quad x_i \in \{1,2,3,4,5,6\}
+$$
+<p>验证一下：六个概率相加，$6 \times \frac{1}{6} = 1$，满足归一化条件。</p>
+<p>再看一个不均匀的例子：某在线客服系统记录每次通话中转接的次数 $Y$，历史数据显示 $P(Y=0)=0.5$，$P(Y=1)=0.3$，$P(Y=2)=0.15$，$P(Y=3)=0.05$。这是一个离散随机变量，因为转接次数只能取有限个整数值，且四个概率之和恰好为 1。</p>
+<p><strong>解决问题的应用</strong></p>
+<p>随机变量的核心价值在于把"不确定的现实"转化为可以计算的数学对象。一旦知道了 PMF，就能回答具体问题，例如：客服通话中转接次数不超过 1 次的概率是多少？只需把对应的概率相加：</p>
+$$
+P(Y \leq 1) = P(Y=0) + P(Y=1) = 0.5 + 0.3 = 0.8
+$$
+<p>这种"事件分解为若干取值、再把概率相加"的方法，是后续学习期望值、方差、累积分布函数等概念的基础——它们都建立在 PMF 精确描述每个取值发生概率这一前提之上。在数据分析、保险精算、机器学习等领域，几乎所有对不确定性的建模，第一步都是把观测量抽象成一个随机变量并写出（或估计出）它的概率质量函数。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Graph Theory Ch6: Random networks (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

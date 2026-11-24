@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pagerank | Graph Intro Ch07</title>
+<script>
+MathJax = {
+  loader: { load: ['[tex]/mathtools'] },
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']],
+         packages: { '[+]': ['mathtools'] } },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="pagerank">Pagerank</h2>
+<p>网页排名算法（PageRank）由拉里·佩奇（Larry Page）和谢尔盖·布林（Sergey Brin）于1998年提出，用递归的方式衡量一个网页的重要性：一个网页的排名值，取决于所有链接到它的网页的排名值，并按这些网页各自的出链数量分摊贡献。设网页 $i$ 的排名为 $PR(i)$，指向 $i$ 的网页集合为 $M(i)$，网页 $j$ 的出链总数为 $L(j)$，网络中共有 $N$ 个网页，则递归定义为：</p>
+$$
+PR(i) = \frac{1-d}{N} + d \sum_{j \in M(i)} \frac{PR(j)}{L(j)}
+$$
+<p>其中 $d$（通常取 $0.85$）称为阻尼因子，模拟用户以概率 $d$ 继续点击链接、以概率 $1-d$ 随机跳转到任意网页的浏览行为，用以避免排名值在无出链或环形链接结构中无限累积或退化为零。</p>
+<p><strong>举例说明</strong>：设有三个网页 A、B、C。A 链接到 B，B 链接到 C，C 链接到 A 和 B。初始时令 $PR(A)=PR(B)=PR(C)=\frac{1}{3}$，取 $d=0.85$。第一轮迭代：C 的入链只有 A，A 的出链数为 1，故 $PR(C) \leftarrow \frac{0.15}{3} + 0.85 \times \frac{1/3}{1} \approx 0.333$；B 的入链有 A 和 C，$PR(B) \leftarrow \frac{0.15}{3} + 0.85 \left(\frac{1/3}{1} + \frac{1/3}{2}\right) \approx 0.475$；A 的入链只有 C，$PR(A) \leftarrow \frac{0.15}{3} + 0.85 \times \frac{(1/3)}{2} \approx 0.192$。将结果代回，反复迭代若干轮后，各网页排名值会逐渐稳定收敛。</p>
+<p><strong>理论基础与计算保证</strong>：把上述递归关系写成矩阵形式 $\mathbf{PR} = \frac{1-d}{N}\mathbf{1} + d \, M \, \mathbf{PR}$，其中 $M$ 是按出链数归一化的转移矩阵。这本质上是求矩阵 $d M + \frac{1-d}{N} \mathbf{1}\mathbf{1}^\top$ 的主特征向量（对应特征值 $1$）。由于该矩阵是随机矩阵（各列元素非负且和为1），根据佩龙-弗罗贝尼乌斯定理（Perron-Frobenius theorem），只要 $0<d<1$，矩阵保证是不可约且非周期的，因而存在唯一的主特征向量，且从任意初始分布出发反复做矩阵乘法（幂迭代法）必然收敛到该向量。这正是搜索引擎能够对数十亿网页排名值稳定求解的数学基础。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Graph Theory Ch7: Modern computer networks (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

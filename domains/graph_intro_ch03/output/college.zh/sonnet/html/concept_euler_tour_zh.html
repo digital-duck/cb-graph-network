@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Euler Tour | Graph Intro Ch03</title>
+<script>
+MathJax = {
+  loader: { load: ['[tex]/mathtools'] },
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']],
+         packages: { '[+]': ['mathtools'] } },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="euler-tour">Euler Tour</h2>
+<p><strong>定义</strong></p>
+<p>给定一个连通图 $G = (V, E)$，欧拉回路（Euler Tour）是指一条从某个顶点出发、沿图中的边行走、最终回到起点的路径，并且图中每一条边恰好被经过一次（顶点可以重复经过，但边不可以）。如果这条路径不要求回到起点，只要求每条边恰好经过一次,则称为欧拉路径（Euler Path）。</p>
+<p>欧拉回路存在的判定条件非常简洁,由欧拉本人在 1736 年研究哥尼斯堡七桥问题时给出：一个连通图存在欧拉回路,当且仅当图中每个顶点的度数都是偶数。若恰好有两个顶点的度数为奇数（其余全为偶数）,则图不存在欧拉回路,但存在欧拉路径,且这条路径必须以这两个奇度顶点作为起点和终点。</p>
+<p>这个判定条件的直观原因在于："出入配对"。每次路径经过某个顶点(不是起点或终点),都必须"进入"一次、"离开"一次,消耗该顶点的两条边。因此,除了起点和终点外,每个顶点被使用的边数必须成对出现,即度数为偶数。若起点等于终点(回路情形),连起点也必须满足这一配对关系,故所有顶点度数均需为偶数。</p>
+<p><strong>应用示例</strong></p>
+<p>哥尼斯堡七桥问题本身就是最经典的例子：城市被一条河分割成四块陆地,由七座桥连接。将每块陆地看作一个顶点,每座桥看作一条边,可得四个顶点的度数分别为 3、3、3、5——全部为奇数。由于奇度顶点的数量(4 个)超过 2 个,该图既不存在欧拉回路,也不存在欧拉路径。这正是欧拉证明"一次不重复地走遍七座桥回到出发点"是不可能任务的原因。</p>
+<p><strong>问题求解应用</strong></p>
+<p>判断与构造欧拉回路的算法是求解此类问题的关键技能,典型步骤如下：</p>
+<li>计算图中每个顶点的度数,验证图连通且所有度数为偶数（或恰有两个奇度顶点）。</li>
+<li>使用 Hierholzer 算法构造实际路径：从任意顶点出发,沿未使用的边行走直到无路可走,形成一个子回路；若仍有未使用的边,从子回路上某个仍有剩余边的顶点出发,递归地寻找新的子回路,并将其拼接进原路径。</li>
+<li>该算法的时间复杂度为 $O(E)$,其中 $E$ 为边数,因为每条边只会被访问和标记一次。</li>
+<p>这类问题在实际场景中广泛出现,例如邮递员投递路线规划(中国邮递员问题)、DNA 测序中的片段重建、以及电路板布线检测等,都可以归结为"能否不重复地走遍所有连接关系"的欧拉回路判定与构造问题。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Graph Theory Ch3: Network traversal (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

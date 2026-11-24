@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Scale Free Network | Graph Intro Ch06</title>
+<script>
+MathJax = {
+  loader: { load: ['[tex]/mathtools'] },
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']],
+         packages: { '[+]': ['mathtools'] } },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="scale-free-network">Scale Free Network</h2>
+<p><strong>定义</strong>：无标度网络是一类顶点度数分布服从幂律的网络，即顶点度数为 $k$ 的概率满足</p>
+$$P(k) \propto k^{-\alpha}$$
+<p>其中指数 $\alpha$ 通常满足 $2 < \alpha < 3$。"无标度"这个名称的含义是：幂律分布不存在特征尺度——不像正态分布或指数分布那样有一个典型的均值附近的集中区域,幂律分布在对数坐标下呈现出自相似的直线形态,在任意尺度上放大观察都呈现出相同的统计规律。这类网络的结构特征是存在少数度数极高的"枢纽节点"（hub），与大量度数很低的普通节点共存,这与随机图（如 Erdős–Rényi 模型）中度数集中于均值附近、呈泊松分布的情形形成本质区别。</p>
+<p><strong>推导要点</strong>：幂律分布的一个关键性质是重尾（heavy tail）。取对数后,</p>
+$$\log P(k) = -\alpha \log k + C$$
+<p>即 $\log P(k)$ 与 $\log k$ 呈线性关系,斜率为 $-\alpha$。这正是判断经验数据是否符合幂律的标准诊断方法：将度数分布绘制在双对数坐标图上,若近似呈一条直线,则该网络具有无标度特征。此外,当 $\alpha \le 3$ 时,度数的二阶矩（方差）在网络规模趋于无穷时会发散,这解释了为何真实世界的无标度网络（如互联网拓扑、万维网链接结构、蛋白质交互网络）即使规模巨大,度数的波动范围也异常宽广。</p>
+<p><strong>问题求解应用</strong>：设某网络的度分布经验估计为 $\alpha = 2.5$。这类网络对随机故障具有很强的鲁棒性——因为随机删除节点绝大概率删除的是度数很低的普通节点,几乎不影响整体连通性；但若攻击者刻意移除度数最高的少数枢纽节点,网络会迅速分裂为孤立碎片。这一"鲁棒但脆弱"（robust-yet-fragile）的性质,正是巴拉巴西—阿尔伯特（Barabási–Albert）优先连接模型试图解释的核心现象,也是设计通信网络容错策略、传染病防控中优先接种高连接度个体等实际决策的理论基础。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Graph Theory Ch6: Random networks (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

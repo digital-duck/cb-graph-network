@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chromatic Number | Graph Intro Ch02</title>
+<script>
+MathJax = {
+  loader: { load: ['[tex]/mathtools'] },
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']],
+         packages: { '[+]': ['mathtools'] } },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="色数">色数</h2>
+<p><strong>定义</strong></p>
+<p>给定一个图 $G = (V, E)$，如果存在一种给顶点分配颜色的方法，使得任意两个相邻的顶点颜色都不相同,则称 $G$ 是 $k$ 可着色的。图 $G$ 的<strong>色数</strong>，记作 $\chi(G)$，是使 $G$ 可着色所需的最少颜色数。这是一个纯粹的组合优化问题：我们既要保证约束（相邻顶点不同色），又要把资源（颜色数）压到最小。</p>
+<p>色数与图的另一个重要参数——<strong>团数</strong>（记作 $\omega(G)$，即图中最大完全子图的顶点数）——之间有一个基本不等式：</p>
+$$
+\omega(G) \le \chi(G)
+$$
+<p>原因很直观：一个大小为 $k$ 的完全子图中，每个顶点都与其余 $k-1$ 个顶点相邻，因此必须用 $k$ 种不同颜色，这就给色数设了一个下界。但反过来不成立——色数可以远大于团数,例如奇圈（长度为奇数的环）不含三角形（团数为 $2$),却需要 $3$ 种颜色才能着色。</p>
+<p><strong>求解示例</strong></p>
+<p>考虑一个五个顶点的环 $C_5$（顶点依次相连成环）。尝试用 $2$ 种颜色：交替染色时,由于顶点数为奇数,最后一个顶点会与第一个顶点颜色冲突。因此 $2$ 种颜色不够。用 $3$ 种颜色则可以顺利完成：例如颜色序列红-蓝-红-蓝-绿，检查每条边两端颜色均不同,约束全部满足。因此 $\chi(C_5) = 3$。</p>
+<p>再看完全图 $K_4$（四个顶点两两相连）：任意两点都相邻，因此每个顶点都需要独立的颜色，$\chi(K_4) = 4$，此时色数恰好等于团数。</p>
+<p><strong>应用于问题求解</strong></p>
+<p>色数的经典应用是<strong>课程排期问题</strong>：将每门课程看作一个顶点，若两门课程有共同学生选修（即存在时间冲突），则在对应顶点间连一条边。这样构造出的"冲突图"的色数，就是安排所有课程互不冲突所需的最少时间段数——每种颜色对应一个时间段。类似地，<strong>地图染色</strong>、<strong>寄存器分配</strong>（编译器优化中,变量的"生命周期重叠"对应图中的边,色数决定所需寄存器个数）都可归结为求色数。需要注意的是，判定一个图是否 $k$ 可着色（$k \ge 3$）是 NP 完全问题,因此对于大规模图,实践中通常依赖贪心算法或启发式方法求近似解,而非精确计算 $\chi(G)$。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Graph Theory Ch2: Extensions (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

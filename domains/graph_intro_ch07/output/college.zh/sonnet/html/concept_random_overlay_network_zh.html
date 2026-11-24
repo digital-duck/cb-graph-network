@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Random Overlay Network | Graph Intro Ch07</title>
+<script>
+MathJax = {
+  loader: { load: ['[tex]/mathtools'] },
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']],
+         packages: { '[+]': ['mathtools'] } },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="随机覆盖网络">随机覆盖网络</h2>
+<p><strong>定义</strong></p>
+<p>随机覆盖网络是一种建立在物理网络之上的逻辑网络：每个节点（对等体）并不知道全网拓扑，只维护一个规模远小于总节点数的"局部视图"——即它所连接的一小组邻居列表。系统设计的目标是让这份局部视图在统计上接近<strong>均匀随机抽样</strong>：任意一个节点出现在某个邻居列表中的概率大致相等，不因为节点加入时间早晚或网络位置而产生系统性偏差。维持这种随机性依赖于"流言协议"（gossip protocol，又称疫情式协议）：每个节点周期性地随机选择若干邻居，与之交换各自视图中的部分条目，就像信息或病毒在人群中随机传播一样。持续的随机交换会不断"洗牌"整个网络的连接结构，从而抵消节点加入、退出或视图老化带来的偏差。</p>
+<p><strong>性质与收敛速度</strong></p>
+<p>随机覆盖网络之所以重要，是因为均匀随机图具备两个关键性质：直径小（任意两点间的平均跳数很短）和抗分割性强（删除少量节点不会轻易切断网络）。流言协议的传播速度是这类网络被广泛采用的理论依据：若每轮每个节点把消息转发给一个随机邻居，那么在拥有 $n$ 个节点的网络中，一条消息传遍全网所需的轮数约为</p>
+$$
+T \approx \log_2 n
+$$
+<p>这一对数级收敛速度来自于"知晓消息的节点数"每轮近似翻倍的指数增长过程,与经典疫情传播模型（epidemic model）中感染人数的增长规律一致。</p>
+<p><strong>问题求解应用</strong></p>
+<p>假设某对等网络有 $n = 1{,}000{,}000$ 个节点，要求评估通过流言协议广播一条更新消息大致需要多少轮通信。代入上式：</p>
+$$
+T \approx \log_2(1{,}000{,}000) \approx 20
+$$
+<p>即约 20 轮通信即可让消息覆盖全网——这解释了为何随机覆盖网络能在无中心协调、无全局拓扑视图的前提下，依然实现快速、鲁棒的信息扩散，被广泛用于分布式哈希表（DHT）、区块链节点发现和大规模发布—订阅系统中的成员管理。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Graph Theory Ch7: Modern computer networks (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

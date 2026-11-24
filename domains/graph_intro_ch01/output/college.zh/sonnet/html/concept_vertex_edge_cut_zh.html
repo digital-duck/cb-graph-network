@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vertex Edge Cut | Graph Intro Ch01</title>
+<script>
+MathJax = {
+  loader: { load: ['[tex]/mathtools'] },
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']],
+         packages: { '[+]': ['mathtools'] } },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="vertex-edge-cut">Vertex Edge Cut</h2>
+<p><strong>定义</strong></p>
+<p>在一个图 $G = (V, E)$ 中，<strong>点割集</strong>是指顶点集合的一个子集 $S \subseteq V$，使得从 $G$ 中删去 $S$ 中的所有顶点（及与之关联的边）后，剩余的图 $G - S$ 的连通分量数目比原图更多。类似地，<strong>边割集</strong>是边集合的一个子集 $F \subseteq E$，使得删去 $F$ 中所有边后，图 $G - F$ 的连通分量数目增加。</p>
+<p>当割集中只含有一个元素时，这个特殊的顶点称为<strong>割点</strong>，这条特殊的边称为<strong>割边</strong>（也叫桥）。割点和割边的重要性在于：它们是图中的"单点故障"，一旦被移除，就会切断原本连通的部分，暴露出图的结构脆弱点。这个概念在分析网络鲁棒性时至关重要——无论是计算机网络、交通网络还是社交网络，找出割点和割边就是找出系统中最容易被攻击或最容易发生故障的关键节点。</p>
+<p><strong>举例说明</strong></p>
+<p>设想一个图，顶点为 $\{A, B, C, D, E\}$，边为 $\{AB, BC, CD, DE, BD\}$。如果删去顶点 $C$，剩下的边只有 $AB, DE, BD$，图仍然连通（$A-B-D-E$）,所以 $C$ 不是割点。但如果删去顶点 $B$，剩下的边为 $CD, DE$，此时 $A$ 被完全孤立，图从 1 个连通分量变成了 2 个（$\{A\}$ 和 $\{C, D, E\}$）。因此 $B$ 是一个割点，单独的集合 $\{B\}$ 构成一个点割集。</p>
+<p>再看边的情况：边 $AB$ 若被删去，顶点 $A$ 同样被孤立，因此 $AB$ 是一条割边（桥）。</p>
+<p><strong>问题求解应用</strong></p>
+<p>判断一个顶点是否为割点，通常借助深度优先搜索（DFS）完成：对每个顶点 $v$，记录其被访问的时间戳 $\text{disc}(v)$，以及通过回边能到达的最早时间戳 $\text{low}(v)$。如果 $v$ 的某个子节点 $u$ 满足 $\text{low}(u) \geq \text{disc}(v)$，说明子树 $u$ 无法绕过 $v$ 连回祖先，$v$ 便是割点；类似地，若 $\text{low}(u) > \text{disc}(v)$，则边 $(v, u)$ 是割边。该算法只需一次 DFS 遍历，时间复杂度为 $O(|V| + |E|)$，广泛应用于电力网、通信网的关键节点识别与容错设计中。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Graph Theory Ch1: Foundations (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

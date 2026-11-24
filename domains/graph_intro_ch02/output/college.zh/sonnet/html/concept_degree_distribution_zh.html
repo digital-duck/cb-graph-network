@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Degree Distribution | Graph Intro Ch02</title>
+<script>
+MathJax = {
+  loader: { load: ['[tex]/mathtools'] },
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']],
+         packages: { '[+]': ['mathtools'] } },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.cb-figure{margin:24px 0;text-align:center}
+.cb-figure img{max-width:100%;height:auto;border:1px solid #e0e0d8;border-radius:6px}
+figcaption{font-size:.82rem;color:#666;margin-top:8px;font-style:italic;text-align:center}
+pre.mermaid{background:none;border:none;padding:0;overflow:visible;margin:16px 0}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="degree-distribution">Degree Distribution</h2>
+<p><strong>定义</strong></p>
+<p>在一个图（或有向图）中，度分布描述的是"具有某个特定度值的顶点，在图中占多少个（或占多大比例）"。设图中共有 $n$ 个顶点，令 $N_k$ 表示度数恰好为 $k$ 的顶点个数,则度分布可以表示为一个概率质量函数:</p>
+$$
+P(k) = \frac{N_k}{n}
+$$
+<p>其中 $P(k)$ 表示随机抽取一个顶点,其度数恰好为 $k$ 的概率。对于有向图,通常需要分别统计入度分布与出度分布,因为二者刻画的意义不同——入度反映"被指向的程度"（如网页被链接的次数),出度反映"主动指向他人的程度"（如账号关注他人的数量)。</p>
+<p><strong>范例</strong></p>
+<p>考虑一个社交网络,包含 6 个用户,其好友关系（无向边)如下:A-B, A-C, A-D, B-C, D-E, E-F。计算各顶点的度: A 的度为 3(连接 B、C、D),B 的度为 2,C 的度为 2,D 的度为 2,E 的度为 2,F 的度为 1。度值集合为 $\{1, 2, 3\}$,对应的顶点数为 $N_1=1, N_2=4, N_3=1$,总顶点数 $n=6$。于是度分布为:</p>
+$$
+P(1)=\frac{1}{6},\quad P(2)=\frac{4}{6}=\frac{2}{3},\quad P(3)=\frac{1}{6}
+$$
+<p>这说明该网络中大多数用户拥有中等数量（2 个)的好友,只有极少数是"边缘用户"（度为 1)或"局部枢纽"（度为 3)。</p>
+<p><strong>问题求解应用</strong></p>
+<p>度分布是判断图的宏观结构类型的关键工具。如果度分布近似服从泊松分布,则该图接近"随机图"（如 Erdős–Rényi 模型),各顶点的连接数相对均匀,没有明显的"超级节点"。但如果度分布呈现幂律形式,即:</p>
+$$
+P(k) \sim k^{-\gamma}
+$$
+<p>（其中 $\gamma$ 通常在 2 到 3 之间),则该图具有"无标度网络"的特征——绝大多数顶点度数很低,但存在极少数度数极高的"枢纽节点"(hub)。这类结构常见于互联网拓扑、引文网络和蛋白质相互作用网络。在实际问题中，工程师可以通过绘制度分布的对数-对数坐标图(log-log plot),观察是否呈现近似直线,来快速判断网络是否具有无标度特性,从而决定采取何种容错设计——例如,无标度网络对随机故障具有较强鲁棒性,但对针对枢纽节点的定向攻击却异常脆弱。</p>
+<pre class="mermaid">graph TD
+    A["度为 3 的用户 A"] --- B["度为 2 的用户 B"]
+    A --- C["度为 2 的用户 C"]
+    A --- D["度为 2 的用户 D"]
+    B --- C
+    D --- E["度为 2 的用户 E"]
+    E --- F["度为 1 的用户 F"]</pre>
+<p><em>该示例网络的结构图,展示了度为 1、2、3 的顶点分布情况,对应正文中计算的度分布。</em></p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Graph Theory Ch2: Extensions (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

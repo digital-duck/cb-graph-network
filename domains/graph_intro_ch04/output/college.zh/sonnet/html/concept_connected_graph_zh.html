@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Connected Graph | Graph Intro Ch04</title>
+<script>
+MathJax = {
+  loader: { load: ['[tex]/mathtools'] },
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']],
+         packages: { '[+]': ['mathtools'] } },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="connected-graph">Connected Graph</h2>
+<p><strong>定义</strong></p>
+<p>设 $G = (V, E)$ 为一个图，其中 $V$ 是顶点集，$E$ 是边集。如果对于 $V$ 中任意两个顶点 $u$ 和 $v$，图中都存在一条从 $u$ 到 $v$ 的路径，则称 $G$ 是一个<strong>连通图</strong>。反之，如果存在某一对顶点之间没有任何路径相连，则该图是<strong>不连通的</strong>，此时图会自然分裂为若干个"连通分量"——每个分量内部相互可达，分量与分量之间彼此隔绝。</p>
+<p>需要注意，连通性只要求路径存在，不要求边是直接相连的，也不涉及边的方向（本节讨论无向图）；对于有向图，则需要区分"强连通"（任意两点双向都可达）与"弱连通"（忽略方向后连通）。</p>
+<p><strong>判定连通性的算法</strong></p>
+<p>判断一个图是否连通，最直接的方法是从任意一个顶点出发做一次遍历——深度优先搜索（DFS）或广度优先搜索（BFS）——并统计能够到达的顶点数量。若遍历结束后访问到的顶点数等于 $|V|$，即图中全部顶点，则图是连通的；否则，未被访问到的顶点就属于另一个连通分量。这个过程的时间复杂度为 $O(|V| + |E|)$，因为每个顶点和每条边最多被访问一次。</p>
+<p><strong>实例分析</strong></p>
+<p>考虑一个表示城市之间航线的图：顶点是城市，边是直达航班。如果这个图是连通的，意味着任意两座城市之间都可以通过若干次转机到达；如果不连通，则说明存在被"孤立"的城市群，比如某个区域的机场只与本区域互通，与外部完全没有航线联系。</p>
+<p><strong>应用与问题求解</strong></p>
+<p>在实际问题中，判断连通性常常是更复杂算法的第一步。例如，在设计通信网络或电力网络时，工程师需要确认网络中任意两个节点之间是否都能建立联系，这直接关系到系统的可靠性——一旦某条关键边发生故障导致图不再连通，网络就会分裂成孤立的部分。判断某条边是否是维持连通性的"关键边"（称为桥），也是建立在连通性概念之上的进一步分析。此外，社交网络分析中，判断某个社群图是否连通，可以揭示信息或影响力是否能够在整个群体中自由传播，还是被局限在若干互不往来的子群体之中。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Graph Theory Ch4: Trees (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

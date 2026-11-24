@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Harary Graph | Graph Intro Ch01</title>
+<script>
+MathJax = {
+  loader: { load: ['[tex]/mathtools'] },
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']],
+         packages: { '[+]': ['mathtools'] } },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="harary-graph">Harary Graph</h2>
+<p><strong>定义</strong></p>
+<p>Harary图 $H(k,n)$ 是在 $n$ 个顶点上构造的一个 $k$-连通简单图，且边数达到理论上的最小值。所谓 $k$-连通，是指任意删除少于 $k$ 个顶点，图仍保持连通。</p>
+<p>先推导边数下界：若图 $G$ 是 $k$-连通的，则每个顶点的度数必须至少为 $k$（否则删去该顶点的全部邻居——数量小于 $k$——即可让图断开）。于是所有顶点的度数之和至少为 $kn$，而边数等于度数之和的一半，因此</p>
+$$|E(G)| \geq \left\lceil \frac{kn}{2} \right\rceil$$
+<p>Harary图正是恰好达到这一下界的构造，是同类 $k$-连通图中边数最少的一个。</p>
+<p><strong>构造方法</strong></p>
+<p>将 $n$ 个顶点标记为 $0,1,\dots,n-1$，排列在一个圆周上。</p>
+<li>若 $k=2r$ 为偶数：每个顶点与圆周上左右各 $r$ 个最近顶点相连（即顶点 $i$ 连接 $i\pm 1,\dots,i\pm r \pmod{n}$）。每个顶点度数恰为 $k$，总边数为 $\frac{kn}{2}$。</li>
+<li>若 $k=2r+1$ 为奇数、$n$ 为偶数：先建 $H(2r,n)$，再让每个顶点 $i$ 额外连接其圆周正对面的顶点 $i+\frac{n}{2}\pmod{n}$，度数各增加 1，边数为 $\frac{kn+n}{2}$。</li>
+<li>若 $k=2r+1$ 为奇数、$n$ 为奇数：先建 $H(2r,n)$，再将顶点 $i$（$i=0,\dots,\frac{n-3}{2}$）与顶点 $i+\frac{n+1}{2}$ 相连，最后单独给顶点 $n-1$ 补一条边使其度数也达到 $k$，总边数为 $\frac{kn+1}{2}$。</li>
+<p><strong>问题求解应用</strong></p>
+<p>设计容错网络（如数据中心互联、通信拓扑）时，工程师需要保证任意 $k-1$ 个节点或链路故障不会使网络断开，同时把布线成本（边数）降到最低。Harary图直接给出了这一优化问题的精确解：给定容错等级 $k$ 与节点数 $n$，套用上述三种构造之一即可得到边数最少的 $k$-连通拓扑，无需组合搜索。</p>
+<p>例如，要为 $n=9$ 台服务器设计能容忍任意 2 台同时下线的网络（即 $k=3$），先建 $H(2,9)$（每点连左右各 1 个邻居，共 $9$ 条边），因 $n$ 为奇数，再按第三种规则补边，最终得到 $\left\lceil \frac{27}{2}\right\rceil=14$ 条边的 3-连通网络，远少于完全图所需的 $36$ 条边。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Graph Theory Ch1: Foundations (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Peering Relationship | Graph Intro Ch07</title>
+<script>
+MathJax = {
+  loader: { load: ['[tex]/mathtools'] },
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']],
+         packages: { '[+]': ['mathtools'] } },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="对等连接关系">对等连接关系</h2>
+<p>对等连接关系指的是两个网络的边界网关路由器之间建立的直接互联链路，使得流量可以在两个网络之间双向流动，而不必绕道经过第三方网络。这种关系通常发生在互联网服务提供商（ISP）、内容分发网络或大型企业网络之间：双方在物理层面通过光纤或交换设备直连（常见于互联网交换中心，即 IXP），并在边界网关协议（BGP）层面互相宣告各自可达的网络前缀，从而让对方的路由器知道"哪些地址空间可以通过我这条链路到达"。对等关系可以是"免费对等"（双方认为流量大致对等，互不计费），也可以是"付费对等"，取决于流量规模和商业谈判结果，但这属于商业安排，不改变对等连接在技术上的本质：一条边界网关之间的直连路径。</p>
+<p><strong>举例说明</strong>：假设网络 A（一家区域性 ISP）和网络 B（一家云服务提供商）在同一个互联网交换中心各自部署了一台边界路由器，并用一根光纤将两台路由器直接连接起来。双方通过 BGP 协议互相交换路由信息：A 告诉 B"我拥有 203.0.113.0/24 这个网段"，B 告诉 A"我拥有 198.51.100.0/24 这个网段"。此后，凡是 A 网络内部用户访问 B 云服务提供商的用户流量，就可以直接经这条对等链路传输，而不必绕经上游的骨干网络运营商，从而降低了传输延迟，也减少了双方向各自上游运营商购买带宽的成本。</p>
+<p><strong>解决实际问题的应用</strong>：对等连接关系的价值主要体现在网络工程决策中。当一家公司发现自己与某个大型内容平台之间的流量占比很高（例如占出口流量的三成以上），网络工程团队就需要判断：与其持续向上游运营商支付这部分流量的转接费用，不如主动申请在附近的互联网交换中心与该平台建立直接对等连接。这类决策需要综合考量流量对称性、地理位置、交换中心接入成本，以及是否满足对方对等政策所设定的最低流量门槛等条件——这正是网络架构师在设计广域网互联方案时必须权衡的现实问题。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Graph Theory Ch7: Modern computer networks (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

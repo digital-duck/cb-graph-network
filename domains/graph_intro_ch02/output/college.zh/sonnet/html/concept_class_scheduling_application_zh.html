@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Class Scheduling Application | Graph Intro Ch02</title>
+<script>
+MathJax = {
+  loader: { load: ['[tex]/mathtools'] },
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']],
+         packages: { '[+]': ['mathtools'] } },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="class-scheduling-application">Class Scheduling Application</h2>
+<p><strong>定义</strong>：将排课问题转化为图论问题时，把每一门课程看作图中的一个顶点；如果两门课程存在共同的学生（即有学生需要同时选修这两门课），就在对应的顶点之间连一条边。这样构造出的图称为"课程冲突图"。在这个模型下，为课程安排考试或上课时间段，等价于给图的顶点"染色"：使用同一种颜色的顶点必须两两不相邻，也就是说,被分配到同一时间段的课程之间不能有共同学生。因此，能够合法排课所需要的最少时间段数，恰好等于该图的色数,记作 $\chi(G)$。</p>
+<p>这一等价关系可以严格陈述为一个定理：设图 $G=(V,E)$ 表示课程冲突图，则存在一种合法排课方案，使用 $k$ 个时间段,当且仅当 $G$ 是 $k$-可染色的,即 $\chi(G) \le k$。证明思路很直接：一个合法的 $k$-染色 $c: V \to \{1,2,\dots,k\}$ 天然给出一种排课方案——将颜色 $i$ 对应时间段 $i$；反过来,任何合法排课方案也天然定义了一个染色函数。由于相邻顶点（即有共同学生的课程）在染色中必须异色,这正好保证了在排课中不会出现冲突。</p>
+<p><strong>实例分析</strong>：假设有课程 $A, B, C, D$，其中 $A$ 与 $B$ 有共同学生，$B$ 与 $C$ 有共同学生，$C$ 与 $D$ 有共同学生，$D$ 与 $A$ 也有共同学生，构成一个四边形（环）$C_4$。由于偶数长度的环是二部图，其色数为 $\chi(C_4)=2$。于是只需两个时间段即可完成排课：时间段一安排 $A, C$，时间段二安排 $B, D$。</p>
+<p><strong>问题求解应用</strong>：若再加入课程 $E$，且 $E$ 与 $A, B, C, D$ 全部冲突，则图中出现一个大小为 3 的完全子图（例如 $A,B,E$），迫使 $\chi(G)\ge 3$，两个时间段不再够用，必须增加到三个时间段。实践中，求精确色数是 NP 困难问题，因此大规模排课通常采用贪心染色等启发式算法求近似解，再结合人工调整以满足现实约束（教室容量、教师时间等）。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Graph Theory Ch2: Extensions (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

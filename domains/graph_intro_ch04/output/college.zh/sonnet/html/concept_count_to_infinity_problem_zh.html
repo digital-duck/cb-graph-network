@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Count To Infinity Problem | Graph Intro Ch04</title>
+<script>
+MathJax = {
+  loader: { load: ['[tex]/mathtools'] },
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']],
+         packages: { '[+]': ['mathtools'] } },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="count-to-infinity-problem-计数至无穷问题">Count To Infinity Problem（计数至无穷问题）</h2>
+<p><strong>定义</strong></p>
+<p>计数至无穷问题是距离向量路由协议（如 RIP）在使用 Bellman-Ford 算法计算最短路径时出现的一种收敛失败现象。每个节点仅根据相邻节点广播的距离估计来更新自己到目的地的最短路径估计，其更新规则为：</p>
+$$
+D_i(d) = \min_{j \in N(i)} \left[ c(i,j) + D_j(d) \right]
+$$
+<p>其中 $D_i(d)$ 表示节点 $i$ 到目的地 $d$ 的估计距离，$N(i)$ 是节点 $i$ 的邻居集合，$c(i,j)$ 是链路 $(i,j)$ 的代价。当网络拓扑稳定时，这一迭代过程会收敛到真实最短距离。但当某条链路发生故障（代价变为无穷大）时，某些节点可能仍持有基于旧拓扑、已经过时的距离估计，并继续把这个过时的值发送给邻居，导致邻居继续依赖一个实际上已经不存在的路径，从而使估计距离在多轮迭代中不断攀升，而不是迅速反映出真实的不可达状态。</p>
+<p><strong>具体例子</strong></p>
+<p>设三个节点 A—B—C 依次相连，链路代价均为 1，A 到 C 原本的最短距离为 2，其路径经过 B。现在 B 与 C 之间的链路断开。C 立即知道到自身的距离更新为不可达，但 B 此时仍然记得"经由 A 可以以代价 3 到达 C"（因为 A 之前记录的到 C 距离是 2，B 加上到 A 的代价 1 得到 3），于是 B 向 C 方向广播距离 3。A 随后又根据 B 广播的 3 更新为 4，再传回给 B，B 又变成 5……如此往复，两个节点的估计值像扭秒的循环一样不断累加，而不会迅速稳定为"不可达"。</p>
+<p><strong>问题求解应用</strong></p>
+<p>面对这一问题，网络工程师有两种常见对策可供选择和组合：一是设置最大跳数（如 RIP 中的 16 表示不可达），把无穷大近似为一个有限的哨兵值，从而限制振荡的持续时间；二是采用"水平分割"（split horizon）规则，即节点不向本就提供该路径信息的邻居回传同一目的地的路由，从而切断循环依赖的源头。在实际排查中，判断某条路由是否陷入该问题的关键标志是：故障发生后，某目的地的跳数在连续多轮更新中持续、单调递增，而不是很快收敛为一个稳定值或标记为不可达。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Graph Theory Ch4: Trees (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

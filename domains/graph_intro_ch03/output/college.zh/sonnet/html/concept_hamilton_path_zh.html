@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hamilton Path | Graph Intro Ch03</title>
+<script>
+MathJax = {
+  loader: { load: ['[tex]/mathtools'] },
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']],
+         packages: { '[+]': ['mathtools'] } },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="hamilton-path">Hamilton Path</h2>
+<p><strong>定义</strong></p>
+<p>设 $G=(V,E)$ 是一个连通图，$|V|=n$。图 $G$ 中的一条<strong>哈密顿路径</strong>（Hamilton path）是指一条经过图中每一个顶点<strong>恰好一次</strong>的路径。若这条路径的起点与终点相邻，从而可以闭合成一个圈，那么它就成为一条<strong>哈密顿回路</strong>（Hamilton cycle）。</p>
+<p>需要特别区分哈密顿路径与欧拉路径：欧拉路径要求经过每一条<strong>边</strong>恰好一次，顶点可以重复；哈密顿路径则要求经过每一个<strong>顶点</strong>恰好一次，边可以不被全部使用。这两个问题看似对偶，但计算难度天差地别——欧拉路径的存在性可以用顶点的度数在多项式时间内判定，而判定一个图是否存在哈密顿路径是 NP 完全问题，目前没有已知的多项式时间算法。</p>
+<p><strong>判定难度与充分条件</strong></p>
+<p>由于哈密顿路径问题的一般判定是 NP 完全的，数学家转而寻找<strong>充分条件</strong>（满足即可保证存在，但不满足不代表不存在）。其中最著名的是狄拉克定理（Dirac's theorem）：若简单图 $G$ 满足 $n\geq 3$，且每个顶点的度数都满足</p>
+$$
+\deg(v) \geq \frac{n}{2}, \quad \forall v \in V
+$$
+<p>则 $G$ 必存在哈密顿回路。这个条件说明：只要图足够"稠密"，哈密顿回路就一定存在，哪怕我们无法立刻把它找出来。</p>
+<p><strong>求解实践</strong></p>
+<p>对于小规模图，可以用回溯法（backtracking）系统地搜索哈密顿路径：从某个顶点出发，每一步尝试扩展到一个未访问过的相邻顶点，若走入死路则回退，换一个分支尝试。例如在一个 5 个顶点的图中，若从顶点 $A$ 出发，依次能走通 $A\to B\to D\to C\to E$，且这 5 步覆盖了全部顶点，则这就是一条合法的哈密顿路径。</p>
+<p>哈密顿路径问题在现实中有重要应用：旅行商问题（TSP，寻找访问所有城市且总成本最小的回路）本质上就是在加权图中寻找哈密顿回路；DNA 测序中的"重叠-布局-一致"算法、电路板钻孔路径优化等，都可以建模为哈密顿路径问题。正因为其 NP 完全性，实际工程中往往采用近似算法或启发式算法（如遗传算法、模拟退火）来求得足够好的近似解，而非追求精确的最优解。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Graph Theory Ch3: Network traversal (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

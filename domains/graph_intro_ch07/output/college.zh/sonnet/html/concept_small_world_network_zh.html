@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Small World Network | Graph Intro Ch07</title>
+<script>
+MathJax = {
+  loader: { load: ['[tex]/mathtools'] },
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']],
+         packages: { '[+]': ['mathtools'] } },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="small-world-network">Small World Network</h2>
+<p><strong>定义</strong></p>
+<p>小世界网络是一类特殊的图结构,其显著特征是同时具备两个看似矛盾的性质:平均路径长度短(与节点总数的对数同阶),以及聚类系数高(远超同等规模的随机图)。设网络包含 $N$ 个节点,节点 $i$ 的度为 $k_i$,其邻居之间实际存在的边数为 $e_i$,则该节点的局部聚类系数定义为</p>
+$$C_i = \frac{2e_i}{k_i(k_i-1)}$$
+<p>全网聚类系数 $C$ 取所有 $C_i$ 的平均值。平均路径长度定义为任意两点间最短路径长度 $d(i,j)$ 的全网平均:</p>
+$$L = \frac{1}{N(N-1)}\sum_{i \neq j} d(i,j)$$
+<p>判定一个网络是否属于小世界网络,需要将其 $C$、$L$ 与相同节点数和相同平均度的随机图的 $C_{rand}$、$L_{rand}$ 进行比较,常用小世界系数</p>
+$$\sigma = \frac{C / C_{rand}}{L / L_{rand}}$$
+<p>当 $\sigma \gg 1$(即 $C \gg C_{rand}$ 而 $L \approx L_{rand}$)时,该网络被判定为小世界网络。</p>
+<p><strong>实例分析:Watts–Strogatz 模型</strong></p>
+<p>构造一个环形格子,$N=1000$ 个节点,每个节点与最近的 $k=10$ 个邻居相连。此时聚类系数可解析求得 $C_{ring} = \frac{3(k-2)}{4(k-1)} \approx 0.67$,但路径长度很长,因为信息必须沿环逐步传递。若以概率 $p$ 随机重连每条边:当 $p=0$ 时保持规则格子(高聚类、长路径);当 $p=1$ 时退化为随机图(低聚类、短路径,$L_{rand}\approx \frac{\ln N}{\ln k}$)。Watts 和 Strogatz 发现,在很小的 $p$(约 $0.01$ 到 $0.1$)区间,只需重连极少数边就能急剧压低平均路径长度,而聚类系数几乎不受影响——这正是小世界区间。</p>
+<p><strong>问题求解应用</strong></p>
+<p>给定一个真实网络(如社交网络、神经元连接网络、航空航线图),判断其是否为小世界网络的标准流程是:先计算实测的 $C$ 和 $L$;再生成节点数、平均度相同的随机图作为对照,计算 $C_{rand}$ 和 $L_{rand}$;最后代入 $\sigma$ 公式。若 $\sigma$ 显著大于 1,即可确认该网络具有小世界性质,这解释了为何信息、疾病或影响力能在看似庞大稀疏的网络中快速扩散。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Graph Theory Ch7: Modern computer networks (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

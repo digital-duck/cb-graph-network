@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Centrality | Graph Intro Ch05</title>
+<script>
+MathJax = {
+  loader: { load: ['[tex]/mathtools'] },
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']],
+         packages: { '[+]': ['mathtools'] } },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="中心性">中心性</h2>
+<p><strong>定义</strong>：中心性（centrality）是图论中用于量化一个顶点在网络中相对重要程度的一族指标。"重要"没有单一含义，因此存在多种正式定义，常见的三种是度中心性、接近中心性和介数中心性。</p>
+<p>设图 $G=(V,E)$ 有 $n=|V|$ 个顶点。<strong>度中心性</strong>最简单，直接用顶点 $v$ 的度数衡量，通常做归一化：</p>
+$$
+C_D(v) = \frac{\deg(v)}{n-1}
+$$
+<p><strong>接近中心性</strong>衡量 $v$ 到所有其他顶点的平均距离的倒数，距离越短说明越"居中"：</p>
+$$
+C_C(v) = \frac{n-1}{\sum_{u \neq v} d(v,u)}
+$$
+<p>其中 $d(v,u)$ 是 $v$ 与 $u$ 之间的最短路径长度。<strong>介数中心性</strong>衡量 $v$ 处于其他顶点对之间最短路径上的频率，刻画其作为"桥梁"或"信息枢纽"的地位：</p>
+$$
+C_B(v) = \sum_{s \neq v \neq t} \frac{\sigma_{st}(v)}{\sigma_{st}}
+$$
+<p>其中 $\sigma_{st}$ 是 $s$ 到 $t$ 的最短路径总数，$\sigma_{st}(v)$ 是其中经过 $v$ 的条数。</p>
+<p><strong>实例</strong>：考虑一个由五个人组成的社交网络：A—B、B—C、C—D、D—E，另外 B—D 也相连。B 和 D 各有 3 条边，度中心性最高；但若只看谁把"两端"的人连接起来，C 虽然度数只有 2（连接 B 和 D），却不在任何关键最短路径上（因为 B—D 直接相连），所以 C 的介数中心性反而很低——这说明度中心性和介数中心性可能给出完全不同的排名，选用哪个指标取决于你想回答的问题：谁认识的人多？谁离所有人最近？还是谁控制着信息流动？</p>
+<p><strong>问题求解应用</strong>：在设计通信网络时，若要找出一旦移除就会显著增加平均通信延迟的关键节点，应计算介数中心性并优先加固介数最高的顶点；若要寻找疫情传播中最先该接种疫苗的人，接近中心性通常比单纯的度数更能反映其"能多快触达全网"的能力。三种指标可以在同一网络上分别计算并比较，从而针对不同目标（连接数量、传播速度、结构控制力）选出不同的关键顶点。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Graph Theory Ch5: Network analysis (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

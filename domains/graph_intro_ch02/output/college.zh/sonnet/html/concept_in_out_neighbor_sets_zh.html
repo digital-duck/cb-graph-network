@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>In Out Neighbor Sets | Graph Intro Ch02</title>
+<script>
+MathJax = {
+  loader: { load: ['[tex]/mathtools'] },
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']],
+         packages: { '[+]': ['mathtools'] } },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.cb-figure{margin:24px 0;text-align:center}
+.cb-figure img{max-width:100%;height:auto;border:1px solid #e0e0d8;border-radius:6px}
+figcaption{font-size:.82rem;color:#666;margin-top:8px;font-style:italic;text-align:center}
+pre.mermaid{background:none;border:none;padding:0;overflow:visible;margin:16px 0}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="in-out-neighbor-sets">In Out Neighbor Sets</h2>
+<p><strong>定义</strong></p>
+<p>设 $D = (V, A)$ 为一个有向图（digraph），其中 $V$ 是顶点集，$A$ 是弧（有向边）集。对于顶点 $v \in V$，定义其<strong>入邻居集</strong>（in-neighbor set）为所有指向 $v$ 的顶点构成的集合：</p>
+$$
+N^-(v) = \{u \in V : (u, v) \in A\}
+$$
+<p>定义其<strong>出邻居集</strong>（out-neighbor set）为 $v$ 所指向的所有顶点构成的集合：</p>
+$$
+N^+(v) = \{w \in V : (v, w) \in A\}
+$$
+<p>这两个集合的大小分别称为 $v$ 的<strong>入度</strong>与<strong>出度</strong>，记作 $\deg^-(v) = |N^-(v)|$ 和 $\deg^+(v) = |N^+(v)|$。需要注意，在有向图中 $N^-(v)$ 和 $N^+(v)$ 一般不相等，这与无向图中"邻居集"只有一种定义形成鲜明对比——方向性正是有向图建模能力的核心。</p>
+<p><strong>举例说明</strong></p>
+<p>考虑一个简单的网页链接图：顶点 $A, B, C, D$ 代表四个网页，弧 $(A,B)$ 表示"网页 A 中有一个链接指向网页 B"。若弧集为 $A = \{(A,B), (A,C), (B,C), (D,C)\}$，那么：</p>
+<li>$N^+(A) = \{B, C\}$（A 链接到 B 和 C），$N^-(A) = \varnothing$（没有网页链接到 A）；</li>
+<li>$N^-(C) = \{A, B, D\}$，$N^+(C) = \varnothing$。</li>
+<p>顶点 $C$ 的入度为 3，说明它被大量引用，这正是网页排名（PageRank）等算法用来衡量"重要性"的基础信号。</p>
+<p><strong>解题应用</strong></p>
+<p>在算法实现中，入邻居集和出邻居集通常用邻接表存储：对每个顶点维护一个出邻居列表用于正向遍历（如广度优先搜索、拓扑排序），同时维护一个反向邻接表（入邻居列表）以支持逆向查询，例如"哪些顶点可以到达当前顶点"或计算入度用于 Kahn 算法的拓扑排序。构建反向邻接表的时间复杂度为 $O(|V| + |A|)$，与正向邻接表相同，因此在需要频繁做双向查询的场景（如网络流、依赖关系分析）中，同时维护两者是标准做法，而不会带来额外的渐近开销。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Graph Theory Ch2: Extensions (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

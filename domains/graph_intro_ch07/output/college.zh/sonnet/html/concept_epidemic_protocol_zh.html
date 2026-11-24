@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Epidemic Protocol | Graph Intro Ch07</title>
+<script>
+MathJax = {
+  loader: { load: ['[tex]/mathtools'] },
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']],
+         packages: { '[+]': ['mathtools'] } },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="流行病协议-epidemic-protocol">流行病协议（Epidemic Protocol）</h2>
+<p><strong>定义</strong></p>
+<p>流行病协议是一种去中心化的信息扩散机制：网络中每个节点（peer）不依赖中心协调者，而是周期性地从全体节点中均匀随机选择一个对象，与其交换数据或视图条目（view entry）。这种"随机配对、局部交换"的模式与传染病在人群中的扩散方式高度相似——因此得名。协议的核心保证是：只要每一轮都有节点持续地把已知信息传给随机选中的邻居，更新最终会以极高概率覆盖全网，而无需任何单点承担全局广播的职责。这使其天然具备容错性和可扩展性，是大规模分布式系统（如 Cassandra、Consul 的成员管理）中传播状态的常用手段。</p>
+<p><strong>具体场景</strong></p>
+<p>设网络中有 $n=1000$ 个节点。节点 A 产生一条新的配置更新。第 1 轮：A 随机选择节点 B，B 获得该更新。第 2 轮：A 和 B 各自随机选择一个节点交换信息，可能是新节点，也可能重复选中已知节点——已知该更新的节点数量期望上翻倍。第 3 轮同理。这个"倍增"过程正是流行病模型中感染人数指数增长阶段的直接体现。</p>
+<p><strong>理论分析与实际应用</strong></p>
+<p>流行病协议的收敛速度可以用经典的传染病扩散模型（SI 模型）来刻画。设第 $t$ 轮结束时已获知更新的节点比例为 $x_t$，每轮每个"感染"节点随机联系一个节点，则：</p>
+$$
+x_{t+1} \approx x_t + x_t(1-x_t)
+$$
+<p>该递推关系表明，当 $x_t$ 较小时增长近似指数，当 $x_t$ 接近 1 时增长放缓，形成典型的 S 形曲线。理论结果（可类比随机传谣问题，random rumor spreading）表明，全网收敛所需的轮数期望为 $O(\log n)$，即使 $n$ 增长到百万级，收敛轮数也只是对数级增长，而非线性。</p>
+<p>在工程实践中，这一分析直接指导参数选择：若要求更新在 $T$ 轮内以概率 $1-\varepsilon$ 覆盖全网，可依据上式反推所需的 $T$ 与每轮交换的邻居数目（fanout）。这正是分布式系统设计者在权衡"传播延迟"与"网络带宽开销"时的核心计算依据。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Graph Theory Ch7: Modern computer networks (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

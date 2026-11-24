@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Storage Load Balancing | Graph Intro Ch02</title>
+<script>
+MathJax = {
+  loader: { load: ['[tex]/mathtools'] },
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']],
+         packages: { '[+]': ['mathtools'] } },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="storage-load-balancing">Storage Load Balancing</h2>
+<p><strong>定义</strong></p>
+<p>在分布式存储系统中，负载均衡常常需要将数据块从繁忙设备迁移到空闲设备。若把每台存储设备看作图中的一个顶点，每一次数据块迁移看作连接源设备与目标设备的一条边，就得到一个多重图 $G=(V,E)$。由于同一台设备在同一时间只能参与一次迁移（受带宽或磁盘I/O限制），我们需要把所有迁移任务分配到若干个时间片中，使得共享同一顶点（同一设备）的两条边不会被分配到同一时间片。这正是图论中的边染色问题：找到一个映射，把每条边染上一种颜色（对应一个时间片），使任意两条相邻边颜色不同，且使用的颜色数（时间片数）最少。这个最小颜色数称为图的边色数，记作 $\chi'(G)$。</p>
+<p>边色数与图的最大度 $\Delta(G)$（即单台设备参与迁移任务数最多的那个值）密切相关。维津定理（Vizing's Theorem）指出，对任意简单图 $G$：</p>
+$$
+\Delta(G) \le \chi'(G) \le \Delta(G) + 1
+$$
+<p>也就是说，调度所需的最少时间片数，不会少于最繁忙设备的迁移任务数，也不会超过这个数再加一。</p>
+<p><strong>实例演算</strong></p>
+<p>设有四台存储设备 $A,B,C,D$，需要完成迁移任务：$A\text{-}B$、$A\text{-}C$、$B\text{-}D$、$C\text{-}D$。这构成一个四阶圈图 $C_4$。每个顶点的度均为2，故 $\Delta(G)=2$。由于 $C_4$ 是偶圈，可以用2种颜色（2个时间片）完成染色：时间片1安排 $A\text{-}B$ 与 $C\text{-}D$（不共享设备），时间片2安排 $A\text{-}C$ 与 $B\text{-}D$。因此 $\chi'(C_4)=2=\Delta(G)$，达到维津定理的下界。</p>
+<p><strong>问题求解应用</strong></p>
+<p>实际调度时，先统计每台设备参与的迁移次数，求出 $\Delta(G)$；再尝试用 $\Delta(G)$ 种时间片贪心染色——若某台设备迁移次数为奇数且图中存在奇圈（如三台设备互相迁移形成的三角形），则可能需要 $\Delta(G)+1$ 个时间片才能完成无冲突调度。工程上通常采用贪心边染色算法：按边的顺序依次分配尚未被其两端点占用的最小编号时间片，实践中往往能逼近维津定理给出的上界。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Graph Theory Ch2: Extensions (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

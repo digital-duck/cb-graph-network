@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chinese Postman Problem | Graph Intro Ch03</title>
+<script>
+MathJax = {
+  loader: { load: ['[tex]/mathtools'] },
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']],
+         packages: { '[+]': ['mathtools'] } },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="中国邮递员问题">中国邮递员问题</h2>
+<p><strong>定义</strong>：给定一个带权连通图 $G=(V,E)$，中国邮递员问题要求找到一条权重最小的闭合回路，使得该回路至少经过图中每一条边一次。这个问题得名于邮递员必须走遍辖区内每条街道再返回邮局的现实场景——若每条边只需经过一次即可回到起点，图就必须是"欧拉图"。</p>
+<p><strong>判定基础</strong>：欧拉定理指出，一个连通图存在欧拉回路（不重复经过任何边、且首尾相接的回路）当且仅当图中每个顶点的度数都是偶数。若图中存在奇度顶点，则邮递员必须重复走某些边才能回到起点，问题就转化为：应该重复哪些边，才能使总重复权重最小、同时让所有顶点度数变为偶数。</p>
+<p><strong>求解思路</strong>：设图中奇度顶点集合为 $O$，可以证明 $|O|$ 必为偶数。算法先计算 $O$ 中所有顶点两两之间的最短路径，然后在以 $O$ 为顶点集、边权为对应最短路径长度的完全图上求一个权重最小的完美匹配（即将 $O$ 中的顶点两两配对，使配对所用最短路径总长度最小）。对每一对匹配顶点，把它们之间最短路径上的边在原图中复制一份。复制之后，原来度数为奇数的顶点都因多了一条边而变成偶数，图变成欧拉图。此时再用弗勒里算法（每一步优先走非桥边，避免过早切断图的连通性）遍历出一条真正的欧拉回路，这条回路就是原问题的最优闭合路线。</p>
+<p><strong>举例</strong>：设某小区道路网络中有 4 个奇度路口 $A,B,C,D$，两两之间最短距离为 $d(A,B)=3$，$d(C,D)=2$，$d(A,C)=5$，$d(B,D)=4$，$d(A,D)=6$，$d(B,C)=4$。比较两种配对方案：$(A,B)+(C,D)=3+2=5$，而 $(A,C)+(B,D)=5+4=9$，前者更优，于是复制 $A$ 到 $B$ 与 $C$ 到 $D$ 最短路径上的边，再运行弗勒里算法即可得到最优邮递路线。</p>
+<p><strong>应用价值</strong>：该模型广泛用于垃圾清运、道路撒盐除雪、电网巡检等需要"逐边覆盖"而非"逐点覆盖"的路径规划问题，是图论算法从理论走向物流调度实践的典型范例。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Graph Theory Ch3: Network traversal (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

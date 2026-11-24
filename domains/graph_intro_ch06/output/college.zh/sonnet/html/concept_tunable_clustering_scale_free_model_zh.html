@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tunable Clustering Scale Free Model | Graph Intro Ch06</title>
+<script>
+MathJax = {
+  loader: { load: ['[tex]/mathtools'] },
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']],
+         packages: { '[+]': ['mathtools'] } },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="tunable-clustering-scale-free-model">Tunable Clustering Scale Free Model</h2>
+<p>标准的择优连接模型(Barabási-Albert 模型)能生成幂律度分布,但其聚集系数会随网络规模增大而趋近于零,这与许多真实网络(如社交网络、生物网络)中观察到的高聚集特性不符。Holme-Kim 模型通过在择优连接的基础上增加"三角形形成"步骤,使聚集系数可以在保持幂律度分布的前提下被独立调节。</p>
+<p>该算法在每一步添加新节点时执行两类操作。第一步与标准择优连接相同:新节点以正比于度数的概率连接到已有节点,即连接到节点 $i$ 的概率为</p>
+$$
+P(i) = \frac{k_i}{\sum_j k_j}
+$$
+<p>其中 $k_i$ 是节点 $i$ 的度数。第二步是三角形形成步骤:以概率 $q$(取值范围 $0 \le q \le 1$),新节点会再连接到刚才所连节点的一个随机邻居,从而闭合一个三角形;以概率 $1-q$,则再执行一次标准的择优连接。参数 $q$ 就是控制聚集系数高低的旋钮:$q=0$ 时模型退化为标准的 Barabási-Albert 模型,聚集系数趋于零;$q$ 越接近 1,新增的边越倾向于闭合三角形,网络的局部聚集程度就越高。</p>
+<p>举一个具体场景:假设正在模拟一个学术合作网络,新加入的研究者倾向于与知名学者合作(择优连接部分),但也常常通过知名学者认识其合作者并共同发表论文(三角形形成部分)。设置 $q=0.3$ 意味着大约三成的新增连接是通过"朋友的朋友"建立的,这样生成的网络既保留了少数高影响力节点的幂律分布特征,又呈现出真实合作网络中常见的紧密小团体结构。</p>
+<p>在实际问题求解中,该模型常被用来生成"零假设"网络,以检验某个真实网络的聚集系数是否显著偏离由度分布单独决定的期望值。做法是:先测量真实网络的度分布和聚集系数,再用 Holme-Kim 算法固定度分布特征,调节 $q$ 直到生成网络的聚集系数与真实网络吻合,由此得到的 $q$ 值本身就成为衡量"三角形闭合倾向"强弱的一个可比较指标,可用于跨网络比较社交粘性或结构冗余程度。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Graph Theory Ch6: Random networks (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

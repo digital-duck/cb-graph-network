@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Weighted Graph | Graph Intro Ch03</title>
+<script>
+MathJax = {
+  loader: { load: ['[tex]/mathtools'] },
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']],
+         packages: { '[+]': ['mathtools'] } },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="weighted-graph-带权图">Weighted Graph（带权图）</h2>
+<p><strong>定义</strong></p>
+<p>带权图是在普通图的基础上，为每条边赋予一个非负实数值（称为权重）的图结构。形式上，一个带权图可以表示为 $G = (V, E, w)$，其中 $V$ 是顶点集合，$E$ 是边集合，$w: E \to \mathbb{R}_{\geq 0}$ 是权重函数，将每条边 $e \in E$ 映射到一个非负实数 $w(e)$。权重可以代表距离、时间、费用或任何需要累加比较的代价。带权图的核心用途是刻画"最小代价路径"问题：在图中寻找一条从起点到终点的路径，使得路径上所有边的权重之和最小。这个和被称为路径的总代价，定义为</p>
+$$
+\text{cost}(P) = \sum_{e \in P} w(e)
+$$
+<p>其中 $P$ 是路径中依次经过的边的集合。</p>
+<p><strong>实例演练</strong></p>
+<p>设想一张城市交通网络图：顶点代表城市，边代表道路，权重代表通行时间（单位：分钟）。若城市 A 到城市 B 有两条路线——一条经过城市 C（A→C 耗时 10 分钟，C→B 耗时 15 分钟），另一条直达（A→B 耗时 30 分钟）——则第一条路径的总代价为 $10 + 15 = 25$，小于直达路径的 $30$，因此是更优选择。这个简单例子说明：带权图中"最短路径"不再是边数最少的路径，而是权重和最小的路径，这正是它区别于无权图的关键。</p>
+<p><strong>问题求解应用</strong></p>
+<p>带权图是众多经典优化问题的建模基础。例如 Dijkstra 算法通过贪心策略逐步确定从单一起点到所有其他顶点的最短路径，前提是所有权重非负（这正是权重函数值域限定为 $\mathbb{R}_{\geq 0}$ 的原因——若允许负权重，贪心的正确性将被破坏）。又如最小生成树问题（Prim 算法、Kruskal 算法），目标是在带权图中找出一棵连接所有顶点且总权重最小的树，广泛应用于网络布线成本优化。在实际建模中，学习者需要先判断问题中的"代价"是否满足非负性与可加性，才能正确套用这些算法；若权重代表比率或存在负值（如某些金融套利场景），则需改用 Bellman-Ford 算法或更谨慎地重新定义问题。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Graph Theory Ch3: Network traversal (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>
